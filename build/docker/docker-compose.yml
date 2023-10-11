@@ -1,0 +1,114 @@
+version: '3'
+
+volumes:
+  any-spa_db:
+
+services:
+  # не очень работает. Не дает билдить и т.д.
+  node:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: node-${COMPOSE_PROJECT_NAME}
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    volumes:
+      - ./../../:/var/www
+    networks:
+      - any-spa-network
+
+  composer:
+    build:
+      context: ./composer
+      dockerfile: Dockerfile.prod
+    container_name: composer-${COMPOSE_PROJECT_NAME}
+    volumes:
+      - ./../../:/var/www
+    restart: unless-stopped
+    networks:
+      - any-spa-network
+
+  # сервис с redis
+  redis:
+    image: redis:7.2.1-alpine
+    container_name: redis-${COMPOSE_PROJECT_NAME}
+    command: ["redis-server", "--appendonly", "yes"]
+    restart: unless-stopped
+    networks:
+      - any-spa-network
+
+  # сервис с php
+  php:
+    build:
+      context: ./php-fpm
+      dockerfile: Dockerfile
+    command: php-fpm
+    container_name: php-${COMPOSE_PROJECT_NAME}
+    depends_on:
+      - postgresql
+      - redis
+    volumes:
+      - ./../../:/var/www
+      - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      - CACHE_DRIVER=redis
+      - APP_NAME=${COMPOSE_PROJECT_NAME}
+      - APP_DEBUG=false
+      - APP_ENV=production
+      - DB_HOST=postgresql-${COMPOSE_PROJECT_NAME}
+      - DB_PORT=5432
+      - DB_CONNECTION=pgsql
+      - DB_DATABASE=${COMPOSE_PROJECT_NAME}
+      - DB_USERNAME=${COMPOSE_PROJECT_NAME}
+      - DB_PASSWORD=${COMPOSE_PROJECT_NAME}
+      - REDIS_HOST=redis-${COMPOSE_PROJECT_NAME}
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+      - APP_URL=${APP_URL_HTTPS}
+    # Если контейнер упал (поломался), то docker попытается его заново поднять
+    # По дефолту - никогда не рестартятся
+    # always - всегда будут рестартиться
+    restart: unless-stopped
+    networks:
+      - any-spa-network
+
+  # сервис с базой данных
+  postgresql:
+    image: postgres:16.0-alpine3.18
+    container_name: postgresql-${COMPOSE_PROJECT_NAME}
+    environment:
+      - POSTGRES_PASSWORD=${COMPOSE_PROJECT_NAME}
+      - POSTGRES_DB=${COMPOSE_PROJECT_NAME}
+      - POSTGRES_USER=${COMPOSE_PROJECT_NAME}
+    volumes:
+      - any-spa_db:/var/lib/postgresql/data
+    # Если контейнер упал (поломался), то docker попытается его заново поднять
+    # По дефолту - никогда не рестартятся
+    # always - всегда будут рестартиться
+    restart: unless-stopped
+    networks:
+      - any-spa-network
+
+  nginx:
+    image: nginx:1.25.2-alpine
+    container_name: nginx-${COMPOSE_PROJECT_NAME}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - APP_URL=${APP_URL}
+    depends_on:
+      - php
+    volumes:
+      - ./../../:/var/www
+      - ./nginx/nginx.prod.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - any-spa-network
+#    links:
+#      - php
+
+networks:
+  any-spa-network:
+    driver: bridge

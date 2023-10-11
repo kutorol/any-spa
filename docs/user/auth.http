@@ -1,0 +1,90 @@
+### Вход юзера
+POST {{api}}/login
+# Authorization: Bearer {{admin_access_token}}
+Content-Type: application/json
+
+{
+    "email": "fasd@3232mail.ru",
+    "password": "1234542"
+}
+
+> {%
+    client.assert([200, 403].indexOf(response.status) !== -1, "Response status is "+response.status)
+
+    if (response.body.data.token.access_token || null) {
+        client.global.set("admin_access_token", response.body.data.token.access_token);
+    }
+
+    if (response.body.data.token.refresh_token || null) {
+        client.global.set("admin_refresh_token", response.body.data.token.refresh_token);
+    }
+%}
+
+### Выход юзера
+POST {{api}}/logout
+Content-Type: application/json
+Authorization: Bearer {{admin_access_token}}
+
+{
+
+}
+
+> {%
+    client.assert([200, 403].indexOf(response.status) !== -1, "Response status is "+response.status)
+    if (response.status === 200) {
+        client.global.set("admin_access_token", "");
+    }
+%}
+
+### Повторая отправка подтверждения email
+POST {{api}}/email/verification-notification
+Content-Type: application/json
+Authorization: Bearer {{admin_access_token}}
+
+{
+
+}
+
+### Повторая отправка подтверждения email
+POST {{api}}/pass/forgot
+Content-Type: application/json
+
+{
+  "email": "nuzfunzon@yandex.ru"
+}
+
+### Повторая отправка подтверждения email
+POST {{api}}/pass/reset/13b712fd50365297fa67b0b0fd9662f881551d3d25480eafbc39e416018090f2
+Content-Type: application/json
+
+{
+  "email": "nuzfunzon@yandex.ru",
+  "password": "87654321",
+  "password_confirmation": "87654321"
+}
+
+
+### Регистрация юзера
+POST {{api}}/register
+Content-Type: application/json
+#Authorization: Bearer {{admin_access_token}}
+
+{
+    "name": "last_name first_name surname",
+    "email": "pipi3109932@mail.ru",
+    "password": "12345678",
+    "password_confirmation": "12345678",
+    "g-recaptcha-token2": "103AFcWeA6sNnU0WLPgb37lZGteMgWBAzwRguRS43q5DEswDKOWFG2bP9YfITRkaBLIen6SXXTQC4pzf4eTa-VcGKJoWWoC-gDJwXwW3bMDsKfT40ExE_mTyiAQIXBgIg1EXit2Nd4tsSlTmuWXauBMbGytrORgS0h_CmTy4LcCd8lMCcH3NSN9Lw1SzpAMu0ruVzo6qnTq_NWtZTgGmc5-hcEb7h16H84dsuHoaN5WkWYvq4uWz2tzLDLQyYsPIIZLDSPRhY83TgdDm9xSrv412H02LDhFVAu1owiEq81JoTtwBLx8WylPFOordt1JOcAhvPP2id5UAH2k4sqO8RToVCWNRTqLsMwpOMRDLwX7siXX44XlrPgFtrUWG7-C6_smcL-m7iIzpFno6C3SO3h1wCRuooFSGbCDVPdOXdFjL-1U3KHbsXUFEdb2RN1n_SXWKO8VlZooA4Tcg329vaGoJUUQsLQmEBSc4iyZDyZl-ZVEdTZFFlfvZvyCq3fXZk7pzmgW2yl3GmDRBTvchcyrf6fVaSl8on_9isVWSRUq9s_DHxiz9guTIDpSQkDHyirjKWCGH8a-hv_1x94xJMsnPUYUINl1DDD20zoGOQ1tof-KJNkE6bus1-J8dHI4o8cXl5kNK-9mOfoxkVNvTobkzu6-S0qnNbEg_5RXDz6iD8x3VIyI_WHSQ09uvEkPFPalib1m0_xEuz4ntpQC3jMndMav0ocAeD2sTB7FFhh52JPVVyB1YFY9siL-gFR9kHzJmO_6vwA4J5DE7dOJnjKkXW-Ezqcc95Dt6zujNjDGdpzgA8nM3tAMrIbpJ2pKnzEToofbI74PC6JTVFqwObZ1IR2styNcLS2oi6qYz0UcwVIeEAeGZZTwd8qsgtJGroy1dP5DNMP9ph1nfZsEwgUlofQlThOa4MTkn-ijkwupMngT2qUAWrdI5RNKTc447T6m9c5s08aWcHtWLNOrZkvgL8a2cBTE0_7kKOGIPoYksURsKruC_YmU4UXcx651G4VDzKUAAqZ_aC4Q0a7TNZzQa7fmjiretrCjdjxR7glKFTeYxC02EqhmkYI-0jnzVbKje3NF0XCvOAvIlHDD1HV6mh7TbMf48ptDQi368duBZaNV8f1viDb9Y8lPTos9sIQLzCBPQhVQJPHvc_Qabhqgay7NBDcVzGOKuD9rsKtn7SmWtztkEt8JADxmguBy1vgGAYxbotOZKPWfkH6z2aQHMT-F_SphHYZx3a2zTcLnVbXQiT5ioQMBtC5EeyYvYgPJ69jXmmlsZNgk1CsPj7uCmCOmd6-mJaLsIxp8nMq2HAxE6YLn04yX826PIlOxg5qGnoS1d7Wce40HANDr24Hr4yIdD7OntP98gTjstA5o1qrwWDfvtSvg4b1xYJ3GIC5DIi2xSOFeZmqJZPUoS5tdfFXIrZQTiWGWrHL42i_DgWpiIM6AKyQsVW8zzbLF3pWFHaS-KaiXoN1YZUl1jLHSYyzftIMpC3o--nn1RLOubFSaglLnuOImXrKNM0NdTxhUP1JKvm7OdNzBNOofwuTP4aIQ2efvEvOBXQ"
+}
+
+> {%
+    client.assert([200, 403].indexOf(response.status) !== -1, "Response status is "+response.status)
+
+    if (response.body.data.token.access_token || null) {
+        client.global.set("admin_access_token", response.body.data.token.access_token);
+    }
+
+    if (response.body.data.token.refresh_token || null) {
+        client.global.set("admin_refresh_token", response.body.data.token.refresh_token);
+    }
+%}

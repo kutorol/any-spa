@@ -1,0 +1,28 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    paths:
+        - app
+
+    # The level 5 is the highest level
+    level: 5
+
+    ignoreErrors:
+        - '#Parameter.*expects\sGoogle\\Protobuf\\Internal\\RepeatedField.*given#'
+        - '#Cannot assign offset [0-9]+ to Google\\Protobuf\\Internal\\MapField#'
+        - '#Grpc\\ChannelCredentials::createSsl\(\) invoked with 0 parameters, 1-3 required.#'
+        - '#data of method Grpc\\ClientStreamingCall::write\(\) expects Grpc\\ByteBuffer#'
+        - '#Parameter .* Google\\Protobuf\\Internal\\MapField constructor expects.*given#'
+        - '#Parameter .* Google\\Protobuf\\Internal\\MapField::offsetSet\(\) expects.*given#'
+        - '#key of method Google\\Protobuf\\Internal\\MapField::offsetExists\(\) expects object#'
+        - '#Offset .* does not exist on Google\\Protobuf\\Internal\\MapField#'
+        - '#Using nullsafe method call on non-nullable type .* Use -> instead\.#'
+        - '#Call to an undefined method Illuminate\\Http\\Request::validated\(\)#'
+        - '#Call to function property_exists\(\) with \*NEVER\* and .* will always evaluate to false#'
+
+    excludePaths:
+        - ./vendor
+
+    checkMissingIterableValueType: true

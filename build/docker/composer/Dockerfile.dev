@@ -1,0 +1,9 @@
+FROM composer:2.6.3
+
+WORKDIR /var/www
+
+# Copy existing app directory
+COPY ./../../../composer*.json ./
+
+ENTRYPOINT ["composer"]
+CMD ["i", "--dev", "--ignore-platform-req=ext-redis", "--ignore-platform-req=ext-grpc", "--ignore-platform-req=ext-gmp"]
