@@ -1,3 +1,4 @@
+// @ts-ignore
 import { get } from "lodash";
 import { createErrMgs } from "../../store/reducers/snackbar/error-snackbar";
 import { RedirectInterface } from "./interfaces";

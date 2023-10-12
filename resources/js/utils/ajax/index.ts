@@ -1,7 +1,8 @@
 import axios from "axios";
+// @ts-ignore
 import { get } from "lodash";
 import { changeAppInitState } from "../../store/reducers/common/app-init";
-import { changeFullScreenLoaderState } from "../../store/reducers/common/fullScreenLoader";
+import { changeFullScreenLoaderState } from "../../store/reducers/common/full-screen-loader";
 import { createSuccessMgs } from "../../store/reducers/snackbar/ok-snackbar";
 import { ChainCheckErrorsHTTP } from "./chains-http/errors";
 import { ChainCheckLocaleHTTP } from "./chains-http/locale";

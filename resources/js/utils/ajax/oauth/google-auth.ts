@@ -1,6 +1,7 @@
 import { TokenResponse } from "@react-oauth/google";
+// @ts-ignore
 import { get } from "lodash";
-import { changeFullScreenLoaderState } from "../../../store/reducers/common/fullScreenLoader";
+import { changeFullScreenLoaderState } from "../../../store/reducers/common/full-screen-loader";
 import { createErrMgs } from "../../../store/reducers/snackbar/error-snackbar";
 import store from "../../../store/store";
 import Locale from "../../funcs/locale";

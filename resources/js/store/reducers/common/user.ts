@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+// @ts-ignore
 import { cloneDeep, get, toNumber } from "lodash";
 import store from "../../store";
 import Locale from "../../../utils/funcs/locale";
@@ -22,15 +23,16 @@ const defaultUser = {
 
 
 const getRoleName = (role: string): string => {
+  const { t } = Locale.locale;
   const roles = {
-    "site_admin": Locale.locale.t("Администратор сайта"),
-    "site_manager": Locale.locale.t("Менеджер сайта"),
-    "gym_admin": Locale.locale.t("Администратор тренажерных залов"),
-    "gym_manager": Locale.locale.t("Менеджер тренажерных залов"),
-    "gym_trainer": Locale.locale.t("Тренер тренажерных залов"),
-    "user": Locale.locale.t("Посетитель тренажерных залов"),
-    "guest": Locale.locale.t("Аноним"),
-    "test_user": Locale.locale.t("Тестовый пользователь")
+    "site_admin": t("Администратор сайта"),
+    "site_manager": t("Менеджер сайта"),
+    "gym_admin": t("Администратор тренажерных залов"),
+    "gym_manager": t("Менеджер тренажерных залов"),
+    "gym_trainer": t("Тренер тренажерных залов"),
+    "user": t("Посетитель тренажерных залов"),
+    "guest": t("Аноним"),
+    "test_user": t("Тестовый пользователь")
   };
 
   return roles[ role ];

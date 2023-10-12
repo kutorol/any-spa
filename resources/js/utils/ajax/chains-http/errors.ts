@@ -1,3 +1,4 @@
+// @ts-ignore
 import { get } from "lodash";
 import { createErrMgs } from "../../../store/reducers/snackbar/error-snackbar";
 import { ChainCheckHTTPResponse } from "../interfaces";
@@ -13,6 +14,10 @@ export class ChainCheckErrorsHTTP implements ChainCheckHTTPResponse {
     if (!errs.length && get(res, "msg", "").trim() !== "") {
       errs.push(res.msg.trim());
     }
+
+    // отдельные логи авторизации
+    const pasetoMsg = get(res, 'data.paseto.msg', null);
+    pasetoMsg && errs.push(pasetoMsg.trim());
 
     // @ts-ignore
     createErrMgs(errs, 7000, get(res, "code", 0));
