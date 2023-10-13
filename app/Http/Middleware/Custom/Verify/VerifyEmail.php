@@ -13,6 +13,12 @@ use Illuminate\Http\Request;
 
 class VerifyEmail
 {
+    private const EXCLUDE_ROUTES = [
+        'verification.send',
+        'api.checkInitRequest',
+        'api.logout',
+    ];
+
     /**
      * Мидлварь проверки email, когда юзер дергает api.
      * @throws Exception
@@ -21,7 +27,7 @@ class VerifyEmail
     {
         /** @var User $user */
         $user = $request->user();
-        if ($user && !$user->email_verified_at && !$request->routeIs(['verification.send', 'api.checkInitRequest', 'api.logout'])) {
+        if ($user && !$user->email_verified_at && !$request->routeIs(self::EXCLUDE_ROUTES)) {
             return IsSiteAdmin::getResponse($request, 'user.no_email_verification', BaseController::FORBIDDEN_CODE, [
                 BaseController::REDIRECT_PARAM => '/verify-email',
             ]);

@@ -4,7 +4,7 @@ import { useLaravelReactI18n } from "laravel-react-i18n";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const FooterGrid = ({ xsNum, isRegister = true, isPasswordReset = false }) => {
+const FooterGrid = ({ xsNum, isRegister = false, isPasswordReset = false }) => {
   const sx = { textDecoration: "none" };
   const { t } = useLaravelReactI18n();
 

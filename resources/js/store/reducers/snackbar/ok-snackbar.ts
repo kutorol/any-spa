@@ -3,7 +3,7 @@ import { toNumber } from "lodash";
 import store from "../../store";
 import { defaultDurationMS } from "./error-snackbar";
 
-export const createSuccessMgs = (msg, duration = 5000) => {
+export const createSuccessMgs = (msg?:string, duration:number = 5000) => {
   msg = msg || "";
   if (!msg.trim()) {
     return;

@@ -12,7 +12,7 @@ import FooterGrid from "./FooterGrid";
 import LogoHeader from "./LogoHeader";
 import TitleGrid from "./TitleGrid";
 
-const AuthFormWrapper = ({ isRegister = true, isPasswordReset = false, isPasswordResetConfirm = false }) => {
+const AuthFormWrapper = ({ isRegister = false, isPasswordReset = false, isPasswordResetConfirm = false }) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
 

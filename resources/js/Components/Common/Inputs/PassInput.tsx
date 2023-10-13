@@ -1,6 +1,7 @@
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Grid, IconButton, InputAdornment, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React, { useEffect, useState } from "react";
@@ -16,13 +17,13 @@ const PassInput = ({
  touched,
  values,
  errors,
- theme,
  isConfirmPass = false,
  withStrength = false,
  withCheckingConfirmation = false,
  passwordsEqual = false
 }) => {
   const { t } = useLaravelReactI18n();
+  const theme = useTheme();
 
   const [strength, setStrength] = useState(0);
   const [level, setLevel] = useState();

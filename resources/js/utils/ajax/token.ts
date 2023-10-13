@@ -1,11 +1,10 @@
-// @ts-ignore
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 import { createErrMgs } from "../../store/reducers/snackbar/error-snackbar";
-import { RedirectInterface } from "./interfaces";
-import redirect from "./redirect";
 import Locale from "../funcs/locale";
+import { RedirectInterface, TokenInterface } from "./interfaces";
+import redirect from "./redirect";
 
-class __tokens {
+class __tokens implements TokenInterface {
   private accessToken?: string = null;
   private refreshToken?: string = null;
 
@@ -71,7 +70,7 @@ class __tokens {
         const msg = get(res, "msg", "").trim();
         msg.length > 0 && errs.unshift(msg);
 
-        createErrMgs(errs, 7000, get(res, "code", 0));
+        createErrMgs(errs, 7000, toNumber(get(res, "code", 0)));
       }
 
       const redirectTo = "/login";

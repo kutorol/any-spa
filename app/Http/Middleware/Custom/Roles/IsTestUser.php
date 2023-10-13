@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware\Custom\Roles;
 
-use App\Models\User;
+use App\Enums\User\RolesEnum;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +22,7 @@ class IsTestUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if (User::getUserRole($request) === User::ROLE_TEST_USER) {
+        if (RolesEnum::isRoles(RolesEnum::ROLE_TEST_USER)) {
             return $next($request);
         }
 

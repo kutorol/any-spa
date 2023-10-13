@@ -1,27 +1,15 @@
-import { get } from "lodash";
 // @ts-ignore
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { changeUserInfo } from "../../../../store/reducers/common/user";
-import r from "../../../../utils/ajax";
-import token from "../../../../utils/ajax/token";
+import userAuth from "../../../../utils/repository/user-auth";
 
 const Logout = () => {
   // @ts-ignore
   const [isLogged, setIsLogged] = useState(useSelector(s => s.userInfo.isLogged));
 
   useEffect(() => {
-    if (isLogged) {
-      r.post("/api/logout").then(res => {
-        if (!get(res, "status", false)) {
-          return;
-        }
-
-        token.clearToken();
-        changeUserInfo(null);
-        setIsLogged(false);
-      });
-    }
+    isLogged && userAuth.logout()
+      .then((res: boolean) => res && setIsLogged(false));
 
     return () => {
     };

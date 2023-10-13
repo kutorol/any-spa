@@ -16,10 +16,24 @@ export interface RedirectInterface {
   isLogout(): boolean;
 }
 
-export enum HTTPMethod {
-  GET = "GET",
-  PATCH = "PATCH",
-  POST = "POST",
-  PUT = "PUT",
-  DELETE = "DELETE"
+
+
+export interface headersInterface {
+  // Хедер авторизации
+  Authorization: string;
+  // Хедер какой тип контента
+  Accept: string;
+  // Любые параметры
+  [ key: string ]: any;
+}
+
+export interface getRequestInterface {
+  // Если true, успешное сообщение не отобразится
+  noSuccessMsg?: boolean;
+  // Если > 0, то успешное сообщение будет показано это кол-во времени
+  successMsgTimeout?: number;
+  // Специфические хедеры, если нужно заменить текущие
+  headers?: headersInterface;
+  // Любые параметры
+  [ key: string ]: any;
 }

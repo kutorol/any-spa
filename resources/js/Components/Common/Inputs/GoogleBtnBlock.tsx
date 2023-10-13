@@ -10,7 +10,7 @@ import useGoogleRecaptcha from "../../../hooks/useGoogleRecaptcha";
 import { GoogleFetchTokens } from "../../../utils/ajax/oauth/google-fetch-tokens";
 import AnimateButton from "../AnimateButton/AnimateButton";
 
-const GoogleBtnBlock = ({ isRegister = true }) => {
+const GoogleBtnBlock = ({ isRegister = false }) => {
   const theme = useTheme();
   const { t } = useLaravelReactI18n();
   const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));

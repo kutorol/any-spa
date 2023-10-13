@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Auth;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Auth\VerifiesEmails;
-use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use RCerljenko\LaravelPaseto\Traits\HasPaseto;
 
@@ -72,16 +70,6 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasPaseto, HasFactory, Notifiable, SoftDeletes, VerifiesEmails;
 
-    public const ROLE_SITE_ADMIN = 'site_admin';
-    public const ROLE_SITE_MANAGER = 'site_manager';
-
-    public const ROLE_USER = 'user';
-    public const ROLE_GUEST = 'guest';
-    public const ROLE_TEST_USER = 'test_user';
-
-    public const MALE = 'male';
-    public const FEMALE = 'female';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -93,8 +81,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'role',
         'phone',
+        'age',
         'sex',
         'avatar',
+        'is_am_pm',
         'email_verified_at',
         'blocked',
         'locale',
@@ -117,6 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_am_pm' => 'boolean',
         'blocked' => 'boolean',
         'locale' => 'string',
     ];
@@ -136,57 +127,8 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public static function roles(): array
+    public static function getCurrentUser(): ?self
     {
-        return [
-            self::ROLE_SITE_ADMIN,
-            self::ROLE_SITE_MANAGER,
-            self::ROLE_USER,
-            self::ROLE_TEST_USER,
-        ];
-    }
-
-    public static function getCurrentUser()
-    {
-        return \Auth::guard('api')->user() ?? \Auth::user();
-    }
-
-    private static function getRole(): string
-    {
-        return self::getCurrentUser()?->role ?? self::ROLE_GUEST;
-    }
-
-    public static function isSiteAdmin(): bool
-    {
-        return self::isRoles(self::ROLE_SITE_ADMIN);
-    }
-
-    public static function isSiteManager(): bool
-    {
-        return self::isRoles(self::ROLE_SITE_MANAGER);
-    }
-
-    public static function isSiteAdminOrManager(): bool
-    {
-        return self::isRoles(self::ROLE_SITE_ADMIN, self::ROLE_SITE_MANAGER);
-    }
-
-    public static function isRoles(string ...$roles): bool
-    {
-        return in_array(self::getRole(), $roles, true);
-    }
-
-    public static function checkRole(?string $role = null): bool
-    {
-        if (!$role) {
-            return false;
-        }
-
-        return in_array(mb_strtolower($role), self::roles(), true);
-    }
-
-    public static function getUserRole(?Request $request = null): string
-    {
-        return Auth::guard('api')->user()?->role ?? $request?->user()?->role ?? self::ROLE_GUEST;
+        return \Auth::guard('api')->user() ?? \Auth::user() ?? null;
     }
 }

@@ -1,6 +1,7 @@
 import RouterAPI from "../funcs/router-api";
+import { RedirectInterface } from "./interfaces";
 
-class __redirect {
+class __redirect implements RedirectInterface {
   // с каких роутов нужно редиректить юзера на главную, если он авторизирован уже
   private readonly redirectFromAuthRouteList = ["/login", "/register"];
 

@@ -4,7 +4,7 @@ import { useLaravelReactI18n } from "laravel-react-i18n";
 import React from "react";
 import AnimateButton from "../../../Common/AnimateButton/AnimateButton";
 
-const SubmitBtn = ({ isSubmitting, isRegister = true, isPasswordReset = false }) => {
+const SubmitBtn = ({ isSubmitting, isRegister = false, isPasswordReset = false }) => {
   const { t } = useLaravelReactI18n();
   const sx = { mt: 2 };
 

@@ -1,5 +1,4 @@
-// @ts-ignore
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 import { createErrMgs } from "../../../store/reducers/snackbar/error-snackbar";
 import { ChainCheckHTTPResponse } from "../interfaces";
 
@@ -20,7 +19,7 @@ export class ChainCheckErrorsHTTP implements ChainCheckHTTPResponse {
     pasetoMsg && errs.push(pasetoMsg.trim());
 
     // @ts-ignore
-    createErrMgs(errs, 7000, get(res, "code", 0));
+    createErrMgs(errs, 7000, toNumber(get(res, "code", 0)));
 
     return res;
   }

@@ -12,7 +12,7 @@ import FormInputsRegister from "../Register/Form/FormInputs";
 import AuthEmailTitle from "./AuthEmailTitle";
 import OrBlock from "./OrBlock";
 
-function AuthForm({ isRegister = true, isPasswordReset = false, isPasswordResetConfirm = false }) {
+function AuthForm({ isRegister = false, isPasswordReset = false, isPasswordResetConfirm = false }) {
   const spacing = 2;
   const { t } = useLaravelReactI18n();
 

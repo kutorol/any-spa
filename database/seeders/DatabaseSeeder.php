@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\User;
+use App\Enums\User\RolesEnum;
+use App\Enums\User\SexEnum;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -25,9 +26,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('adminadmin'),
-            'role' => User::ROLE_SITE_ADMIN,
+            'role' => RolesEnum::ROLE_SITE_ADMIN,
             'phone' => null,
-            'sex' => User::MALE,
+            'sex' => SexEnum::MALE,
+            'age' => 18,
+            'is_am_pm' => false,
         ]);
 
         \App\Models\User::factory()->create([
@@ -35,9 +38,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@user.com',
             'email_verified_at' => now(),
             'password' => Hash::make('useruser'),
-            'role' => User::ROLE_USER,
+            'role' => RolesEnum::ROLE_USER,
             'phone' => null,
-            'sex' => User::MALE,
+            'sex' => SexEnum::MALE,
+            'age' => 18,
+            'is_am_pm' => false,
         ]);
     }
 }

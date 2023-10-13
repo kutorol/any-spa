@@ -1,54 +1,26 @@
 import { Divider, Grid, Typography } from "@mui/material";
 import { IconSend } from "@tabler/icons-react";
 import { useLaravelReactI18n } from "laravel-react-i18n";
+import { get } from "lodash";
 // @ts-ignore
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import useSecondsLeftTimer from "../../../../hooks/useSecondsLeftTimer";
-import { changeFullScreenLoaderState } from "../../../../store/reducers/common/full-screen-loader";
-import r from "../../../../utils/ajax";
+import userAuth from "../../../../utils/repository/user-auth";
 import CustomAlert from "../../../Common/Gui/Alert/CustomAlert";
 import Btn from "../../../Common/Gui/Btn/Btn";
 import MainCard from "../../../Common/MainCard/MainCard";
 
-const VerifyEmail = () => {
+interface VerifyEmailProps {
+  leftSeconds: number
+  onClick: (e) => void;
+}
+
+const VerifyEmail = ({ leftSeconds, onClick }: VerifyEmailProps) => {
   const { t, tChoice } = useLaravelReactI18n();
   const xs = 12;
   const spacing = 2;
-
-  const navigate = useNavigate();
-  // @ts-ignore
-  const verifiedEmail = useSelector(s => s.userInfo.user.verified_email);
-  const { leftSeconds, setLeftSeconds } = useSecondsLeftTimer({
-    initStorageNameLeftSeconds: "verify_email_again_action"
-  });
-
-  useEffect(() => {
-    if (verifiedEmail) {
-      navigate("/");
-    }
-    return () => {
-    };
-  }, [verifiedEmail]);
-
-
-  const onClickSendEmail = e => {
-    e && e.preventDefault();
-    if (leftSeconds > 0) {
-      return;
-    }
-
-    changeFullScreenLoaderState(true);
-    r.post("/api/email/verification-notification", {}).then(res => {
-      res.status && setLeftSeconds(60);
-      changeFullScreenLoaderState(false);
-    });
-  };
-
-  if (verifiedEmail) {
-    return null;
-  }
 
   return (
     // @ts-ignore
@@ -92,7 +64,7 @@ const VerifyEmail = () => {
             <Btn
               webTitle={t("Отправить письмо еще раз")}
               mobTitle={t("Отправить")}
-              onClick={onClickSendEmail}
+              onClick={onClick}
             />
           </Grid>
         )}

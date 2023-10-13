@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO\User;
 
-use App\Models\User;
+use App\Enums\User\RolesEnum;
 use App\Models\User\OAuth;
 
 class OAuthRegisterDTO
@@ -15,7 +15,7 @@ class OAuthRegisterDTO
 
     private string $email = '';
 
-    private string $role = User::ROLE_USER;
+    private string $role = RolesEnum::ROLE_USER;
 
     private string $locale = 'ru';
 
@@ -66,8 +66,8 @@ class OAuthRegisterDTO
 
     public function setRole(?string $role): self
     {
-        if (!User::checkRole($role)) {
-            $role = User::ROLE_USER;
+        if (!RolesEnum::checkRole($role)) {
+            $role = RolesEnum::ROLE_USER;
         }
 
         $this->role = $role;

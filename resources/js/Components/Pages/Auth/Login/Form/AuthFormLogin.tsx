@@ -4,7 +4,7 @@ import AuthForm from "../../Common/AuthForm";
 
 function AuthFormLogin() {
   return (
-    <AuthForm isRegister={false}/>
+    <AuthForm />
   );
 }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Models\User;
+use App\Enums\User\RolesEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -17,7 +17,7 @@ class RegisterRequest extends FormRequest
             'password' => 'required|min:6|max:255',
             'password_confirmation' => 'required|same:password|min:6|max:255',
             'g-recaptcha-token' => 'required|recaptchav3:,0.5',
-            'role' => 'nullable|in:'.implode(',', User::roles()),
+            'role' => 'nullable|in:'.implode(',', RolesEnum::roles()),
         ];
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware\Custom\Roles;
 
-use App\Models\User;
+use App\Enums\User\RolesEnum;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +22,7 @@ class IsSiteAdminAndManager
      */
     public function handle(Request $request, Closure $next)
     {
-        if (in_array(User::getUserRole($request), [User::ROLE_SITE_ADMIN, User::ROLE_SITE_MANAGER])) {
+        if (RolesEnum::isRoles(RolesEnum::ROLE_SITE_ADMIN, RolesEnum::ROLE_SITE_MANAGER)) {
             return $next($request);
         }
 

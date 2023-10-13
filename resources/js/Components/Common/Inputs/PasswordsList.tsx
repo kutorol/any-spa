@@ -21,7 +21,6 @@ const PasswordsList = ({ values, handleBlur, handleChange, touched, errors }) =>
           handleChange={handleChange}
           touched={touched}
           errors={errors}
-          theme={theme}
         />
       </Grid>
 
@@ -35,7 +34,6 @@ const PasswordsList = ({ values, handleBlur, handleChange, touched, errors }) =>
           handleChange={handleChange}
           touched={touched}
           errors={errors}
-          theme={theme}
         />
       </Grid>
     </Grid>

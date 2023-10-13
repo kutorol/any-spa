@@ -9,11 +9,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleOAuthClientID, GoogleRecaptchaV3SiteKey } from "./store/constant";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { LaravelReactI18nProvider } from "laravel-react-i18n";
-
-enum Languages {
-  RU = "ru",
-  EN = "en"
-}
+import { Languages } from "./utils/enums/common/enums";
 
 const fallBackLocale: Languages = Languages.RU;
 const defaultLocale = get(window, 'siteLocale', fallBackLocale);

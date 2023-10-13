@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware\Custom\Roles;
 
+use App\Enums\User\RolesEnum;
 use App\Http\Controllers\Api\BaseController;
-use App\Models\User;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
@@ -25,7 +25,7 @@ class IsSiteAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (User::getUserRole($request) === User::ROLE_SITE_ADMIN) {
+        if (RolesEnum::isRoles(RolesEnum::ROLE_SITE_ADMIN)) {
             return $next($request);
         }
 

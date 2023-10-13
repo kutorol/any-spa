@@ -1,5 +1,6 @@
 import { get } from "lodash";
 import { changeUserInfo } from "../../../store/reducers/common/user";
+import { UserInterface } from "../../repository/interfaces";
 import { ChainCheckHTTPResponse, RedirectInterface } from "../interfaces";
 
 // Проверка на приход данных по юзеру
@@ -10,7 +11,7 @@ export class ChainCheckUserDataHTTP implements ChainCheckHTTPResponse {
   }
 
   public check(res: any): any {
-    const user = get(res, "data.user_data", null);
+    const user = <UserInterface>get(res, "data.user_data", null);
     if (!user) {
       return res;
     }

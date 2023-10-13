@@ -3,7 +3,7 @@ import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React from "react";
 
-const AuthEmailTitle = ({ isRegister = true }) => {
+const AuthEmailTitle = ({ isRegister = false }) => {
   const xs = 12;
   const sx = { mb: 2 };
   const { t } = useLaravelReactI18n();

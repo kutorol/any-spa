@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -93,17 +92,12 @@ class BaseController extends Controller
      */
     protected function user(): ?User
     {
-        return Auth::guard('api')->user() ?? Auth::user() ?? null;
+        return User::getCurrentUser();
     }
 
     protected function getUID(): int
     {
         return (int)($this->user()?->id ?? 0);
-    }
-
-    protected function checkRoles(string ...$roles): bool
-    {
-        return in_array(User::getUserRole(), $roles, true);
     }
 
     public static function isWeb(?Request $r = null): bool

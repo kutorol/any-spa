@@ -1,16 +1,21 @@
 import axios from "axios";
-// @ts-ignore
-import { get } from "lodash";
+import { get, toNumber } from "lodash";
 import { changeAppInitState } from "../../store/reducers/common/app-init";
 import { changeFullScreenLoaderState } from "../../store/reducers/common/full-screen-loader";
 import { createSuccessMgs } from "../../store/reducers/snackbar/ok-snackbar";
+import { HTTPMethod } from "../enums/common/enums";
 import { ChainCheckErrorsHTTP } from "./chains-http/errors";
 import { ChainCheckLocaleHTTP } from "./chains-http/locale";
 import { ChainCheckRedirectHTTP } from "./chains-http/redirect";
 import { ChainCheckNeedRefreshTokenHTTP } from "./chains-http/refresh-tokens";
 import { ChainCheckSetTokensHTTP } from "./chains-http/set-tokens";
 import { ChainCheckUserDataHTTP } from "./chains-http/user";
-import { ChainCheckHTTPResponse, HTTPMethod, RedirectInterface, TokenInterface } from "./interfaces";
+import {
+  ChainCheckHTTPResponse,
+  getRequestInterface,
+  RedirectInterface,
+  TokenInterface
+} from "./interfaces";
 import redirect from "./redirect";
 import token from "./token";
 
@@ -40,57 +45,57 @@ class ajax {
   }
 
   // GET запрос
-  public get(url: string, params: object = {}): Promise<any> {
+  public get(url: string, params: getRequestInterface): Promise<any> {
     return this.commonRequest(url, params, false, HTTPMethod.GET);
   }
 
   // POST запрос
-  public post(url: string, params: object = {}): Promise<any> {
+  public post(url: string, params: getRequestInterface): Promise<any> {
     return this.commonRequest(url, params, false, HTTPMethod.POST);
   }
 
   // PUT запрос
-  public put(url: string, params: object = {}): Promise<any> {
+  public put(url: string, params: getRequestInterface): Promise<any> {
     return this.commonRequest(url, params, false, HTTPMethod.PUT);
   }
 
   // PATCH запрос
-  public patch(url: string, params: object = {}): Promise<any> {
+  public patch(url: string, params: getRequestInterface): Promise<any> {
     return this.commonRequest(url, params, false, HTTPMethod.PATCH);
   }
 
   // DELETE запрос
-  public delete(url: string, params: object = {}) {
+  public delete(url: string, params: getRequestInterface) {
     return this.commonRequest(url, params, false, HTTPMethod.DELETE);
   }
 
   // GET запрос на другой сайт
-  public getOutside(url: string, params: object = {}): Promise<any> {
+  public getOutside(url: string, params: getRequestInterface): Promise<any> {
     return this.commonRequestOutside(url, params, HTTPMethod.GET);
   }
 
   // POST запрос на другой сайт
-  public postOutside(url: string, params: object = {}): Promise<any> {
+  public postOutside(url: string, params: getRequestInterface): Promise<any> {
     return this.commonRequestOutside(url, params, HTTPMethod.POST);
   }
 
   // PUT запрос на другой сайт
-  public putOutside(url: string, params: object = {}): Promise<any> {
+  public putOutside(url: string, params: getRequestInterface): Promise<any> {
     return this.commonRequestOutside(url, params, HTTPMethod.PUT);
   }
 
   // PATCH запрос на другой сайт
-  public patchOutside(url: string, params: object = {}): Promise<any> {
+  public patchOutside(url: string, params: getRequestInterface): Promise<any> {
     return this.commonRequestOutside(url, params, HTTPMethod.PATCH);
   }
 
   // DELETE запрос
-  public deleteOutside(url: string, params: object = {}) {
+  public deleteOutside(url: string, params: getRequestInterface) {
     return this.commonRequestOutside(url, params, HTTPMethod.DELETE);
   }
 
   // Общий обработчик для всех запросов
-  private commonRequest(url: string, params: object = {}, isRepeat: boolean = false, method: HTTPMethod = HTTPMethod.GET): Promise<any> {
+  private commonRequest(url: string, params: getRequestInterface, isRepeat: boolean = false, method: HTTPMethod = HTTPMethod.GET): Promise<any> {
     return this.afterRequest(
       this.getRequest(url, params, method),
       url,
@@ -101,12 +106,13 @@ class ajax {
   }
 
   // Общий обработчик для всех запросов от другого сайт
-  private commonRequestOutside(url: string, params: object = {}, method: HTTPMethod = HTTPMethod.GET): Promise<any> {
+  private commonRequestOutside(url: string, params: getRequestInterface, method: HTTPMethod = HTTPMethod.GET): Promise<any> {
     return this.afterRequestOutside(this.getRequest(url, params, method));
   }
 
   // Возвращает сам запрос
-  private getRequest(url: string, params: object = {}, method: HTTPMethod): Promise<any> {
+  private getRequest(url: string, params: getRequestInterface, method: HTTPMethod): Promise<any> {
+
     const headers = this.getHeaders(params);
     return axios.request({
       method: method,
@@ -120,7 +126,7 @@ class ajax {
         // @ts-ignore
         if (get(res, "status", false) && !params.noSuccessMsg) {
           // @ts-ignore
-          createSuccessMgs(get(res, "msg", null), params.successMsgTimeout || 3000);
+          createSuccessMgs(get(res, "msg", null), toNumber(params.successMsgTimeout || 3000));
         }
 
         return res;

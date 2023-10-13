@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { get } from "lodash";
+import { Languages } from "../../../utils/enums/common/enums";
 import Locale from "../../../utils/funcs/locale";
 import store from "../../store";
 
-export const changeLocale = (locale: string = "ru") => {
+export const changeLocale = (locale: Languages = Languages.RU) => {
   store.dispatch(localeReducer.actions.set({
     val: locale
   }));
@@ -12,8 +14,7 @@ export const createLocaleReducer = () => {
   return createSlice({
     name: "localeReducer",
     initialState: {
-      // @ts-ignore
-      val: window.siteLocale || "ru"
+      val: get(window, "siteLocale", Languages.RU)
     },
     reducers: {
       set: (state, action) => {

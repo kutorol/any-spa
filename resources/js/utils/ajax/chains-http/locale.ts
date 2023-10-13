@@ -1,5 +1,6 @@
 import { get } from "lodash";
 import { changeLocale } from "../../../store/reducers/common/locale";
+import { Languages } from "../../enums/common/enums";
 import Locale from "../../funcs/locale";
 import { ChainCheckHTTPResponse } from "../interfaces";
 
@@ -11,7 +12,7 @@ export class ChainCheckLocaleHTTP implements ChainCheckHTTPResponse {
       return res;
     }
 
-    changeLocale(locale);
+    changeLocale(<Languages>locale);
     Locale.locale.setLocale(locale);
 
     return res;

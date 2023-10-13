@@ -11,7 +11,7 @@ const LoginPage = Loadable(lazy(() => import("../../Components/Pages/Auth/Login/
 // @ts-ignore
 const RegisterPage = Loadable(lazy(() => import("../../Components/Pages/Auth/Register/Register")));
 // @ts-ignore
-const VerifyEmailPage = Loadable(lazy(() => import("../../Components/Pages/Auth/VerifyEmail/VerifyEmail")));
+const VerifyEmailPage = Loadable(lazy(() => import("../../Components/Pages/Auth/VerifyEmail/VerifyEmailWrapper")));
 // @ts-ignore
 const LogoutPage = Loadable(lazy(() => import("../../Components/Pages/Auth/Logout/Logout")));
 // @ts-ignore

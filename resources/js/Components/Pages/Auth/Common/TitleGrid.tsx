@@ -8,7 +8,7 @@ const TitleGrid = ({
  xsNum,
  themeColor,
  matchDownSM,
- isRegister = true,
+ isRegister = false,
  isPasswordReset = false,
  isPasswordResetConfirm = false
 }) => {

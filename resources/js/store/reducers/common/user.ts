@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 // @ts-ignore
 import { cloneDeep, get, toNumber } from "lodash";
-import store from "../../store";
+import { Languages, Roles, Sex } from "../../../utils/enums/common/enums";
 import Locale from "../../../utils/funcs/locale";
+import { UserInterface } from "../../../utils/repository/interfaces";
+import store from "../../store";
 
-const defaultUser = {
+const defaultUser: UserInterface = {
   uid: 0,
   verified_email: false,
   full_name: "",
@@ -12,38 +14,38 @@ const defaultUser = {
   last_name: "",
   surname: "",
   email: "",
-  role: "guest",
-  locale: "ru",
+  roleTitle: "",
+  role: Roles.GUEST,
+  locale: Languages.RU,
   is_am_pm: false,
   phone: null,
-  sex: "male",
+  sex: Sex.MALE,
   avatar: null,
   age: 0
 };
 
-
-const getRoleName = (role: string): string => {
+const getRoleName = (role: Roles): string => {
   const { t } = Locale.locale;
-  const roles = {
-    "site_admin": t("Администратор сайта"),
-    "site_manager": t("Менеджер сайта"),
-    "gym_admin": t("Администратор тренажерных залов"),
-    "gym_manager": t("Менеджер тренажерных залов"),
-    "gym_trainer": t("Тренер тренажерных залов"),
-    "user": t("Посетитель тренажерных залов"),
-    "guest": t("Аноним"),
-    "test_user": t("Тестовый пользователь")
+  const roles: { [key in Roles]: string } = {
+    [ Roles.SITE_ADMIN ]: t("Администратор сайта"),
+    [ Roles.SITE_MANAGER ]: t("Менеджер сайта"),
+    [ Roles.GYM_ADMIN ]: t("Администратор тренажерных залов"),
+    [ Roles.GYM_MANAGER ]: t("Менеджер тренажерных залов"),
+    [ Roles.GYM_TRAINER ]: t("Тренер тренажерных залов"),
+    [ Roles.USER ]: t("Посетитель тренажерных залов"),
+    [ Roles.GUEST ]: t("Аноним"),
+    [ Roles.TEST_USER ]: t("Тестовый пользователь")
   };
 
   return roles[ role ];
 };
 
-export const changeUserInfo = (user: object) => {
+export const changeUserInfo = (user?: UserInterface) => {
   const uid = user ? toNumber(get(user, "uid", 0)) : 0;
   const isLogged = uid > 0;
 
   const u = isLogged ? cloneDeep(user) : cloneDeep(defaultUser);
-  u.roleTitle = getRoleName(u.role);
+  u.roleTitle = getRoleName(<Roles>u.role);
 
   store.dispatch(userInfoReducer.actions.set({
     isLogged: isLogged,
@@ -65,7 +67,7 @@ export const createUserInfoReducer = () => {
         const { user, isLogged, uid } = action.payload;
         state.isLogged = isLogged;
         state.user = user;
-        state.uid = user;
+        state.uid = uid;
       },
       clear: (state) => {
         state.user = defaultUser;

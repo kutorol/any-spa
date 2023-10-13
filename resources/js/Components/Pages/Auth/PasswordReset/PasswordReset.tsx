@@ -4,10 +4,7 @@ import AuthFormWrapper from "../Common/AuthFormWrapper";
 
 const PasswordReset = () => {
   return (
-    <AuthFormWrapper
-      isRegister={false}
-      isPasswordReset
-    />
+    <AuthFormWrapper isPasswordReset/>
   );
 };
 

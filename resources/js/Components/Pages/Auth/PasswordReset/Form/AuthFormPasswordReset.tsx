@@ -4,10 +4,7 @@ import AuthForm from "../../Common/AuthForm";
 
 const AuthFormPasswordReset = () => {
   return (
-    <AuthForm
-      isRegister={false}
-      isPasswordReset
-    />
+    <AuthForm isPasswordReset/>
   );
 };
 

@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App;
 use App\DTO\User\OAuthRegisterDTO;
+use App\Enums\User\RolesEnum;
 use App\Http\Controllers\Api\BaseController;
 use App\Models\User;
 use App\Models\User\BlockedUserInfo;
@@ -20,8 +21,8 @@ class UserRepository
     public function create(array $data): User
     {
         $data['password'] = bcrypt($data['password']);
-        if (!User::checkRole($data['role'] ?? null)) {
-            $data['role'] = User::ROLE_USER;
+        if (!RolesEnum::checkRole($data['role'] ?? null)) {
+            $data['role'] = RolesEnum::ROLE_USER;
         }
         $data['locale'] = App::getLocale();
 

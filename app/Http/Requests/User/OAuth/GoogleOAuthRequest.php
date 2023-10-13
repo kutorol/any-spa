@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\User\OAuth;
 
-use App\Models\User;
+use App\Enums\User\RolesEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GoogleOAuthRequest extends FormRequest implements OAuthRequestInterface
@@ -15,7 +15,7 @@ class GoogleOAuthRequest extends FormRequest implements OAuthRequestInterface
             'name' => 'required|max:255',
             'email' => 'required|email',
             'g-recaptcha-token' => 'required|recaptchav3:,0.5',
-            'role' => 'nullable|in:'.implode(',', User::roles()),
+            'role' => 'nullable|in:'.implode(',', RolesEnum::roles()),
             'locale' => 'nullable|string|max:20',
             'id' => 'required|max:255',
             'avatar' => 'nullable|string',

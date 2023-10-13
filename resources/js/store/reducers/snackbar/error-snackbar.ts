@@ -4,11 +4,11 @@ import store from "../../store";
 
 export const defaultDurationMS = 5000;
 
-export const createErrMgs = (listErrs, duration = 5000, code = 0) => {
+export const createErrMgs = (listErrs: string|string[], duration: number = 5000, code: number = 0) => {
   store.dispatch(errSnackbar.actions.set(_createErrMgs(listErrs, duration, code)));
 };
 
-const _createErrMgs = (listErrs, duration = 5000, code = 0) => {
+const _createErrMgs = (listErrs: string|string[], duration: number = 5000, code: number = 0) => {
   let errs = [];
   if (typeof listErrs === "string") {
     errs.push(listErrs);
