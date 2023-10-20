@@ -2,11 +2,13 @@ import { FormControl, FormHelperText, InputLabel, OutlinedInput } from "@mui/mat
 import { useTheme } from "@mui/material/styles";
 import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
-import React from "react";
+import React, { useMemo } from "react";
+import { hashCode } from "../../../utils/funcs/hash";
 
 const EmailInput = ({ touched, errors, values, handleBlur, handleChange }) => {
   const theme = useTheme();
-  const emailID = "outlined-adornment-email-register";
+
+  const emailID = useMemo(() => `email-${hashCode(`email-${new Date().toString()}`)}`, []);
   const hasErr = Boolean(touched.email && errors.email);
   const { t } = useLaravelReactI18n();
 
@@ -17,9 +19,7 @@ const EmailInput = ({ touched, errors, values, handleBlur, handleChange }) => {
       // @ts-ignore
       sx={{ ...theme.typography.customInput }}
     >
-      <InputLabel htmlFor={emailID}>
-        {t("E-mail")}
-      </InputLabel>
+      <InputLabel htmlFor={emailID}>{t("E-mail")}</InputLabel>
       <OutlinedInput
         id={emailID}
         type="email"
@@ -29,7 +29,7 @@ const EmailInput = ({ touched, errors, values, handleBlur, handleChange }) => {
         onChange={handleChange}
       />
       {hasErr && (
-        <FormHelperText error id="standard-weight-helper-text--register">
+        <FormHelperText error>
           {errors.email}
         </FormHelperText>
       )}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Api\OAuth\GoogleOAuthController;
 use App\Http\Controllers\Api\Other\TermOfUsePolicy;
+use App\Http\Controllers\Api\TechSupport\AnonymTechSupportController;
 use App\Http\Controllers\Api\User\AuthController;
 use App\Http\Controllers\Api\User\ForgotController;
 use App\Http\Middleware\Custom\Roles\IsGuest;
@@ -17,6 +18,11 @@ Route::middleware('throttle:5,1')->prefix('/oauth')->group(function () {
     // Авторизация через Google
     Route::post('/google', [GoogleOAuthController::class, 'index'])->name('googleOAuth');
 });
+
+// Отправка запроса в тех. службу от юзера
+Route::post('/tech-support', [AnonymTechSupportController::class, 'send'])
+    ->middleware('throttle:5,1')
+    ->name('support.send');
 
 Route::middleware(IsGuest::MIDDLEWARE_NAME)->group(function () {
     Route::middleware('throttle:5,1')->group(function () {

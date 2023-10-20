@@ -14,17 +14,22 @@ import {
   Typography
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { IconLogout, IconSettings } from "@tabler/icons-react";
+import { IconLifebuoy, IconLogout, IconSettings } from "@tabler/icons-react";
+import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // @ts-ignore
 import User1 from "../../../../../../assets/images/svg/users/user-round.svg";
+import useOpen from "../../../../../hooks/useOpen";
+import WebOrMobileBox from "../../../../Common/Gui/WebOrMobileBox";
 import MainCard from "../../../../Common/MainCard/MainCard";
 import Transitions from "../../../../Common/Transitions/Transitions";
+import TechSupport from "../../../../Pages/Special/TechSupport/TechSupport";
 
 const ProfileSection = () => {
+  const { t } = useLaravelReactI18n();
   const theme = useTheme();
   // @ts-ignore
   const user = useSelector(s => s.userInfo.user);
@@ -36,6 +41,14 @@ const ProfileSection = () => {
   // const [ notification, setNotification ] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
+  const { isOpen: isOpenSupport, toggle: toggleOpenSupport } = useOpen();
+
+  const onClickSupport = (e?: any) => {
+    e && e.preventDefault();
+    setOpen(false);
+    toggleOpenSupport();
+  };
+
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
@@ -277,7 +290,32 @@ const ProfileSection = () => {
                         <ListItemIcon>
                           <IconLogout stroke={1.5} size="1.3rem"/>
                         </ListItemIcon>
-                        <ListItemText primary={<Typography variant="body2">Выйти</Typography>}/>
+                        <ListItemText primary={<Typography variant="body2">{t("Выйти")}</Typography>}/>
+                      </ListItemButton>
+                      <Stack sx={{ m: 1 }}/>
+                      <Divider/>
+
+                      <ListItemButton
+                        sx={{ borderRadius: `${customization.borderRadius}px` }}
+                        component={Link}
+                        to="/support-tech"
+                        onClick={onClickSupport}
+                        // onClick={handleLogout}
+                      >
+                        <ListItemIcon>
+                          <IconLifebuoy stroke={1.5} size="1.3rem"/>
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <WebOrMobileBox
+                              mobileComponent={<Typography variant="body2">{t("Тех. поддержка")}</Typography>}
+                            >
+                              <Typography variant="body2">
+                                {t("Техническая поддержка")}
+                              </Typography>
+                            </WebOrMobileBox>
+                          }
+                        />
                       </ListItemButton>
                     </List>
                   </Box>
@@ -288,6 +326,11 @@ const ProfileSection = () => {
           </Transitions>
         )}
       </Popper>
+
+      <TechSupport
+        isOpen={isOpenSupport}
+        toggle={onClickSupport}
+      />
     </>
   );
 };

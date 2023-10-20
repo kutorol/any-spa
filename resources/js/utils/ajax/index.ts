@@ -10,12 +10,7 @@ import { ChainCheckRedirectHTTP } from "./chains-http/redirect";
 import { ChainCheckNeedRefreshTokenHTTP } from "./chains-http/refresh-tokens";
 import { ChainCheckSetTokensHTTP } from "./chains-http/set-tokens";
 import { ChainCheckUserDataHTTP } from "./chains-http/user";
-import {
-  ChainCheckHTTPResponse,
-  getRequestInterface,
-  RedirectInterface,
-  TokenInterface
-} from "./interfaces";
+import { ChainCheckHTTPResponse, getRequestInterface, RedirectInterface, TokenInterface } from "./interfaces";
 import redirect from "./redirect";
 import token from "./token";
 
@@ -45,52 +40,52 @@ class ajax {
   }
 
   // GET запрос
-  public get(url: string, params: getRequestInterface): Promise<any> {
+  public get(url: string, params: getRequestInterface = {}): Promise<any> {
     return this.commonRequest(url, params, false, HTTPMethod.GET);
   }
 
   // POST запрос
-  public post(url: string, params: getRequestInterface): Promise<any> {
+  public post(url: string, params: getRequestInterface = {}): Promise<any> {
     return this.commonRequest(url, params, false, HTTPMethod.POST);
   }
 
   // PUT запрос
-  public put(url: string, params: getRequestInterface): Promise<any> {
+  public put(url: string, params: getRequestInterface = {}): Promise<any> {
     return this.commonRequest(url, params, false, HTTPMethod.PUT);
   }
 
   // PATCH запрос
-  public patch(url: string, params: getRequestInterface): Promise<any> {
+  public patch(url: string, params: getRequestInterface = {}): Promise<any> {
     return this.commonRequest(url, params, false, HTTPMethod.PATCH);
   }
 
   // DELETE запрос
-  public delete(url: string, params: getRequestInterface) {
+  public delete(url: string, params: getRequestInterface = {}) {
     return this.commonRequest(url, params, false, HTTPMethod.DELETE);
   }
 
   // GET запрос на другой сайт
-  public getOutside(url: string, params: getRequestInterface): Promise<any> {
+  public getOutside(url: string, params: getRequestInterface = {}): Promise<any> {
     return this.commonRequestOutside(url, params, HTTPMethod.GET);
   }
 
   // POST запрос на другой сайт
-  public postOutside(url: string, params: getRequestInterface): Promise<any> {
+  public postOutside(url: string, params: getRequestInterface = {}): Promise<any> {
     return this.commonRequestOutside(url, params, HTTPMethod.POST);
   }
 
   // PUT запрос на другой сайт
-  public putOutside(url: string, params: getRequestInterface): Promise<any> {
+  public putOutside(url: string, params: getRequestInterface = {}): Promise<any> {
     return this.commonRequestOutside(url, params, HTTPMethod.PUT);
   }
 
   // PATCH запрос на другой сайт
-  public patchOutside(url: string, params: getRequestInterface): Promise<any> {
+  public patchOutside(url: string, params: getRequestInterface = {}): Promise<any> {
     return this.commonRequestOutside(url, params, HTTPMethod.PATCH);
   }
 
   // DELETE запрос
-  public deleteOutside(url: string, params: getRequestInterface) {
+  public deleteOutside(url: string, params: getRequestInterface = {}) {
     return this.commonRequestOutside(url, params, HTTPMethod.DELETE);
   }
 
@@ -118,7 +113,7 @@ class ajax {
       method: method,
       headers: headers,
       url: url,
-      data: this.cleanParams(params)
+      data: params.formData ? params.formData : this.cleanParams(params)
     })
       .then(res => res.data)
       .catch(res => get(res, "response.data", {}))

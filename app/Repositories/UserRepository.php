@@ -60,6 +60,11 @@ class UserRepository
         return User::withTrashed()->firstWhere('id', '=', $id);
     }
 
+    public function findByEmail(string $email): ?User
+    {
+        return User::withTrashed()->firstWhere('email', '=', $email);
+    }
+
     public function delete(User $user): bool
     {
         return (bool)$user->delete();

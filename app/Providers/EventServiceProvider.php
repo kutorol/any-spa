@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Events\TechSupport\TechSupportUpdate;
+use App\Listeners\TechSupport\TechSupportUpdateNotification;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
@@ -29,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
         // Пароль успешно сменили после отправки email на сброс
         PasswordReset::class => [
 
+        ],
+        TechSupportUpdate::class => [
+            TechSupportUpdateNotification::class,
         ],
     ];
 

@@ -4,25 +4,30 @@ export interface ChainCheckHTTPResponse {
 
 export interface TokenInterface {
   setTokens(res: any): void;
+
   getAccess(): string;
+
   getRefresh(): string;
+
   clearToken(redirectTo?: string): void;
+
   checkTokens(method: (url: string, params: object) => Promise<any>): Promise<any>;
 }
 
 export interface RedirectInterface {
   redirectTo(to: string);
+
   redirectFromAuthRoutes(): void;
+
   isLogout(): boolean;
 }
 
-
-
 export interface headersInterface {
   // Хедер авторизации
-  Authorization: string;
+  Authorization?: string;
   // Хедер какой тип контента
-  Accept: string;
+  Accept?: string;
+
   // Любые параметры
   [ key: string ]: any;
 }
@@ -34,6 +39,9 @@ export interface getRequestInterface {
   successMsgTimeout?: number;
   // Специфические хедеры, если нужно заменить текущие
   headers?: headersInterface;
+  // данные с файлами и всей остальной формой
+  formData?: FormData,
+
   // Любые параметры
   [ key: string ]: any;
 }

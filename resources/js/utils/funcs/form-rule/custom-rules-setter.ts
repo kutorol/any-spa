@@ -1,9 +1,18 @@
 import * as Yup from "yup";
 import Locale from "../locale";
+import checker from "./checker";
+
+interface checkerInterface {
+  checkEmail(v?: string): boolean;
+}
 
 // Инициализатор обработки собственных правил валидации формы
 class CustomRulesSetter {
   private isInit: boolean = false;
+
+
+  constructor(private readonly checker: checkerInterface) {
+  }
 
   public init(): void {
     if (this.isInit) {
@@ -14,7 +23,7 @@ class CustomRulesSetter {
 
 
     this.setForStr();
-    this.setForNum();
+    this.setEmailCustom();
   }
 
   private setForStr(): void {
@@ -22,10 +31,7 @@ class CustomRulesSetter {
     this.setMaxLenStr();
   }
 
-  private setForNum(): void {
-
-  }
-
+  // добавляет правила валидации минимального количества символов
   private setMinLenStr(): void {
     Yup.addMethod(Yup.string, "minLen", function(num) {
       const errorMessage = Locale.locale.tChoice(
@@ -43,6 +49,7 @@ class CustomRulesSetter {
     });
   }
 
+  // добавляет правила валидации максимального количества символов
   private setMaxLenStr(): void {
     Yup.addMethod(Yup.string, "maxLen", function(num) {
       const errorMessage = Locale.locale.tChoice(
@@ -59,6 +66,19 @@ class CustomRulesSetter {
       });
     });
   }
+
+  // добавляет правила валидации email
+  private setEmailCustom(): void {
+    const checker = this.checker;
+    Yup.addMethod(Yup.string, "emailCustom", function() {
+      const errorMessage = Locale.locale.t("E-mail не правильный");
+
+      return this.test(`test-email-custom`, errorMessage, function(v: any) {
+        return checker.checkEmail(v)
+          || this.createError({ path: this.path, message: errorMessage });
+      });
+    });
+  }
 }
 
-export const customRulesSetter = new CustomRulesSetter();
+export const customRulesSetter = new CustomRulesSetter(checker);

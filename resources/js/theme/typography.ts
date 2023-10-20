@@ -86,6 +86,21 @@ export default function themeTypography(theme) {
         top: 0
       }
     },
+    customTextarea: {
+      marginTop: 1,
+      marginBottom: 1,
+      "& > div > label": {
+        top: 0,
+        left: 0,
+        color: theme.grey500,
+        "&[data-shrink=\"false\"]": {
+          top: 5
+        }
+      },
+      "& fieldset": {
+        top: -4
+      }
+    },
     mainContent: {
       backgroundColor: theme.background,
       width: "100%",

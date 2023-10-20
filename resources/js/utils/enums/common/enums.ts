@@ -26,3 +26,10 @@ export enum HTTPMethod {
   PUT = "PUT",
   DELETE = "DELETE"
 }
+
+// Типы запроса в тех. поддержку
+export enum TechSupportTypes {
+  TYPE_PROBLEM = "problem",
+  TYPE_SUGGEST = "suggest",
+  TYPE_QUESTION = "question"
+}

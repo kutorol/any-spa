@@ -56,6 +56,7 @@ return [
     'exists'               => 'Такое значение :attribute не существует.',
     'file'                 => 'Поле :attribute должно быть файлом.',
     'filled'               => 'Поле :attribute обязательно для заполнения.',
+    'max_file_count' => 'Максимальное количество файлов - :num',
     'gt'                   => [
         'numeric' => 'Поле :attribute должно быть больше :value.',
         'file'    => 'Размер файла в поле :attribute должен быть больше :value Килобайт(а).',

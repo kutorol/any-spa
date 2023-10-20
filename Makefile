@@ -87,6 +87,8 @@ prepare:
 larastan:
 	$(COMPOSE) run --rm -u $(CURRENT_UID) --entrypoint bash composer -c "php /var/www/vendor/bin/phpstan analyse --memory-limit 500M"
 
+fix: fix-ide-helper fix-cs
+
 # Делает форматирование кода
 fix-cs:
 	$(COMPOSE) run --rm -u $(CURRENT_UID) --entrypoint bash composer -c "/var/www/vendor/bin/php-cs-fixer fix --verbose --config=.php_cs.laravel.php"

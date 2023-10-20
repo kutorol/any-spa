@@ -1,7 +1,12 @@
-import { Divider, Grid, Stack, useMediaQuery } from "@mui/material";
+import { Divider, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { IconLifebuoy } from "@tabler/icons-react";
+import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React from "react";
+import { Link } from "react-router-dom";
+import useOpen from "../../../../hooks/useOpen";
+import TechSupport from "../../Special/TechSupport/TechSupport";
 import AuthCardWrapper from "../LayoutTheme/AuthCardWrapper";
 import AuthWrapper1 from "../LayoutTheme/AuthWrapper1";
 import AuthFormLogin from "../Login/Form/AuthFormLogin";
@@ -14,7 +19,15 @@ import TitleGrid from "./TitleGrid";
 
 const AuthFormWrapper = ({ isRegister = false, isPasswordReset = false, isPasswordResetConfirm = false }) => {
   const theme = useTheme();
+  const { isOpen: isOpenSupport, toggle: toggleOpenSupport } = useOpen();
+
+  const { t } = useLaravelReactI18n();
   const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
+
+  const onClickSupport = (e?: any) => {
+    e && e.preventDefault();
+    toggleOpenSupport();
+  };
 
   const xsNum = 12;
   const grid1Sx = { minHeight: "100vh" };
@@ -88,7 +101,27 @@ const AuthFormWrapper = ({ isRegister = false, isPasswordReset = false, isPasswo
         </Grid>
 
         <Grid item xs={xsNum} sx={sxFooter}>
-          <Stack direction="row" justifyContent="space-between"/>
+          <Stack direction="row" justifyContent="flex-end">
+            <TechSupport
+              isOpen={isOpenSupport}
+              toggle={onClickSupport}
+            />
+
+            <Typography
+              component={Link}
+              to="/support-tech"
+              onClick={onClickSupport}
+            >
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-end"
+                spacing={1}
+              >
+                <IconLifebuoy size="1rem"/> <span>{t("Техническая поддержка")}</span>
+              </Stack>
+            </Typography>
+          </Stack>
         </Grid>
       </Grid>
     </AuthWrapper1>
