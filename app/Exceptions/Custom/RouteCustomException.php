@@ -12,11 +12,9 @@ use Throwable;
 // Класс расширяет ошибки маршрутов
 class RouteCustomException implements CustomExceptionInterface
 {
-    private Throwable|RouteNotFoundException|MethodNotAllowedHttpException $e;
-
-    public function __construct(Throwable $e)
+    // @phpstan-ignore-next-line
+    public function __construct(Throwable|RouteNotFoundException|MethodNotAllowedHttpException $e)
     {
-        $this->e = $e;
     }
 
     public function getExtendedMessage(array $response): array

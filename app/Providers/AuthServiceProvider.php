@@ -20,7 +20,7 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
 
-    /** @var array<InterfaceProvider> */
+    /** @var array<string|InterfaceProvider> */
     private const PROVIDERS = [
         VerifyEmailProvider::class,
         ResetPasswordProvider::class,

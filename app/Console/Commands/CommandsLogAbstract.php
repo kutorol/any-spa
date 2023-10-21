@@ -25,6 +25,8 @@ abstract class CommandsLogAbstract extends Command
         $this->log()->info('cron_middleware__start', ['command' => $this->signature]);
         $startTime = new DateTime('now');
 
+        /** @var void|bool $res */
+        $res = false;
         try {
             $res = $cb();
             $method = $res ? 'error' : 'info';

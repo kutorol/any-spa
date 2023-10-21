@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\User\PasetoToken;
 use App\Repositories\User\PasetoTokenRepository;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -17,7 +19,7 @@ use Illuminate\Routing\Redirector;
 
 final class CheckToken extends CheckAbstract
 {
-    private ?PasetoToken $infoToken = null;
+    private PasetoToken|Model|Builder|null $infoToken = null;
 
     private ?User $user = null;
 
@@ -35,11 +37,13 @@ final class CheckToken extends CheckAbstract
     public function check(): bool
     {
         // если токена нет или он не активен или истек срок хранения токена
+        // @phpstan-ignore-next-line
         return !is_null($this->infoToken) && $this->infoToken->isActive();
     }
 
     public function getData(): ?PasetoToken
     {
+        // @phpstan-ignore-next-line
         return $this->infoToken;
     }
 

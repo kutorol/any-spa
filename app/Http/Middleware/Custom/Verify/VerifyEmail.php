@@ -25,7 +25,7 @@ class VerifyEmail
      */
     public function handle(Request $request, Closure $next)
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $request->user();
         if ($user && !$user->email_verified_at && !$request->routeIs(self::EXCLUDE_ROUTES)) {
             return IsSiteAdmin::getResponse($request, 'user.no_email_verification', BaseController::FORBIDDEN_CODE, [

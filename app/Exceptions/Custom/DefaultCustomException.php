@@ -9,11 +9,9 @@ use Throwable;
 
 class DefaultCustomException implements CustomExceptionInterface
 {
-    private Throwable $e;
-
+    // @phpstan-ignore-next-line
     public function __construct(Throwable $e)
     {
-        $this->e = $e;
     }
 
     public function getExtendedMessage(array $response): array

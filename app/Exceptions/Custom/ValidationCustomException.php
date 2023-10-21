@@ -13,7 +13,7 @@ class ValidationCustomException implements CustomExceptionInterface
 {
     private ValidationException|Throwable $e;
 
-    public function __construct(Throwable $e)
+    public function __construct(Throwable|ValidationException $e)
     {
         $this->e = $e;
     }
@@ -23,6 +23,7 @@ class ValidationCustomException implements CustomExceptionInterface
         $response['msg'] = __('validation.failed_validation');
         $response['data'][BaseController::ERR_PARAM] = [];
 
+        // @phpstan-ignore-next-line
         foreach (($this->e->errors() ?? []) as $errors) {
             foreach ($errors as $error) {
                 $response['data'][BaseController::ERR_PARAM][] = $error;

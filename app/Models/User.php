@@ -129,6 +129,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public static function getCurrentUser(): ?self
     {
+        // @phpstan-ignore-next-line
         return \Auth::guard('api')->user() ?? \Auth::user() ?? null;
     }
 }

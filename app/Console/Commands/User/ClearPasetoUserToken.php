@@ -15,6 +15,10 @@ class ClearPasetoUserToken extends CommandsLogAbstract
 
     public function handle()
     {
-        return $this->logMiddleware(fn () => app(PasetoTokenRepository::class)->clearInvalidTokens());
+        return $this->logMiddleware(function () {
+            app(PasetoTokenRepository::class)->clearInvalidTokens();
+
+            return true;
+        });
     }
 }

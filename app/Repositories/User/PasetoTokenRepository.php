@@ -64,13 +64,13 @@ class PasetoTokenRepository
             'token_type' => PasetoToken::ACCESS_TYPE,
             'expires_at' => $untilAccess,
         ];
-        $createdAccess = (bool)PasetoToken::create($createData);
+        $createdAccess = PasetoToken::create($createData)->user_id > 0;
 
-        $createdRefresh = (bool)PasetoToken::create(array_merge($createData, [
+        $createdRefresh = PasetoToken::create(array_merge($createData, [
             'token' => $refreshToken,
             'token_type' => PasetoToken::REFRESH_TYPE,
             'expires_at' => $untilRefresh,
-        ]));
+        ]))->user_id > 0;
 
         if ($createdAccess && $createdRefresh) {
             return [

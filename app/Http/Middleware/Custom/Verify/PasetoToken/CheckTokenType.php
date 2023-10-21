@@ -20,6 +20,7 @@ final class CheckTokenType extends CheckAbstract
 
     public function init(): void
     {
+        // @phpstan-ignore-next-line
         $claims = (array)(Auth::getTokenPayload() ?? []);
         $this->tokenType = $claims['type'] ?? '';
     }

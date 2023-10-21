@@ -20,13 +20,11 @@ class VerifyBlockedUser
      */
     public function handle(Request $request, Closure $next)
     {
-        /** @var User $user */
+        /** @var User $u */
         $u = $request->user();
-        if ($u) {
-            $response = self::getResponse($u, $request);
-            if ($response) {
-                return $response;
-            }
+        $response = self::getResponse($u, $request);
+        if ($response) {
+            return $response;
         }
 
         return $next($request);

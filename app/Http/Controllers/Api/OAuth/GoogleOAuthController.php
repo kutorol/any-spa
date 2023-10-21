@@ -32,6 +32,7 @@ class GoogleOAuthController extends BaseController implements OAuthInterface
         $oauthRep = app(OAuthRepository::class);
         $data = $request->validated();
 
+        /** @var OAuth|null $oauthInfo */
         $oauthInfo = $oauthRep->findByEmail($data['email'], OAuth::OAUTH_TITLE_GOOGLE);
         if ($oauthInfo) {
             return $this->login($oauthInfo);
