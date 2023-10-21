@@ -7,24 +7,27 @@ import WarningSnackbar from "./Snackbar/WarningSnackbar";
 import FullLoader from "./Utils/FullLoader";
 import LocalizatorSetter from "./Utils/LocalizatorSetter";
 import NavigateSetter from "./Utils/NavigateSetter";
+import SeoTitles from "./Utils/SeoTitles";
 import YumCustomRulesSetter from "./Utils/YumCustomRulesSetter";
 
 export default function InitCommonComponents() {
   return (
     <>
-      {/*Разноцветные уведомлялки*/}
+      {/* Разноцветные уведомлялки */}
       <ErrorSnackbar/>
       <InfoSnackbar/>
       <WarningSnackbar/>
       <SuccessSnackbar/>
-      {/*Создаем хук для управления роутами в любом месте*/}
+      {/* Создаем хук для управления роутами в любом месте */}
       <NavigateSetter/>
-      {/*Создаем хук для управления локализацией в любом месте*/}
+      {/* Создаем хук для управления локализацией в любом месте */}
       <LocalizatorSetter/>
-      {/*Устанавливает кастомные обработчики ошибок формы*/}
+      {/* Устанавливает кастомные обработчики ошибок формы */}
       <YumCustomRulesSetter/>
-      {/*Создаем div, который на весь экран ставит загрузку*/}
+      {/* Создаем div, который на весь экран ставит загрузку */}
       <FullLoader/>
+      {/* При обновлении каждой страницы ставим seo текст */}
+      <SeoTitles/>
     </>
   );
 }

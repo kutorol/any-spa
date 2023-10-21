@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Api\OAuth\GoogleOAuthController;
 use App\Http\Controllers\Api\Other\TermOfUsePolicy;
+use App\Http\Controllers\Api\Seo\SeoController;
 use App\Http\Controllers\Api\TechSupport\AnonymTechSupportController;
 use App\Http\Controllers\Api\User\AuthController;
 use App\Http\Controllers\Api\User\ForgotController;
@@ -23,6 +24,10 @@ Route::middleware('throttle:5,1')->prefix('/oauth')->group(function () {
 Route::post('/tech-support', [AnonymTechSupportController::class, 'send'])
     ->middleware('throttle:5,1')
     ->name('support.send');
+
+// Получение seo названий страницы
+Route::get('/seo-page-info', [SeoController::class, 'pageInfo'])
+    ->name('seo.page-info');
 
 Route::middleware(IsGuest::MIDDLEWARE_NAME)->group(function () {
     Route::middleware('throttle:5,1')->group(function () {

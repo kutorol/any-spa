@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import appInitReducer from "./reducers/common/app-init";
 import fullScreenLoaderReducer from "./reducers/common/full-screen-loader";
 import localeReducer from "./reducers/common/locale";
+import seoReducer from "./reducers/common/seo";
 import userInfoReducer from "./reducers/common/user";
 import leftMenuReducer from "./reducers/menu/left-menu";
 import errSnackbar from "./reducers/snackbar/error-snackbar";
@@ -19,6 +20,7 @@ export default configureStore({
     fullScreenLoader: fullScreenLoaderReducer,
     userInfo: userInfoReducer,
     leftMenu: leftMenuReducer,
-    appInit: appInitReducer
+    appInit: appInitReducer,
+    seoReducer: seoReducer
   }
 });

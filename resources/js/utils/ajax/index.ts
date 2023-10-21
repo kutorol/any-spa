@@ -109,11 +109,19 @@ class ajax {
   private getRequest(url: string, params: getRequestInterface, method: HTTPMethod): Promise<any> {
 
     const headers = this.getHeaders(params);
+    const data: FormData | object = params.formData ? params.formData : this.cleanParams(params);
+
+    let searchParams = '';
+    if (method === HTTPMethod.GET) {
+      // @ts-ignore
+      searchParams = new URLSearchParams(data).toString();
+    }
+
     return axios.request({
       method: method,
       headers: headers,
-      url: url,
-      data: params.formData ? params.formData : this.cleanParams(params)
+      url: url + (searchParams ? `?${searchParams}` : ''),
+      data: data
     })
       .then(res => res.data)
       .catch(res => get(res, "response.data", {}))
