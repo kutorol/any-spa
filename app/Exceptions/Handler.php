@@ -7,7 +7,7 @@ namespace App\Exceptions;
 use App\Exceptions\Custom\FactoryCustomException;
 use App\Exceptions\Log\FactoryLogException;
 use App\Http\Controllers\Api\BaseController;
-use Auth;
+use App\Models\User;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -38,7 +38,7 @@ class Handler extends ExceptionHandler
         return array_merge(
             parent::context(),
             FactoryLogException::getExtendedData([
-                'user_id' => (int)(Auth::user()?->id ?? Auth::guard('api')?->user()?->id ?? 0),
+                'user_id' => (int)(User::getCurrentUser()?->id ?? 0),
             ])
         );
     }
