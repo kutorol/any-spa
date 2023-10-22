@@ -1,5 +1,5 @@
 import { get, toNumber } from "lodash";
-import { createErrMgs } from "../../store/reducers/snackbar/error-snackbar";
+import { createErrMgs } from "../../store/reducers/func/snackbar/error-snackbar";
 import Locale from "../funcs/locale";
 import { RedirectInterface, TokenInterface } from "./interfaces";
 import redirect from "./redirect";

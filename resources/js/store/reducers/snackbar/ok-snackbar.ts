@@ -1,19 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toNumber } from "lodash";
-import store from "../../store";
 import { defaultDurationMS } from "./error-snackbar";
-
-export const createSuccessMgs = (msg?:string, duration:number = 5000) => {
-  msg = msg || "";
-  if (!msg.trim()) {
-    return;
-  }
-
-  store.dispatch(successSnackbar.actions.set({
-    msg,
-    duration: toNumber(duration)
-  }));
-};
 
 export const createSnackbarReduce = (name) => {
   return createSlice({
@@ -27,9 +14,7 @@ export const createSnackbarReduce = (name) => {
         const { msg, duration } = action.payload;
         state.value = msg;
         const dur = toNumber(duration);
-        if (dur > 0) {
-          state.duration = dur;
-        }
+        state.duration = dur > 0 ? dur : defaultDurationMS;
       },
       clear: (state) => {
         state.value = "";

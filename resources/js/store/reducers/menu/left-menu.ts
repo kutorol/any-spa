@@ -1,11 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import store from "../../store";
-
-export const changeLeftMenu = (isOpen: boolean = true) => {
-  store.dispatch(leftMenuReducer.actions.set({
-    isOpen: isOpen
-  }));
-};
 
 export const createLeftMenuReducer = () => {
   return createSlice({

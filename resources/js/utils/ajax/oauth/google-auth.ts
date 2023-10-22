@@ -1,7 +1,7 @@
 import { TokenResponse } from "@react-oauth/google";
 // @ts-ignore
 import { get } from "lodash";
-import { createErrMgs } from "../../../store/reducers/snackbar/error-snackbar";
+import { createErrMgs } from "../../../store/reducers/func/snackbar/error-snackbar";
 import Locale from "../../funcs/locale";
 import userAuth from "../../repository/user-auth";
 

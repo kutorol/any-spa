@@ -9,10 +9,7 @@ use App\Models\Seo\I18Seo;
 
 class I18Repository
 {
-    private function prepareLabel(string $label): string
-    {
-        return trim(preg_replace("/\_\_+/", '_', preg_replace('/[^a-z0-9_]/iu', '_', $label)));
-    }
+    private const REDIS_TTL = 10 * 60;
 
     public function findByLabel(string $label, Locale $locale): ?string
     {
@@ -48,10 +45,18 @@ class I18Repository
             return $res;
         }
 
+        $cacheKey = "seo:{$label}";
+        /** @var array|null $cachedRes */
+        $cachedRes = redisGet($cacheKey);
+        if ($cachedRes) {
+            return $cachedRes;
+        }
+
         $keys = ["seo_title_{$label}", "seo_desc_{$label}", "seo_h1_{$label}"];
         foreach ($keys as $i => $k) {
             $keys[$i] = $this->prepareLabel($k);
         }
+
         try {
             $value = I18Seo::select(['value', 'label'])
                 ->whereIn('label', $keys)
@@ -77,6 +82,8 @@ class I18Repository
                     'locale' => $locale,
                 ]);
             }
+
+            redisSetTTL($cacheKey, $res, self::REDIS_TTL);
         } catch (\Throwable $e) {
             \Log::error('rep seoFindByLabel has err', [
                 'msg' => $e->getMessage(),
@@ -85,5 +92,10 @@ class I18Repository
         }
 
         return $res;
+    }
+
+    private function prepareLabel(string $label): string
+    {
+        return trim(preg_replace("/\_\_+/", '_', preg_replace('/[^a-z0-9_]/iu', '_', $label)));
     }
 }

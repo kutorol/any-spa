@@ -13,7 +13,7 @@ services:
 
   postgresql:
     ports:
-      - "20432:5432"
+      - "21432:5432"
 
   php:
     environment:

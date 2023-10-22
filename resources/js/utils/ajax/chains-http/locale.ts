@@ -1,5 +1,5 @@
 import { get } from "lodash";
-import { changeLocale } from "../../../store/reducers/common/locale";
+import { changeLocale } from "../../../store/reducers/func/common/locale";
 import { Languages } from "../../enums/common/enums";
 import Locale from "../../funcs/locale";
 import { ChainCheckHTTPResponse } from "../interfaces";

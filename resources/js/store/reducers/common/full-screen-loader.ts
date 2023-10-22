@@ -1,11 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import store from "../../store";
-
-export const changeFullScreenLoaderState = (isActive: boolean = false) => {
-  store.dispatch(fullScreenLoaderReducer.actions.set({
-    active: isActive
-  }));
-};
 
 export const createFullScreenLoaderReducer = () => {
   return createSlice({

@@ -10,7 +10,7 @@ import { useLaravelReactI18n } from "laravel-react-i18n";
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import useOnEnter from "../../../../../hooks/useOnEnter";
-import { createWarningMgs } from "../../../../../store/reducers/snackbar/warning-snackbar";
+import { createWarningMgs } from "../../../../../store/reducers/func/snackbar/warning-snackbar";
 import { mergeUniqArrays } from "../../../../../utils/funcs/array";
 import RoundBtn from "../../../../Common/Gui/Btn/RoundBtn";
 import WebOrMobileBox from "../../../../Common/Gui/WebOrMobileBox";

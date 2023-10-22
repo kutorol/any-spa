@@ -1,5 +1,5 @@
 import { get, toNumber } from "lodash";
-import { createErrMgs } from "../../../store/reducers/snackbar/error-snackbar";
+import { createErrMgs } from "../../../store/reducers/func/snackbar/error-snackbar";
 import { ChainCheckHTTPResponse } from "../interfaces";
 
 // Проверка на показ ошибок во всплывающем окне

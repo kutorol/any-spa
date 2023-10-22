@@ -2,7 +2,7 @@ import { get } from "lodash";
 // @ts-ignore
 import React, { useEffect } from "react";
 import { useLocation } from "react-router";
-import { changeSeo, checkExistsPath, setExistsPath } from "../../../store/reducers/common/seo";
+import { changeSeo, checkExistsPath, setExistsPath } from "../../../store/reducers/func/common/seo";
 import r from "../../../utils/ajax";
 
 const SeoTitles = () => {

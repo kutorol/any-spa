@@ -1,6 +1,6 @@
 import { get } from "lodash";
-import { changeFullScreenLoaderState } from "../../store/reducers/common/full-screen-loader";
-import { createErrMgs } from "../../store/reducers/snackbar/error-snackbar";
+import { changeFullScreenLoaderState } from "../../store/reducers/func/common/full-screen-loader";
+import { createErrMgs } from "../../store/reducers/func/snackbar/error-snackbar";
 import store from "../../store/store";
 import r from "../ajax";
 import Locale from "../funcs/locale";

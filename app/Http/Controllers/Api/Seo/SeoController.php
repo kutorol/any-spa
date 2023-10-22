@@ -19,6 +19,8 @@ class SeoController extends BaseController
             $path = request()->path();
         }
 
+        $path = ltrim($path, '/');
+
         $locale = Locale::tryFrom(\App::getLocale()) ?? Locale::RU;
 
         return $this->successResponse('', [

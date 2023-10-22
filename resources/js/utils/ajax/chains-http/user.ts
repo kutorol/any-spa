@@ -1,5 +1,5 @@
 import { get } from "lodash";
-import { changeUserInfo } from "../../../store/reducers/common/user";
+import { changeUserInfo } from "../../../store/reducers/func/common/user";
 import { UserInterface } from "../../repository/interfaces";
 import { ChainCheckHTTPResponse, RedirectInterface } from "../interfaces";
 

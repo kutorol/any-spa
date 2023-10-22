@@ -1,11 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import store from "../../store";
-
-export const changeAppInitState = (init: boolean = true) => {
-  store.dispatch(appInitReducer.actions.set({
-    init: init
-  }));
-};
 
 export const createAppInitReducerReducer = () => {
   return createSlice({

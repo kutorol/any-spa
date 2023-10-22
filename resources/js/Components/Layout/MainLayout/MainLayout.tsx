@@ -6,7 +6,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { drawerWidth } from "../../../store/constant";
-import { changeLeftMenu } from "../../../store/reducers/menu/left-menu";
+import { changeLeftMenu } from "../../../store/reducers/func/menu/left-menu";
 import Breadcrumbs from "../../Common/Breadcrumbs/Breadcrumbs";
 import menuItems from "../../Menu/menu-items";
 import Login from "../../Pages/Auth/Login/Login";

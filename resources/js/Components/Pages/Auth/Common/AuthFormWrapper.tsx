@@ -4,8 +4,10 @@ import { IconLifebuoy } from "@tabler/icons-react";
 import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React from "react";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { Link } from "react-router-dom";
 import useOpen from "../../../../hooks/useOpen";
+import { GoogleRecaptchaV3SiteKey } from "../../../../store/constant";
 import TechSupport from "../../Special/TechSupport/TechSupport";
 import AuthCardWrapper from "../LayoutTheme/AuthCardWrapper";
 import AuthWrapper1 from "../LayoutTheme/AuthWrapper1";
@@ -48,83 +50,89 @@ const AuthFormWrapper = ({ isRegister = false, isPasswordReset = false, isPasswo
   }
 
   return (
-    <AuthWrapper1>
-      <Grid
-        container
-        direction="column"
-        justifyContent="flex-end"
-        sx={grid1Sx}
-      >
-        <Grid item xs={xsNum}>
-          <Grid
-            container
-            justifyContent="center"
-            alignItems="center"
-            sx={grid2Sx}
-          >
-            <Grid item sx={grid3Sx}>
-              <AuthCardWrapper>
-                <Grid
-                  container
-                  spacing={gridSpace}
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <LogoHeader/>
+    <GoogleReCaptchaProvider
+      reCaptchaKey={GoogleRecaptchaV3SiteKey}
+      useRecaptchaNet={true}
+      // container={{parameters: { theme: 'dark' }}}
+    >
+      <AuthWrapper1>
+        <Grid
+          container
+          direction="column"
+          justifyContent="flex-end"
+          sx={grid1Sx}
+        >
+          <Grid item xs={xsNum}>
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              sx={grid2Sx}
+            >
+              <Grid item sx={grid3Sx}>
+                <AuthCardWrapper>
+                  <Grid
+                    container
+                    spacing={gridSpace}
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <LogoHeader/>
 
-                  <TitleGrid
-                    xsNum={xsNum}
-                    matchDownSM={matchDownSM}
-                    themeColor={theme.palette.secondary.main}
-                    isRegister={isRegister}
-                    isPasswordReset={isPasswordReset}
-                    isPasswordResetConfirm={isPasswordResetConfirm}
-                  />
+                    <TitleGrid
+                      xsNum={xsNum}
+                      matchDownSM={matchDownSM}
+                      themeColor={theme.palette.secondary.main}
+                      isRegister={isRegister}
+                      isPasswordReset={isPasswordReset}
+                      isPasswordResetConfirm={isPasswordResetConfirm}
+                    />
 
-                  <Grid item xs={xsNum}>
-                    {form}
+                    <Grid item xs={xsNum}>
+                      {form}
+                    </Grid>
+
+                    <Grid item xs={xsNum}>
+                      <Divider/>
+                    </Grid>
+
+                    <FooterGrid
+                      xsNum={xsNum}
+                      isRegister={isRegister}
+                      isPasswordReset={isPasswordReset}
+                    />
                   </Grid>
-
-                  <Grid item xs={xsNum}>
-                    <Divider/>
-                  </Grid>
-
-                  <FooterGrid
-                    xsNum={xsNum}
-                    isRegister={isRegister}
-                    isPasswordReset={isPasswordReset}
-                  />
-                </Grid>
-              </AuthCardWrapper>
+                </AuthCardWrapper>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        <Grid item xs={xsNum} sx={sxFooter}>
-          <Stack direction="row" justifyContent="flex-end">
-            <TechSupport
-              isOpen={isOpenSupport}
-              toggle={onClickSupport}
-            />
+          <Grid item xs={xsNum} sx={sxFooter}>
+            <Stack direction="row" justifyContent="flex-end">
+              <TechSupport
+                isOpen={isOpenSupport}
+                toggle={onClickSupport}
+              />
 
-            <Typography
-              component={Link}
-              to="/support-tech"
-              onClick={onClickSupport}
-            >
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="flex-end"
-                spacing={1}
+              <Typography
+                component={Link}
+                to="/support-tech"
+                onClick={onClickSupport}
               >
-                <IconLifebuoy size="1rem"/> <span>{t("Техническая поддержка")}</span>
-              </Stack>
-            </Typography>
-          </Stack>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  spacing={1}
+                >
+                  <IconLifebuoy size="1rem"/> <span>{t("Техническая поддержка")}</span>
+                </Stack>
+              </Typography>
+            </Stack>
+          </Grid>
         </Grid>
-      </Grid>
-    </AuthWrapper1>
+      </AuthWrapper1>
+    </GoogleReCaptchaProvider>
   );
 };
 

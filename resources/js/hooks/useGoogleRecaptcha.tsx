@@ -2,8 +2,8 @@ import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React, { useCallback, useEffect } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { changeFullScreenLoaderState } from "../store/reducers/common/full-screen-loader";
-import { createErrMgs } from "../store/reducers/snackbar/error-snackbar";
+import { changeFullScreenLoaderState } from "../store/reducers/func/common/full-screen-loader";
+import { createErrMgs } from "../store/reducers/func/snackbar/error-snackbar";
 
 const useGoogleRecaptcha = ({
   fromAction = "login", actionOnSubmit = (captchaToken, values) => {}

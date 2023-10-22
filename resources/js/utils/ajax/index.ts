@@ -1,8 +1,8 @@
 import axios from "axios";
 import { get, toNumber } from "lodash";
-import { changeAppInitState } from "../../store/reducers/common/app-init";
-import { changeFullScreenLoaderState } from "../../store/reducers/common/full-screen-loader";
-import { createSuccessMgs } from "../../store/reducers/snackbar/ok-snackbar";
+import { changeAppInitState } from "../../store/reducers/func/common/app-init";
+import { changeFullScreenLoaderState } from "../../store/reducers/func/common/full-screen-loader";
+import { createSuccessMgs } from "../../store/reducers/func/snackbar/ok-snackbar";
 import { HTTPMethod } from "../enums/common/enums";
 import { ChainCheckErrorsHTTP } from "./chains-http/errors";
 import { ChainCheckLocaleHTTP } from "./chains-http/locale";

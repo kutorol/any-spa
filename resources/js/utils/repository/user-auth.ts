@@ -1,6 +1,6 @@
 import { get } from "lodash";
-import { changeFullScreenLoaderState } from "../../store/reducers/common/full-screen-loader";
-import { changeUserInfo } from "../../store/reducers/common/user";
+import { changeFullScreenLoaderState } from "../../store/reducers/func/common/full-screen-loader";
+import { changeUserInfo } from "../../store/reducers/func/common/user";
 import r from "../ajax";
 import token from "../ajax/token";
 import userAuthGoogle from "./google-auth";

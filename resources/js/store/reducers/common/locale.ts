@@ -2,13 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { get } from "lodash";
 import { Languages } from "../../../utils/enums/common/enums";
 import Locale from "../../../utils/funcs/locale";
-import store from "../../store";
-
-export const changeLocale = (locale: Languages = Languages.RU) => {
-  store.dispatch(localeReducer.actions.set({
-    val: locale
-  }));
-};
 
 export const createLocaleReducer = () => {
   return createSlice({

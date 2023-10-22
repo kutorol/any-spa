@@ -1,6 +1,6 @@
-PROJECT_NAME=any-spa
-TAG=local-any-spa
-APP_URL=any-spa.com
+PROJECT_NAME=hard
+TAG=local-hard
+APP_URL=hard.com
 APP_URL_HTTPS:="https://${APP_URL}"
 
 include .env
@@ -120,7 +120,6 @@ seed:
 vite-dev:
 	# $(COMPOSE) run --rm -u $(CURRENT_UID) --entrypoint npm node run dev
 	# npm i # если ошибку выдает, то юзаем это
-	npm i
 	npm run dev
 
 # запуск сборки reactjs
@@ -132,3 +131,6 @@ ssl-cert-macos:
 	brew install mkcert && \
 	 mkcert -install && \
 	 mkcert -key-file key.pem -cert-file cert.pem $(APP_URL)
+
+c-redis:
+	docker exec -it redis-$(PROJECT_NAME) redis-cli

@@ -1,29 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { cloneDeep, toNumber } from "lodash";
-import store from "../../store";
+import { toNumber } from "lodash";
 
 export const defaultDurationMS = 5000;
-
-export const createErrMgs = (listErrs: string|string[], duration: number = 5000, code: number = 0) => {
-  store.dispatch(errSnackbar.actions.set(_createErrMgs(listErrs, duration, code)));
-};
-
-const _createErrMgs = (listErrs: string|string[], duration: number = 5000, code: number = 0) => {
-  let errs = [];
-  if (typeof listErrs === "string") {
-    errs.push(listErrs);
-  } else if (Array.isArray(listErrs)) {
-    errs = cloneDeep(listErrs);
-  } else {
-    errs = null;
-  }
-
-  return {
-    code: toNumber(code),
-    errors: errs,
-    duration: toNumber(duration)
-  };
-};
 
 export const errSnackbar = createSlice({
   name: "errSnackbar",
@@ -38,9 +16,7 @@ export const errSnackbar = createSlice({
 
       state.errors = errors;
       const dur = toNumber(duration);
-      if (dur > 0) {
-        state.duration = dur;
-      }
+      state.duration = dur > 0 ? dur : defaultDurationMS;
 
       state.code = code;
     },
