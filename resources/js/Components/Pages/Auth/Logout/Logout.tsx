@@ -1,17 +1,18 @@
-import { Box, Grid, Skeleton, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, Grid, LinearProgress, Stack, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import useScriptRef from "../../../../hooks/useScriptRef";
 import userAuth from "../../../../utils/repository/user-auth";
-import LogoHeader from "../Common/LogoHeader";
 import AuthCardWrapper from "../LayoutTheme/AuthCardWrapper";
 import AuthWrapper1 from "../LayoutTheme/AuthWrapper1";
 
 const Logout = () => {
   const { t } = useLaravelReactI18n();
+  const navigate = useNavigate();
   // @ts-ignore
   const [isLogged, setIsLogged] = useState(useSelector(s => s.userInfo.isLogged));
   const theme = useTheme();
@@ -33,6 +34,8 @@ const Logout = () => {
     if (isLogged && r.current) {
       r.current = false;
       userAuth.logout().then((res: boolean) => res && setIsLogged(false));
+    } else if (!isLogged && r.current) {
+      navigate("/");
     }
 
     return () => {
@@ -62,8 +65,6 @@ const Logout = () => {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <LogoHeader withLink={false}/>
-
                   <Grid item xs={xsNum}>
                     <Grid
                       container
@@ -91,9 +92,7 @@ const Logout = () => {
 
                   <Grid item xs={xsNum}>
                     <Box sx={{ width: "100%" }}>
-                      <Skeleton variant="rectangular" width="100%">
-                        <div style={{ paddingTop: "20%" }}/>
-                      </Skeleton>
+                      <LinearProgress/>
                     </Box>
                   </Grid>
                 </Grid>
