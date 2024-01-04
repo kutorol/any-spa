@@ -1,11 +1,11 @@
 import { Container, Grid, Typography } from "@mui/material";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 function Dashboard() {
   // @ts-ignore
-  const user = useSelector(s => s.userInfo.user);
+  const user = useSelector((s: RootState) => s.userInfo.user);
 
   return (
     <React.Fragment>

@@ -22,12 +22,12 @@ class LoginController extends Controller
     // POST
     public function login(): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
     {
-        return redirect('login');
+        return $this->redirectTo('/login');
     }
 
     // POST
     public function logout(): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
     {
-        return redirect('logout');
+        return $this->redirectTo('/logout');
     }
 }

@@ -3,20 +3,16 @@ import { createTheme } from "@mui/material/styles";
 import colors from "../../assets/scss/themes-vars.module.scss";
 import componentStyleOverrides from "./comp-style-override";
 import themePalette from "./palette";
-import themeTypography from "./typography";
+import themeTypography, { IThemeTypography } from "./typography";
 
-/**
- * Represent theme style and structure as per Material-UI
- * @param {JsonObject} customization customization parameter object
- */
-
-export const theme = (customization) => {
+export const theme = () => {
   const color = colors;
 
-  const themeOption = {
+  const themeOption: IThemeTypography = {
     colors: color,
     heading: color.grey900,
     paper: color.paper,
+    grey500: color.grey500,
     backgroundDefault: color.paper,
     background: color.primaryLight,
     darkTextPrimary: color.grey700,
@@ -25,7 +21,10 @@ export const theme = (customization) => {
     menuSelected: color.secondaryDark,
     menuSelectedBack: color.secondaryLight,
     divider: color.grey200,
-    customization
+    customization: {
+      fontFamily: `'Roboto', sans-serif`,
+      borderRadius: 9
+    }
   };
 
   const themeOptions = {

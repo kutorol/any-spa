@@ -2,17 +2,13 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
 // material-ui
-import { useTheme, styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { Avatar, Box, Button, Grid, Typography } from '@mui/material';
 
 // third-party
 // import Chart from 'react-apexcharts';
-
 // project imports
 import SkeletonEarningCard from '../Skeleton/SkeletonEarningCard';
-
-import ChartDataMonth from './total-order-month-line-chart';
-import ChartDataYear from './total-order-year-line-chart';
 
 // assets
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
@@ -33,12 +29,12 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     position: 'absolute',
     width: 210,
     height: 210,
-    background: theme.palette.primary[800],
+    background: theme.palette.primary[ 800 ],
     borderRadius: '50%',
     zIndex: 1,
     top: -85,
     right: -95,
-    [theme.breakpoints.down('sm')]: {
+    [ theme.breakpoints.down('sm') ]: {
       top: -105,
       right: -140
     }
@@ -49,12 +45,12 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     zIndex: 1,
     width: 210,
     height: 210,
-    background: theme.palette.primary[800],
+    background: theme.palette.primary[ 800 ],
     borderRadius: '50%',
     top: -125,
     right: -15,
     opacity: 0.5,
-    [theme.breakpoints.down('sm')]: {
+    [ theme.breakpoints.down('sm') ]: {
       top: -155,
       right: -70
     }
@@ -74,7 +70,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
   return (
     <>
       {isLoading ? (
-        <SkeletonEarningCard />
+        <SkeletonEarningCard/>
       ) : (
         <CardWrapper border={false} content={false}>
           <Box sx={{ p: 2.25 }}>
@@ -87,12 +83,12 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                       sx={{
                         ...theme.typography.commonAvatar,
                         ...theme.typography.largeAvatar,
-                        backgroundColor: theme.palette.primary[800],
+                        backgroundColor: theme.palette.primary[ 800 ],
                         color: '#fff',
                         mt: 1
                       }}
                     >
-                      <LocalMallOutlinedIcon fontSize="inherit" />
+                      <LocalMallOutlinedIcon fontSize="inherit"/>
                     </Avatar>
                   </Grid>
                   <Grid item>
@@ -123,9 +119,11 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                     <Grid container alignItems="center">
                       <Grid item>
                         {timeValue ? (
-                          <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>$108</Typography>
+                          <Typography
+                            sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>$108</Typography>
                         ) : (
-                          <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>$961</Typography>
+                          <Typography
+                            sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>$961</Typography>
                         )}
                       </Grid>
                       <Grid item>
@@ -133,11 +131,11 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                           sx={{
                             ...theme.typography.smallAvatar,
                             cursor: 'pointer',
-                            backgroundColor: theme.palette.primary[200],
+                            backgroundColor: theme.palette.primary[ 200 ],
                             color: theme.palette.primary.dark
                           }}
                         >
-                          <ArrowDownwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
+                          <ArrowDownwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }}/>
                         </Avatar>
                       </Grid>
                       <Grid item xs={12}>
@@ -145,7 +143,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                           sx={{
                             fontSize: '1rem',
                             fontWeight: 500,
-                            color: theme.palette.primary[200]
+                            color: theme.palette.primary[ 200 ]
                           }}
                         >
                           Total Order

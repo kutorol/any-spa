@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { ISeoFields } from "../func/common/seo";
 
 export const createSeoReducer = () => {
   return createSlice({
@@ -6,14 +7,14 @@ export const createSeoReducer = () => {
     initialState: {
       title: "",
       desc: "",
-      keywords: ""
+      image: ""
     },
     reducers: {
       set: (state, action) => {
-        const { title, desc, keywords } = action.payload;
+        const { title, desc, image } = action.payload as ISeoFields;
         state.title = title;
         state.desc = desc;
-        state.keywords = keywords;
+        state.image = image;
       }
     }
   });

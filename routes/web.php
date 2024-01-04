@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\Seo\SeoController;
 use App\Http\Controllers\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Auth;
@@ -28,4 +29,5 @@ Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'
 // страница показа восстановления пароля с формой пароля
 Route::get('/pass/forgot/{email}/{token}', [ConfirmPasswordController::class, 'showFormWithPass'])->name('pass.forgot_show_form_with_pass');
 
-Route::fallback(fn () => view('app'));
+// Сюда попадает любой роут, которого не существует
+Route::fallback([SeoController::class, 'fallbackUrl']);

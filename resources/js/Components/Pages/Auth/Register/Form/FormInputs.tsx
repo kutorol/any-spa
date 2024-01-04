@@ -1,13 +1,18 @@
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import * as Yup from "yup";
 import useGoogleRecaptcha from "../../../../../hooks/useGoogleRecaptcha";
+import { ERoles } from "../../../../../utils/enums/user";
 import { inputRules } from "../../../../../utils/funcs/form-rule/default-rule";
 import userAuth from "../../../../../utils/repository/user-auth";
 import FormikRegister from "./Formik/FormikRegister";
 
-const FormInputs = () => {
+interface IFormInputs {
+  chosenRole: ERoles;
+  setChosenRole: (r: ERoles) => void;
+}
+
+const FormInputs = ({ chosenRole, setChosenRole }: IFormInputs) => {
   const { t } = useLaravelReactI18n();
 
   // @ts-ignore
@@ -21,7 +26,11 @@ const FormInputs = () => {
     // @ts-ignore
     sur_name: { rule: Yup.string().trim().maxLen(255).required(t("Отчество обязательно")) },
     // @ts-ignore
-    last_name: { rule: Yup.string().trim().maxLen(255).required(t("Фамилия обязательна")) }
+    last_name: { rule: Yup.string().trim().maxLen(255).required(t("Фамилия обязательна")) },
+    role: {
+      rule: Yup.string().required().oneOf([ERoles.USER, ERoles.ADMIN], t("Роль может быть выбрана только из доступных вариантов!")),
+      val: chosenRole
+    }
   });
 
   const { onSubmit } = useGoogleRecaptcha({
@@ -33,6 +42,8 @@ const FormInputs = () => {
 
   return (
     <FormikRegister
+      chosenRole={chosenRole}
+      setChosenRole={setChosenRole}
       onSubmit={onSubmit}
       formFields={formFields}
       formValidationSchema={formValidationSchema}

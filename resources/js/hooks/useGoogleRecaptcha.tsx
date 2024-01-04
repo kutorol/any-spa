@@ -6,8 +6,9 @@ import { changeFullScreenLoaderState } from "../store/reducers/func/common/full-
 import { createErrMgs } from "../store/reducers/func/snackbar/error-snackbar";
 
 const useGoogleRecaptcha = ({
-  fromAction = "login", actionOnSubmit = (captchaToken, values) => {}
-}) => {
+                              fromAction = "login", actionOnSubmit = (captchaToken, values) => {
+  }
+                            }) => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const { t } = useLaravelReactI18n();
 
@@ -28,7 +29,11 @@ const useGoogleRecaptcha = ({
   return {
     handleReCaptchaVerify: handleReCaptchaVerify,
     // @ts-ignore
-    onSubmit: async (values = {}, { resetForm = () => {}, setSubmitting = (v) => {} }) => {
+    onSubmit: async (values = {}, {
+      resetForm = () => {
+      }, setSubmitting = (v) => {
+      }
+    }) => {
       setSubmitting(true);
       handleReCaptchaVerify().then(captchaToken => {
         changeFullScreenLoaderState(true);

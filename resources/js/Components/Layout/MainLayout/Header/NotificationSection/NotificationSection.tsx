@@ -12,30 +12,22 @@ import {
   Popper,
   Stack,
   TextField,
-  Typography,
-  useMediaQuery
+  Typography
 } from "@mui/material";
-
-// material-ui
 import { useTheme } from "@mui/material/styles";
-
-// assets
-import { IconBell } from "@tabler/icons-react";
-// @ts-ignore
-import React, { useEffect, useRef, useState } from "react";
-
-// third-party
+import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import useMatch from "../../../../../hooks/useMatch";
+import { RootState } from "../../../../../store/store";
+import { IUserInterface } from "../../../../../utils/interfaces/user";
+import Icon from "../../../../Common/Gui/Common/Icon";
 import MainCard from "../../../../Common/MainCard/MainCard";
-
-// project imports
 import Transitions from "../../../../Common/Transitions/Transitions";
 import NotificationList from "./NotificationList";
 
-
-// notification status options
 const status = [
   {
     value: "all",
@@ -55,19 +47,14 @@ const status = [
   }
 ];
 
-// ==============================|| NOTIFICATION ||============================== //
-
 const NotificationSection = () => {
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
-  // @ts-ignore
-  const user = useSelector(s => s.userInfo.user);
+  const { matchDownMd } = useMatch();
+  const user: IUserInterface = useSelector((s: RootState) => s.userInfo.user);
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  /**
-   * anchorRef is used on different componets and specifying one type leads to other components throwing an error
-   * */
+
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
@@ -93,7 +80,7 @@ const NotificationSection = () => {
     if (event?.target.value) setValue(event?.target.value);
   };
 
-  if (!user.verified_email) {
+  if (user.uid === 0 || !user.verified_email) {
     return null;
   }
 
@@ -103,12 +90,12 @@ const NotificationSection = () => {
         sx={{
           ml: 2,
           mr: 3,
-          [ theme.breakpoints.down("md") ]: {
+          [theme.breakpoints.down("md")]: {
             mr: 2
           }
         }}
       >
-        <ButtonBase sx={{ borderRadius: "12px" }}>
+        <ButtonBase>
           <Avatar
             variant="rounded"
             sx={{
@@ -130,12 +117,12 @@ const NotificationSection = () => {
             onClick={handleToggle}
             color="inherit"
           >
-            <IconBell stroke={1.5} size="1.3rem"/>
+            <Icon tablerIcon="IconBell"/>
           </Avatar>
         </ButtonBase>
       </Box>
       <Popper
-        placement={matchesXs ? "bottom" : "bottom-end"}
+        placement={matchDownMd ? "bottom" : "bottom-end"}
         open={open}
         anchorEl={anchorRef.current}
         role={undefined}
@@ -146,18 +133,18 @@ const NotificationSection = () => {
             {
               name: "offset",
               options: {
-                offset: [matchesXs ? 5 : 0, 20]
+                offset: [matchDownMd ? 5 : 0, 20]
               }
             }
           ]
         }}
       >
         {({ TransitionProps }) => (
-          <Transitions position={matchesXs ? "top" : "top-right"} in={open} {...TransitionProps}>
+          <Transitions position={matchDownMd ? "top" : "top-right"} in={open} {...TransitionProps}>
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 {/* @ts-ignore */}
-                <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[ 16 ]}>
+                <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
                   <Grid container direction="column" spacing={2}>
                     <Grid item xs={12}>
                       <Grid container alignItems="center" justifyContent="space-between" sx={{ pt: 2, px: 2 }}>

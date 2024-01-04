@@ -1,9 +1,9 @@
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import ErrorSnackbar from "./Snackbar/ErrorSnackbar";
 import InfoSnackbar from "./Snackbar/InfoSnackbar";
 import SuccessSnackbar from "./Snackbar/OkSnackbar";
 import WarningSnackbar from "./Snackbar/WarningSnackbar";
+import CookieConfirm from "./Utils/Cookie/CookieConfirm";
 import FullLoader from "./Utils/FullLoader";
 import LocalizatorSetter from "./Utils/LocalizatorSetter";
 import NavigateSetter from "./Utils/NavigateSetter";
@@ -28,6 +28,8 @@ export default function InitCommonComponents() {
       <FullLoader/>
       {/* При обновлении каждой страницы ставим seo текст */}
       <SeoTitles/>
+      {/* Подтверждение использования cookie */}
+      <CookieConfirm/>
     </>
   );
 }

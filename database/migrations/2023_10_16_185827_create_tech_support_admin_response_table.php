@@ -14,8 +14,9 @@ return new class extends Migration {
     {
         Schema::create('tech_support_admin_response', function (Blueprint $table) {
             $table->id();
-            $table->integer('tech_support_id')->unsigned()->index();
-            $table->integer('user_id')->unsigned()->index();
+            $table->unsignedInteger('tech_support_id')->index();
+            $table->unsignedInteger('user_id')->index();
+            $table->addColumn('string', 'status');
             $table->text('comment');
             $table->timestampsTz();
 

@@ -16,7 +16,7 @@ class TechSupportUpdateNotification
     public function handle(TechSupportUpdate $event): void
     {
         Mail::to($event->entity->email)
-            ->locale($event->entity->locale)
+            ->locale($event->entity->locale->value)
             ->send(new TechSupportUpdateMail($event->entity, $event->adminComment));
     }
 }

@@ -1,7 +1,5 @@
-// material-ui
 import { useTheme } from "@mui/material/styles";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 /**
  * if you want to use image instead of <svg> uncomment following.

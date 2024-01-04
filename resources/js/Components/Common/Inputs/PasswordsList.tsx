@@ -1,15 +1,25 @@
 import { Grid, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-// @ts-ignore
-import React from "react";
+import { FormikErrors, FormikValues } from "formik/dist/types";
+import * as React from "react";
 import PassInput from "./PassInput";
 
-const PasswordsList = ({ values, handleBlur, handleChange, touched, errors }) => {
+interface IPasswordsList {
+  handleBlur?: (e: React.FocusEvent<any>) => void;
+  handleChange: (e: React.ChangeEvent<any>) => void;
+  values: FormikValues;
+  errors: FormikErrors<FormikValues>;
+}
+
+export const isPassEqual = (values: FormikValues): boolean => {
+  return values.password_confirmation === values.password;
+};
+
+const PasswordsList = ({ values, handleBlur, handleChange, errors }: IPasswordsList) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
 
   const withCheckingConfirmation = values.password.length > 0 && values.password_confirmation.length > 0;
-  const passwordsEqual = values.password_confirmation === values.password;
 
   return (
     <Grid container spacing={matchDownSM ? 0 : 2}>
@@ -19,7 +29,6 @@ const PasswordsList = ({ values, handleBlur, handleChange, touched, errors }) =>
           values={values}
           handleBlur={handleBlur}
           handleChange={handleChange}
-          touched={touched}
           errors={errors}
         />
       </Grid>
@@ -28,11 +37,10 @@ const PasswordsList = ({ values, handleBlur, handleChange, touched, errors }) =>
         <PassInput
           isConfirmPass
           withCheckingConfirmation={withCheckingConfirmation}
-          passwordsEqual={passwordsEqual}
+          passwordsEqual={isPassEqual(values)}
           values={values}
           handleBlur={handleBlur}
           handleChange={handleChange}
-          touched={touched}
           errors={errors}
         />
       </Grid>

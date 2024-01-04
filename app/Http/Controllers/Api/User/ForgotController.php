@@ -30,10 +30,11 @@ class ForgotController extends BaseController
         $input = $request->validated();
         $passReset = $userRep->findPassResetByEmail($input['email']);
         if (!$passReset || !\Hash::check($input['url_token'], $passReset->token)) {
-            return $this->validationResponse(__('auth.pass_forgot_check_token'));
+            return $this->validationResponse(__('auth.pass.reset.token_invalid'));
         }
 
         $input['token'] = $input['url_token'];
+        // убираем не нужный параметр, чтобы не получить ошибку базы данных
         $input = array_diff_key($input, ['url_token' => true]);
         $tokens = null;
         $u = null;
@@ -42,14 +43,14 @@ class ForgotController extends BaseController
 
             $tokens = DB::transaction(function () use ($user, $rep) {
                 if (!$user->save()) {
-                    throw new PasetoException(__('auth.pass_not_reset'));
+                    throw new PasetoException(__('auth.pass.reset.fail'));
                 }
 
                 $rep->deleteByUID($user->id);
 
                 $tokens = $rep->create($user);
                 if (!$tokens) {
-                    throw new PasetoException(__('auth.pass_not_reset'));
+                    throw new PasetoException(__('auth.pass.reset.fail'));
                 }
 
                 return $tokens;
@@ -60,14 +61,14 @@ class ForgotController extends BaseController
 
         $isError = $response !== Password::PASSWORD_RESET;
         if ($isError || !$tokens) {
-            return $this->badRequestResponse(__('auth.pass_not_reset'));
+            return $this->badRequestResponse(__('auth.pass.reset.fail'));
         }
 
         if ($u) {
             event(new PasswordReset($u));
         }
 
-        return $this->successResponse(__('auth.pass_reset'), [
+        return $this->successResponse(__('auth.pass.reset.success'), [
             self::TOKEN_CHANGED_PARAM => true,
             ...$tokens,
             self::USER_PARAM => AuthController::getUserData($u),
@@ -86,9 +87,9 @@ class ForgotController extends BaseController
 
         $isError = $response !== Password::RESET_LINK_SENT;
         if ($isError) {
-            return $this->badRequestResponse(__('auth.pass_reset_link_not_send'));
+            return $this->badRequestResponse(__('auth.pass.reset.link_not_send'));
         }
 
-        return $this->successResponse(__('auth.pass_reset_link_send'));
+        return $this->successResponse(__('auth.pass.reset.link_send'));
     }
 }

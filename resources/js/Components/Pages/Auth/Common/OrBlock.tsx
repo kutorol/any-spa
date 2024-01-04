@@ -1,8 +1,7 @@
 import { Box, Button, Divider, Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 const OrBlock = () => {
   const theme = useTheme();
@@ -19,8 +18,8 @@ const OrBlock = () => {
             m: 2,
             py: 0.5,
             px: 7,
-            borderColor: `${theme.palette.grey[ 100 ]} !important`,
-            color: `${theme.palette.grey[ 900 ]}!important`,
+            borderColor: `${theme.palette.grey[100]} !important`,
+            color: `${theme.palette.grey[900]}!important`,
             fontWeight: 500,
             borderRadius: `15px`
           }}

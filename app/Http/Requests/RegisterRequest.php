@@ -6,6 +6,7 @@ namespace App\Http\Requests;
 
 use App\Enums\User\RolesEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class RegisterRequest extends FormRequest
 {
@@ -17,7 +18,7 @@ class RegisterRequest extends FormRequest
             'password' => 'required|min:6|max:255',
             'password_confirmation' => 'required|same:password|min:6|max:255',
             'g-recaptcha-token' => 'required|recaptchav3:,0.5',
-            'role' => 'nullable|in:'.implode(',', RolesEnum::roles()),
+            'role' => ['required', new Enum(RolesEnum::class)],
         ];
     }
 }

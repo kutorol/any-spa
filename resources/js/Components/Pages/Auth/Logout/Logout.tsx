@@ -4,17 +4,17 @@ import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import useScriptRef from "../../../../hooks/useScriptRef";
+import { RootState } from "../../../../store/store";
+import { navTo } from "../../../../utils/funcs/url";
 import userAuth from "../../../../utils/repository/user-auth";
 import AuthCardWrapper from "../LayoutTheme/AuthCardWrapper";
 import AuthWrapper1 from "../LayoutTheme/AuthWrapper1";
 
 const Logout = () => {
   const { t } = useLaravelReactI18n();
-  const navigate = useNavigate();
   // @ts-ignore
-  const [isLogged, setIsLogged] = useState(useSelector(s => s.userInfo.isLogged));
+  const [isLogged, setIsLogged] = useState<boolean>(useSelector((s: RootState) => s.userInfo.isLogged));
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -35,7 +35,7 @@ const Logout = () => {
       r.current = false;
       userAuth.logout().then((res: boolean) => res && setIsLogged(false));
     } else if (!isLogged && r.current) {
-      navigate("/");
+      navTo("/");
     }
 
     return () => {
@@ -92,7 +92,7 @@ const Logout = () => {
 
                   <Grid item xs={xsNum}>
                     <Box sx={{ width: "100%" }}>
-                      <LinearProgress/>
+                      <LinearProgress color={"secondary"}/>
                     </Box>
                   </Grid>
                 </Grid>

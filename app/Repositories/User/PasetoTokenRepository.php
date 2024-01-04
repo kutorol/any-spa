@@ -64,13 +64,23 @@ class PasetoTokenRepository
             'token_type' => PasetoToken::ACCESS_TYPE,
             'expires_at' => $untilAccess,
         ];
-        $createdAccess = PasetoToken::create($createData)->user_id > 0;
 
-        $createdRefresh = PasetoToken::create(array_merge($createData, [
-            'token' => $refreshToken,
-            'token_type' => PasetoToken::REFRESH_TYPE,
-            'expires_at' => $untilRefresh,
-        ]))->user_id > 0;
+        try {
+            $createdAccess = PasetoToken::create($createData)->user_id > 0;
+
+            $createdRefresh = PasetoToken::create(array_merge($createData, [
+                'token' => $refreshToken,
+                'token_type' => PasetoToken::REFRESH_TYPE,
+                'expires_at' => $untilRefresh,
+            ]))->user_id > 0;
+        } catch (\Throwable $e) {
+            PasetoToken::log()->error('create token error', [
+                'code' => $e->getCode(),
+                'msg' => $e->getMessage(),
+            ]);
+
+            throw new PasetoException(__('auth.token.not_created'));
+        }
 
         if ($createdAccess && $createdRefresh) {
             return [
@@ -110,7 +120,7 @@ class PasetoTokenRepository
      */
     public function recreateTokenTx(?User $user): array
     {
-        $err = new PasetoException(__('auth.token_not_created'));
+        $err = new PasetoException(__('auth.token.not_created'));
         if (!$user) {
             throw $err;
         }

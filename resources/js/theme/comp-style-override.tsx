@@ -1,8 +1,9 @@
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 export default function componentStyleOverrides(theme) {
-  const bgColor = theme.colors?.grey50;
+  const bgColor = theme.colors.grey50;
+  const br = `${theme.customization.borderRadius}px`;
+
   return {
     MuiButton: {
       styleOverrides: {
@@ -21,14 +22,14 @@ export default function componentStyleOverrides(theme) {
           backgroundImage: "none"
         },
         rounded: {
-          borderRadius: `${theme?.customization?.borderRadius}px`
+          borderRadius: br
         }
       }
     },
     MuiCardHeader: {
       styleOverrides: {
         root: {
-          color: theme.colors?.textDark,
+          color: theme.colors.textDark,
           padding: "24px"
         },
         title: {
@@ -106,12 +107,12 @@ export default function componentStyleOverrides(theme) {
       styleOverrides: {
         root: {
           background: bgColor,
-          borderRadius: `${theme?.customization?.borderRadius}px`,
+          borderRadius: br,
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: theme.colors?.grey400
+            borderColor: theme.colors.grey400
           },
           "&:hover $notchedOutline": {
-            borderColor: theme.colors?.primaryLight
+            borderColor: theme.colors.primaryLight
           },
           "&.MuiInputBase-multiline": {
             padding: 1
@@ -121,7 +122,7 @@ export default function componentStyleOverrides(theme) {
           fontWeight: 500,
           background: bgColor,
           padding: "15.5px 14px",
-          borderRadius: `${theme?.customization?.borderRadius}px`,
+          borderRadius: br,
           "&.MuiInputBase-inputSizeSmall": {
             padding: "10px 14px",
             "&.MuiInputBase-inputAdornedStart": {
@@ -133,7 +134,7 @@ export default function componentStyleOverrides(theme) {
           paddingLeft: 4
         },
         notchedOutline: {
-          borderRadius: `${theme?.customization?.borderRadius}px`
+          borderRadius: br
         }
       }
     },
@@ -141,7 +142,7 @@ export default function componentStyleOverrides(theme) {
       styleOverrides: {
         root: {
           "&.Mui-disabled": {
-            color: theme.colors?.grey300
+            color: theme.colors.grey300
           }
         },
         mark: {
@@ -149,7 +150,7 @@ export default function componentStyleOverrides(theme) {
           width: "4px"
         },
         valueLabel: {
-          color: theme?.colors?.primaryLight
+          color: theme.colors.primaryLight
         }
       }
     },
@@ -164,8 +165,8 @@ export default function componentStyleOverrides(theme) {
     MuiAvatar: {
       styleOverrides: {
         root: {
-          color: theme.colors?.primaryDark,
-          background: theme.colors?.primary200
+          color: theme.colors.primaryDark,
+          background: theme.colors.primary200
         }
       }
     },
@@ -182,7 +183,7 @@ export default function componentStyleOverrides(theme) {
       styleOverrides: {
         tooltip: {
           color: theme.paper,
-          background: theme.colors?.grey700
+          background: theme.colors.grey700
         }
       }
     }

@@ -1,6 +1,5 @@
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import Locale from "../../../utils/funcs/locale";
 
 const LocalizatorSetter = () => {

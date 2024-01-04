@@ -1,7 +1,7 @@
 {
     "name": "hard/hard",
     "type": "project",
-    "description": "CRM gym fitness",
+    "description": "CRM spa",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
@@ -10,14 +10,17 @@
         "ext-gmp": "*",
         "ext-pdo": "*",
         "ext-redis": "*",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.8",
+        "jaybizzle/laravel-crawler-detect": "1.*",
         "josiasmontag/laravel-recaptchav3": "^1.0",
-        "laravel/framework": "10.7.1",
-        "laravel/sanctum": "^3.2",
+        "laravel/framework": "^10.31",
+        "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "laravel/ui": "^4.0",
-        "predis/predis": "^2.0",
-        "rcerljenko/laravel-paseto": "^2.1"
+        "laravel/ui": "^4.2",
+        "predis/predis": "^2.2",
+        "propaganistas/laravel-phone": "^5.0",
+        "rcerljenko/laravel-paseto": "^2.1",
+        "ext-simplexml": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",

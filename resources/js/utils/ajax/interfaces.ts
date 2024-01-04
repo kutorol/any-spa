@@ -29,7 +29,7 @@ export interface headersInterface {
   Accept?: string;
 
   // Любые параметры
-  [ key: string ]: any;
+  [key: string]: any;
 }
 
 export interface getRequestInterface {
@@ -40,8 +40,10 @@ export interface getRequestInterface {
   // Специфические хедеры, если нужно заменить текущие
   headers?: headersInterface;
   // данные с файлами и всей остальной формой
-  formData?: FormData,
+  formData?: FormData;
+  // это запрос на другие сайты?
+  isOutside?: boolean;
 
   // Любые параметры
-  [ key: string ]: any;
+  [key: string]: any;
 }

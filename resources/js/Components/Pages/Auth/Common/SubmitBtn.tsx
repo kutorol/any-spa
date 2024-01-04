@@ -1,10 +1,14 @@
 import { Box, Button } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
-import AnimateButton from "../../../Common/AnimateButton/AnimateButton";
+import * as React from "react";
 
-const SubmitBtn = ({ isSubmitting, isRegister = false, isPasswordReset = false }) => {
+interface ISubmitBtn {
+  disabled: boolean;
+  isRegister?: boolean;
+  isPasswordReset?: boolean;
+}
+
+const SubmitBtn = ({ disabled, isRegister = false, isPasswordReset = false }: ISubmitBtn) => {
   const { t } = useLaravelReactI18n();
   const sx = { mt: 2 };
 
@@ -17,20 +21,17 @@ const SubmitBtn = ({ isSubmitting, isRegister = false, isPasswordReset = false }
 
   return (
     <Box sx={sx}>
-      {/*@ts-ignore*/}
-      <AnimateButton>
-        <Button
-          disableElevation
-          disabled={isSubmitting}
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          color="secondary"
-        >
-          {title}
-        </Button>
-      </AnimateButton>
+      <Button
+        disableElevation
+        disabled={disabled}
+        fullWidth
+        size="large"
+        type="submit"
+        variant="contained"
+        color="secondary"
+      >
+        {title}
+      </Button>
     </Box>
   );
 };

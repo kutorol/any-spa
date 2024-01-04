@@ -1,7 +1,7 @@
-import { Formik } from "formik";
-import { FormikHelpers, FormikValues } from "formik/dist/types";
+import { Formik, FormikTouched } from "formik";
+import { FormikErrors, FormikHelpers, FormikValues } from "formik/dist/types";
 // @ts-ignore
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import EmailInput from "../../../../../Common/Inputs/EmailInput";
 import PassInput from "../../../../../Common/Inputs/PassInput";
 import SubmitBtn from "../../../Common/SubmitBtn";
@@ -12,6 +12,10 @@ interface FormikLoginProps {
   formValidationSchema: object;
 }
 
+export const isDisabledBtn = (errors: FormikErrors<FormikValues>, touched: FormikTouched<FormikValues>): boolean => {
+  return Object.keys(touched).length == 0 || Object.keys(errors).length > 0;
+};
+
 const FormikLogin = ({ onSubmit, formFields, formValidationSchema }: FormikLoginProps) => {
   return (
     <Formik
@@ -19,13 +23,12 @@ const FormikLogin = ({ onSubmit, formFields, formValidationSchema }: FormikLogin
       validationSchema={formValidationSchema}
       onSubmit={onSubmit}
     >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+      {({ errors, handleBlur, handleChange, touched, handleSubmit, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           <EmailInput
             values={values}
             handleBlur={handleBlur}
             handleChange={handleChange}
-            touched={touched}
             errors={errors}
           />
 
@@ -33,11 +36,12 @@ const FormikLogin = ({ onSubmit, formFields, formValidationSchema }: FormikLogin
             values={values}
             handleBlur={handleBlur}
             handleChange={handleChange}
-            touched={touched}
             errors={errors}
           />
 
-          <SubmitBtn isSubmitting={isSubmitting}/>
+          <SubmitBtn
+            disabled={isDisabledBtn(errors, touched)}
+          />
         </form>
       )}
     </Formik>

@@ -20,6 +20,7 @@ class RouteCustomException implements CustomExceptionInterface
     public function getExtendedMessage(array $response): array
     {
         $response['msg'] = __('validation.route_not_found');
+        $response['statusCode'] = $this->getHeaderCode();
 
         return $response;
     }

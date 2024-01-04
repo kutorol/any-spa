@@ -1,13 +1,13 @@
 import MuiAlert from "@mui/material/Alert";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clear } from "../../../store/reducers/snackbar/info-snackbar";
+import { RootState } from "../../../store/store";
 import Snackbar from "./Snackbar";
 
 const InfoSnackbar = () => {
   // @ts-ignore
-  const messageObj = useSelector(s => s.infoSnackbar);
+  const messageObj = useSelector((s: RootState) => s.infoSnackbar);
   const d = useDispatch();
   const isOpen = messageObj.value.trim() !== "";
   const autoHideMs = messageObj.duration || 5000;
@@ -26,7 +26,7 @@ const InfoSnackbar = () => {
         severity="info"
         onClose={_clear}
       >
-        {messageObj.value}
+        <div dangerouslySetInnerHTML={{ __html: messageObj.value }}/>
       </MuiAlert>
     </Snackbar>
   );

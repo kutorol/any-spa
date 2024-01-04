@@ -1,19 +1,13 @@
 import { Divider, Grid, Typography } from "@mui/material";
-import { IconSend } from "@tabler/icons-react";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-import { get } from "lodash";
-// @ts-ignore
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import useSecondsLeftTimer from "../../../../hooks/useSecondsLeftTimer";
-import userAuth from "../../../../utils/repository/user-auth";
+import * as React from "react";
 import CustomAlert from "../../../Common/Gui/Alert/CustomAlert";
 import Btn from "../../../Common/Gui/Btn/Btn";
+import Icon from "../../../Common/Gui/Common/Icon";
 import MainCard from "../../../Common/MainCard/MainCard";
 
 interface VerifyEmailProps {
-  leftSeconds: number
+  leftSeconds: number;
   onClick: (e) => void;
 }
 
@@ -51,7 +45,7 @@ const VerifyEmail = ({ leftSeconds, onClick }: VerifyEmailProps) => {
             <CustomAlert
               title={t("Письмо отправлено")}
               color="success"
-              icon={<IconSend/>}
+              icon={<Icon tablerIcon="IconSend"/>}
               subtitleElement={<>
                 {t("Письмо с проверочной ссылкой должно придти")} <b>{t("в течении нескольких минут")}</b>.
                 <br/>
@@ -62,8 +56,10 @@ const VerifyEmail = ({ leftSeconds, onClick }: VerifyEmailProps) => {
         ) : (
           <Grid item xs={xs}>
             <Btn
+              variant="contained"
               webTitle={t("Отправить письмо еще раз")}
               mobTitle={t("Отправить")}
+              icon={<Icon tablerIcon="IconSend"/>}
               onClick={onClick}
             />
           </Grid>

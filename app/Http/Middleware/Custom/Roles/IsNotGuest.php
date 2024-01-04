@@ -24,7 +24,7 @@ class IsNotGuest
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!RolesEnum::isRoles(RolesEnum::ROLE_GUEST)) {
+        if (!RolesEnum::isRoles(RolesEnum::GUEST)) {
             return $next($request);
         }
 

@@ -30,14 +30,24 @@ class BaseController extends Controller
     public const ERR_PARAM = 'errs';
     // параметр, в котором находится инфа о юзере
     public const USER_PARAM = 'user_data';
+    // параметр, в котором язык приложения передается
+    public const LOCALE_PARAM = 'locale';
+    // Заголовок, в котором указан язык клиента
+    public const HEADER__X_REQUEST_LOCALE = 'X-REQUEST-LOCALE';
+    // Заголовок, в котором если 1, то это бот зашел на сайт
+    public const HEADER__X_REQUEST_CRAWLER = 'X-REQUEST-CRAWLER';
+    // Заголовок, в котором указаны А/Б тесты юзера
+    public const HEADER__X_REQUEST_AB_TESTS = 'X-REQUEST-AB-TESTS';
 
-    public static function errorResponse(string $msg, array $data = [], int $code = 0): array
+    public static function errorResponse(string $msg, array $data = [], int $statusCode = 0, int $code = 0): array
     {
         return [
             'status' => false,
             'msg' => $msg,
             'data' => $data,
             'code' => $code,
+            'statusCode' => $statusCode,
+            'version' => config('app.version'),
         ];
     }
 
@@ -52,6 +62,8 @@ class BaseController extends Controller
             'status' => true,
             'msg' => $msg,
             'data' => $data,
+            'statusCode' => self::OK_CODE,
+            'version' => config('app.version'),
         ];
 
         return response()->json($response, self::OK_CODE);
@@ -59,7 +71,7 @@ class BaseController extends Controller
 
     public function sendError(string $msg, array $data = [], int $code = self::NOT_FOUND_CODE): JsonResponse
     {
-        return response()->json(self::errorResponse($msg, $data), $code);
+        return response()->json(self::errorResponse($msg, $data, $code), $code);
     }
 
     public function badRequestResponse(string $msg, array $data = []): JsonResponse

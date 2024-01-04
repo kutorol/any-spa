@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('tech_support_attachment', function (Blueprint $table) {
             $table->id();
-            $table->integer('tech_support_id')->unsigned()->index();
+            $table->unsignedInteger('tech_support_id')->index();
             $table->addColumn('string', 'file_name');
             $table->timestampsTz();
 

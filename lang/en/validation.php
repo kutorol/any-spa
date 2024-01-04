@@ -2,19 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Rules\Num\MinMaxInteger;
+
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Validation Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines contain the default error messages used by
-    | the validator class. Some of these rules have multiple versions such
-    | as the size rules. Feel free to tweak each of these messages here.
-    |
-    */
-
     'accepted' => 'The :attribute must be accepted.',
     'accepted_if' => 'The :attribute must be accepted when :other is :value.',
     'active_url' => 'The :attribute is not a valid URL.',
@@ -53,6 +43,7 @@ return [
     'exists' => 'The selected :attribute is invalid.',
     'file' => 'The :attribute must be a file.',
     'filled' => 'The :attribute field must have a value.',
+
     'gt' => [
         'array' => 'The :attribute must have more than :value items.',
         'file' => 'The :attribute must be greater than :value kilobytes.',
@@ -154,12 +145,6 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
-    ],
-
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -171,6 +156,53 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name'                  => 'Name',
+        'username'              => 'Username',
+        'email'                 => 'E-Mail',
+        'first_name'            => 'First Name',
+        'last_name'             => 'Last Name',
+        'password'              => 'Password',
+        'password_confirmation' => 'Password Confirmation',
+        'city'                  => 'City',
+        'country'               => 'Country',
+        'address'               => 'Address',
+        'phone'                 => 'Phone',
+        'mobile'                => 'Mobile Number',
+        'age'                   => 'Age',
+        'sex'                   => 'Sex',
+        'gender'                => 'Gender',
+        'day'                   => 'Day',
+        'month'                 => 'Month',
+        'year'                  => 'Year',
+        'hour'                  => 'Hour',
+        'minute'                => 'Minute',
+        'second'                => 'Second',
+        'title'                 => 'Title',
+        'content'               => 'Content',
+        'description'           => 'Description',
+        'excerpt'               => 'Excerpt',
+        'date'                  => 'Date',
+        'time'                  => 'Time',
+        'available'             => 'Available',
+        'size'                  => 'Size',
+    ],
+
+    'phone' => 'Phone must be valid',
+
+    'route_not_found' => 'This URL does not exist',
+    'failed_validation' => 'Incoming data validation error',
+    'internal_error' => 'Internal error',
+
+    'custom' => [
+        'max_file_count' => 'Maximum file count is :num',
+        'bad_title' => 'The title did not pass validation',
+        'latitude_fail' => 'Latitude should be a valid latitude coordinate in decimal format (e.g., 48.8584)',
+        'longitude_fail' => 'Longitude should be a valid longitude coordinate in decimal format (e.g., 2.2945)',
+        'g-recaptcha-token' => [
+            'recaptchav3' => 'Google reCAPTCHA verification error',
+        ],
+        'integer' => 'The :attribute field must be an integer and cannot be less than 0 or greater than '.MinMaxInteger::MAX_INT32,
+    ],
 
 ];

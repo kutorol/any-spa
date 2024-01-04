@@ -1,9 +1,9 @@
 import { Formik } from "formik";
 import { FormikHelpers, FormikValues } from "formik/dist/types";
-// @ts-ignore
-import React from "react";
-import PasswordsList from "../../../../../Common/Inputs/PasswordsList";
+import * as React from "react";
+import PasswordsList, { isPassEqual } from "../../../../../Common/Inputs/PasswordsList";
 import SubmitBtn from "../../../Common/SubmitBtn";
+import { isDisabledBtn } from "../../../Login/Form/Formik/FormikLogin";
 
 interface FormikPassResetConfirmProps {
   onSubmit: (v: FormikValues, formikHelpers: FormikHelpers<FormikValues>) => void | Promise<any>;
@@ -18,18 +18,17 @@ const FormikPassResetConfirm = ({ onSubmit, formFields, formValidationSchema }: 
       validationSchema={formValidationSchema}
       onSubmit={onSubmit}
     >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+      {({ errors, touched, handleBlur, handleChange, handleSubmit, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           <PasswordsList
             values={values}
             handleBlur={handleBlur}
             handleChange={handleChange}
-            touched={touched}
             errors={errors}
           />
 
           <SubmitBtn
-            isSubmitting={isSubmitting}
+            disabled={isDisabledBtn(errors, touched) || !isPassEqual(values)}
             isPasswordReset
           />
         </form>

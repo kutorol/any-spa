@@ -1,36 +1,34 @@
 import { Avatar, Box, ButtonBase } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { IconMenu2 } from "@tabler/icons-react";
-// @ts-ignore
-import PropTypes from "prop-types";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
+import useMatch from "../../../../hooks/useMatch";
+import Icon from "../../../Common/Gui/Common/Icon";
 import LogoSection from "../LogoSection/LogoSection";
+import LangSection from "./LangSection/LangSection";
 import NotificationSection from "./NotificationSection/NotificationSection";
 import ProfileSection from "./ProfileSection/ProfileSection";
 import SearchSection from "./SearchSection/SearchSection";
 
-// ==============================|| MAIN NAVBAR / HEADER ||============================== //
+interface IHeader {
+  handleLeftDrawerToggle: () => void;
+}
 
-const Header = ({ handleLeftDrawerToggle }) => {
+const Header = ({ handleLeftDrawerToggle }: IHeader) => {
   const theme = useTheme();
 
+  const { bDownMD } = useMatch().breakpoints;
   return (
     <>
-      {/* logo & toggler button */}
       <Box
         sx={{
           width: 228,
           display: "flex",
-          [ theme.breakpoints.down("md") ]: {
+          [bDownMD]: {
             width: "auto"
           }
         }}
       >
-        <Box component="span" sx={{ display: { xs: "none", md: "block" }, flexGrow: 1 }}>
-          <LogoSection/>
-        </Box>
-        <ButtonBase sx={{ borderRadius: "12px", overflow: "hidden" }}>
+        <ButtonBase sx={{ overflow: "hidden" }}>
           <Avatar
             variant="rounded"
             sx={{
@@ -49,25 +47,32 @@ const Header = ({ handleLeftDrawerToggle }) => {
             onClick={handleLeftDrawerToggle}
             color="inherit"
           >
-            <IconMenu2 stroke={1.5} size="1.3rem"/>
+            <Icon tablerIcon="IconMenu2"/>
           </Avatar>
         </ButtonBase>
+        <Box
+          component="span"
+          sx={{
+            display: { xs: "none", md: "block" },
+            flexGrow: 1,
+            ml: 2
+          }}
+        >
+          <LogoSection/>
+        </Box>
       </Box>
 
-      {/* header search */}
       <SearchSection/>
+
       <Box sx={{ flexGrow: 1 }}/>
       <Box sx={{ flexGrow: 1 }}/>
 
-      {/* notification & profile */}
+
+      <LangSection/>
       <NotificationSection/>
       <ProfileSection/>
     </>
   );
-};
-
-Header.propTypes = {
-  handleLeftDrawerToggle: PropTypes.func
 };
 
 export default Header;

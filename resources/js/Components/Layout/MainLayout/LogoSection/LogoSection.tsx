@@ -1,16 +1,16 @@
 import { ButtonBase } from "@mui/material";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Logo from "../../../../../assets/images/svg/Components/Logo";
-
-// ==============================|| MAIN LOGO ||============================== //
+import { NotVerifyEmailURL } from "../../../../store/constant";
+import { RootState } from "../../../../store/store";
+import { getUrl } from "../../../../utils/funcs/url";
+import { IUserInterface } from "../../../../utils/interfaces/user";
 
 const LogoSection = () => {
-  // @ts-ignore
-  const user = useSelector(s => s.userInfo.user);
-  const urlTo = user.verified_email ? "/" : "/verify-email";
+  const user: IUserInterface = useSelector((s: RootState) => s.userInfo.user);
+  const urlTo = getUrl(user.uid === 0 || user.verified_email ? "/" : NotVerifyEmailURL);
 
   return (
     <ButtonBase

@@ -1,40 +1,48 @@
 import { FormControl, FormHelperText, InputLabel, OutlinedInput } from "@mui/material";
-import { FormikErrors, FormikTouched, FormikValues } from "formik/dist/types";
-// @ts-ignore
-import React from "react";
+import { useTheme } from "@mui/material/styles";
+import { FormikErrors, FormikValues } from "formik/dist/types";
+import * as React from "react";
+import { preventOnSubmit } from "../../../store/reducers/func/input/prevent-submit";
 import LeftSymbols from "../Gui/Common/LeftSymbols";
 
 interface CustomInputProps {
-  type: string;
+  type?: "text" | "email" | "password" | string;
   name: string;
   title: string;
-  theme: any;
+  theme?: any;
   endAdornment?: React.ReactNode;
-  handleBlur: (e: React.FocusEvent<any>) => void;
+  handleBlur?: (e: React.FocusEvent<any>) => void;
   handleChange: (e: React.ChangeEvent<any>) => void;
   values: FormikValues;
-  touched: FormikTouched<FormikValues>;
-  errors: FormikErrors<FormikValues>;
+  errors?: FormikErrors<FormikValues>;
   showLeftChars?: boolean;
+  // если true, то submit по enter отменяем
+  noSubmit?: boolean;
   maxLength?: number;
+
+  [key: string]: any;
 }
 
 const CustomInput = ({
                        type = "text",
                        name,
                        title,
-                       touched,
-                       errors,
+                       errors = {},
                        theme,
                        values,
-                       handleBlur,
+                       handleBlur = e => {
+                       },
                        handleChange,
                        endAdornment,
                        showLeftChars,
-                       maxLength
-}: CustomInputProps) => {
+                       maxLength,
+                       noSubmit = false,
+                       ...otherInputProps
+                     }: CustomInputProps) => {
   const inputID = `${name}-${type}-custom-input`;
-  const hasErr = Boolean(touched[ name ] && errors[ name ]);
+  const hasErr = Boolean(errors[name]);
+
+  theme = theme ? theme : useTheme();
 
   const onChange = (e: React.ChangeEvent<any>): void => {
     if (maxLength && e.target.value.length > maxLength) {
@@ -50,28 +58,31 @@ const CustomInput = ({
       error={hasErr}
       sx={{ ...theme.typography.customInput }}
     >
-      <InputLabel htmlFor={inputID}>{title}</InputLabel>
+      <InputLabel color="secondary" htmlFor={inputID}>{title}</InputLabel>
       <OutlinedInput
         id={inputID}
         type={type}
-        value={values[ name ]}
+        value={values[name]}
         name={name}
         label={title}
         onBlur={handleBlur}
         onChange={onChange}
         endAdornment={endAdornment}
+        color={"secondary"}
+        onKeyDown={preventOnSubmit(noSubmit)}
+        {...otherInputProps}
       />
 
       {(!hasErr && showLeftChars && maxLength) && (
         <LeftSymbols
-          value={values[ name ]}
+          value={values[name]}
           maxLength={maxLength}
         />
       )}
 
       {hasErr && (
         <FormHelperText error>
-          {errors[ name ]}
+          {errors[name]}
         </FormHelperText>
       )}
     </FormControl>

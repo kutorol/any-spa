@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Enums\User;
 
-enum SexEnum
+use App\Enums\EnumTrait;
+
+enum SexEnum: string
 {
+    use EnumTrait;
+
     // Мужик
-    public const MALE = 'male';
+    case MALE = 'male';
     // Баба
-    public const FEMALE = 'female';
+    case FEMALE = 'female';
 }

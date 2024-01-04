@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\DTO\TechSupport;
 
+use App\Enums\Common\Locale;
 use App\Enums\TechSupport\TechSupportStatus;
 use App\Enums\TechSupport\TechSupportType;
 
 class TechSupportDTO
 {
+    private ?string $ip = null;
+
+    private ?string $userAgent = null;
+
     private string $email = '';
 
     private ?int $uid = null;
@@ -19,21 +24,29 @@ class TechSupportDTO
 
     private string $comment = '';
 
-    private string $locale = 'ru';
+    private Locale $locale = Locale::RU;
+
+    private ?string $fromURL = null;
+
+    public function __construct()
+    {
+        $this->ip = request()->ip();
+        $this->userAgent = request()->userAgent();
+    }
 
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setLocale(string $locale): self
+    public function setLocale(Locale $locale): self
     {
         $this->locale = $locale;
 
         return $this;
     }
 
-    public function getLocale(): string
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
@@ -89,6 +102,28 @@ class TechSupportDTO
     public function setComment(string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getIp(): ?string
+    {
+        return $this->ip;
+    }
+
+    public function getUserAgent(): ?string
+    {
+        return $this->userAgent;
+    }
+
+    public function getFromURL(): ?string
+    {
+        return $this->fromURL;
+    }
+
+    public function setFromURL(?string $fromURL): self
+    {
+        $this->fromURL = $fromURL;
 
         return $this;
     }

@@ -1,11 +1,16 @@
 import { Box } from "@mui/material";
-// @ts-ignore
-import PropTypes from "prop-types";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import MainCard from "../../../Common/MainCard/MainCard";
 
-const AuthCardWrapper = ({ children, ...other }) => {
+;
+
+interface IAuthCardWrapper {
+  children: any;
+
+  [k: string]: any;
+}
+
+const AuthCardWrapper = ({ children, ...other }: IAuthCardWrapper) => {
   const sxBox = { p: { xs: 2, sm: 3, xl: 5 } };
   const sxMain = {
     maxWidth: { xs: 400, lg: 475 },
@@ -27,10 +32,6 @@ const AuthCardWrapper = ({ children, ...other }) => {
       <Box sx={sxBox}>{children}</Box>
     </MainCard>
   );
-};
-
-AuthCardWrapper.propTypes = {
-  children: PropTypes.node
 };
 
 export default AuthCardWrapper;

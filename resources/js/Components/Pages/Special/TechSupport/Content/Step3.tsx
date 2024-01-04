@@ -1,5 +1,4 @@
-import { Delete as DeleteIcon, PhotoCamera } from "@mui/icons-material";
-import { Button, Toolbar, Typography } from "@mui/material";
+import { Grid, Toolbar, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -8,12 +7,12 @@ import ListItemText from "@mui/material/ListItemText";
 import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React, { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
 import useOnEnter from "../../../../../hooks/useOnEnter";
 import { createWarningMgs } from "../../../../../store/reducers/func/snackbar/warning-snackbar";
 import { mergeUniqArrays } from "../../../../../utils/funcs/array";
 import RoundBtn from "../../../../Common/Gui/Btn/RoundBtn";
-import WebOrMobileBox from "../../../../Common/Gui/WebOrMobileBox";
+import Icon from "../../../../Common/Gui/Common/Icon";
+import DragZone from "../../../../Common/Inputs/DragZone";
 
 interface IStep3 {
   onNextClick: () => void;
@@ -25,26 +24,28 @@ const Step3 = ({ onNextClick, attachments, setAttachments }: IStep3) => {
   const { t } = useLaravelReactI18n();
   useOnEnter(onNextClick);
 
-  const onDrop = useCallback(acceptedFiles => {
-    let files = mergeUniqArrays(acceptedFiles, attachments, "name");
+  const onChangeDropZone = (files: File[]): void => setAttachments(files);
+
+  const onValidationFiles = (files: File[]): File[] | string | false => {
+    files = mergeUniqArrays(files, attachments, "name");
+    let warningText: string[] = [];
     if (files.length > 3) {
-      createWarningMgs(t("Загрузить можно максимум 3 файла"), 4000);
+      warningText.push(t("Загрузить можно максимум 3 файла"));
       files = files.slice(0, 3);
     }
 
     const wasCount = files.length;
     files = files.filter((f: File) => (f.size / 1024 / 1024) <= 10);
     if (wasCount != files.length) {
-      createWarningMgs(t("Загрузить можно максимум 10Mb на файл. Остальные файлы не загружены"), 4000);
+      warningText.push(t("Загрузить можно максимум 10Mb на файл. Остальные файлы не загружены"));
     }
 
-    setAttachments(files);
-  }, [attachments]);
+    if (warningText.length) {
+      createWarningMgs(warningText.join("<br><br>"), 5000);
+    }
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: onDrop,
-    accept: { "image/*": [".png", ".jpg", ".jpeg"] }
-  });
+    return files;
+  };
 
   let images = [];
   for (let i = 0; i < attachments.length; i++) {
@@ -52,14 +53,14 @@ const Step3 = ({ onNextClick, attachments, setAttachments }: IStep3) => {
     images.push(
       <React.Fragment key={i}>
         <ListItem
-          disablePadding
           alignItems="center"
           divider={needDivider}
+          dense
           secondaryAction={
             <RoundBtn
               size="small"
               color="error"
-              icon={<DeleteIcon/>}
+              icon={<Icon tablerIcon="IconTrashFilled"/>}
               onClick={() => {
                 // @ts-ignore
                 const newAttachments = Array.from(attachments).filter((a, ai) => ai !== i);
@@ -67,15 +68,16 @@ const Step3 = ({ onNextClick, attachments, setAttachments }: IStep3) => {
               }}
             />
           }
+          sx={{ m: 0, p: 0, py: 1 }}
         >
           <ListItemAvatar>
             <Avatar
-              sx={{ height: 50, width: "auto" }}
+              sx={{ height: 50, width: "auto", maxWidth: 50 }}
               variant="square"
-              src={URL.createObjectURL(attachments[ i ])}
+              src={URL.createObjectURL(attachments[i])}
             />
           </ListItemAvatar>
-          <ListItemText inset primary={attachments[ i ].name}/>
+          <ListItemText inset primary={attachments[i].name}/>
         </ListItem>
       </React.Fragment>
     );
@@ -84,30 +86,24 @@ const Step3 = ({ onNextClick, attachments, setAttachments }: IStep3) => {
   return (
     <>
       <Toolbar/>
-      <Typography align="center" sx={{ m: 1 }} variant="subtitle2">
-        {t("Выберите фото")}
-      </Typography>
 
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
+      <Grid container alignItems="center" justifyContent="center">
+        <Typography sx={{ m: 1 }} variant="subtitle2">
+          <Icon tablerIcon="IconCameraPlus"/>
+        </Typography>
+        <Typography variant="subtitle2">
+          <span>{t("Выберите фото")}</span>
+        </Typography>
+      </Grid>
 
-        <Button
-          sx={{ minHeight: 100 }}
-          color="primary"
-          fullWidth
-          variant={isDragActive ? "contained" : "outlined"}
-          startIcon={<PhotoCamera/>}
-        >
-          {isDragActive
-            ? t("Отпустите файлы")
-            : (
-              <WebOrMobileBox mobileComponent={t("Нажмите чтобы выбрать фото")}>
-                {t("Перетащите файлы или нажмите на это поле")}
-              </WebOrMobileBox>
-            )
-          }
-        </Button>
-      </div>
+      <DragZone
+        titleWeb={t("Перетащите файлы или нажмите на это поле")}
+        titleMobile={t("Нажмите, чтобы выбрать фото")}
+        titleOnDrag={t("Отпустите файлы")}
+        onValidationFiles={onValidationFiles}
+        onChange={onChangeDropZone}
+        multiple
+      />
 
       <Toolbar/>
 

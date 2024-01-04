@@ -2,9 +2,12 @@ import { createTheme, useTheme } from "@mui/material/styles";
 import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { TechSupportTypes } from "../../../../utils/enums/common/enums";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
+import { ETechSupportTypes } from "../../../../utils/enums/tech-support";
 import checker from "../../../../utils/funcs/form-rule/checker";
+import { navTo } from "../../../../utils/funcs/url";
+import { IUserInterface } from "../../../../utils/interfaces/user";
 import techSupport from "../../../../utils/repository/tech-support";
 import FullScreenDialog from "../../../Common/Gui/Dialog/FullScreenDialog";
 import Wizard from "../../../Common/Gui/Wizard/Wizard";
@@ -22,22 +25,23 @@ interface ITechSupport {
 
 const TechSupport = ({ toggle, isFromSupportPage = false, isOpen = false }: ITechSupport) => {
   const theme = useTheme();
-  const navigate = useNavigate();
   // перекрашиваем весь попап в зеленый цвет, когда успешная отправка
   const successTheme = createTheme(theme, {
     palette: {
-      primary: {
+      secondary: {
         main: theme.palette.success.dark
       }
     }
   });
 
+  const user: IUserInterface = useSelector((s: RootState) => s.userInfo.user);
+
   const { t } = useLaravelReactI18n();
-  const [chosenVariantType, setChosenVariantType] = useState<TechSupportTypes>(TechSupportTypes.TYPE_PROBLEM);
-  const [email, setEmail] = useState("");
+  const [chosenVariantType, setChosenVariantType] = useState<ETechSupportTypes>(ETechSupportTypes.TYPE_PROBLEM);
+  const [email, setEmail] = useState<string>(user.uid > 0 ? user.email : "");
   const [comment, setComment] = useState("");
-  const [attachments, setAttachments] = useState([]);
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [activeStep, setActiveStep] = React.useState<number>(0);
   const [isSendSuccess, setIsSendSuccess] = useState<boolean>(false);
   const [timer, setTimer] = useState(null);
 
@@ -52,7 +56,7 @@ const TechSupport = ({ toggle, isFromSupportPage = false, isOpen = false }: ITec
     setActiveStep(0);
     setEmail("");
     setComment("");
-    setChosenVariantType(TechSupportTypes.TYPE_PROBLEM);
+    setChosenVariantType(ETechSupportTypes.TYPE_PROBLEM);
     setAttachments([]);
     setIsSendSuccess(false);
   };
@@ -60,15 +64,17 @@ const TechSupport = ({ toggle, isFromSupportPage = false, isOpen = false }: ITec
   const onCloseOpenClick = (e?: any) => {
     e && e.preventDefault();
 
-    // при закрытии сбрасываем форму
-    isOpen && resetForm();
-
     toggle();
 
     // Если открыли со специальной страницы, то на логин перекидываем при закрытии
     if (isOpen && isFromSupportPage) {
-      navigate("/");
+      navTo("/");
     }
+
+    // при закрытии сбрасываем форму - сбрасываем через n времени, чтобы цветовая гамма сразу не менялась
+    setTimeout(() => {
+      resetForm();
+    }, 100);
   };
 
   // закрытие формы через 5 секунд после успешной отправки
@@ -136,6 +142,7 @@ const TechSupport = ({ toggle, isFromSupportPage = false, isOpen = false }: ITec
         getStepTextError={getStepTextError}
         showButtons={activeStep !== stepTitles.length}
         theme={isSendSuccess ? successTheme : theme}
+        isSuccess={isSendSuccess}
       >
         {() => {
           if (activeStep === 0) {

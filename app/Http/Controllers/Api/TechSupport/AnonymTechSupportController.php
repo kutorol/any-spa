@@ -6,8 +6,10 @@ namespace App\Http\Controllers\Api\TechSupport;
 
 use App;
 use App\DTO\TechSupport\TechSupportDTO;
+use App\Enums\Common\Locale;
 use App\Enums\TechSupport\TechSupportStatus;
 use App\Enums\TechSupport\TechSupportType;
+use App\Http\Controllers\Api\Admin\TechSupport\AdminTechSupportController;
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Requests\TechSupport\SendRequest;
 use App\Repositories\TechSupport\TechSupportRepository;
@@ -17,24 +19,25 @@ use Illuminate\Http\UploadedFile;
 
 class AnonymTechSupportController extends BaseController
 {
-    // От юзера создается заявка в тех. поддержку
+    /**
+     * От юзера создается заявка в тех. поддержку.
+     * @param SendRequest $request
+     * @param TechSupportRepository $repository
+     * @return JsonResponse
+     */
     public function send(SendRequest $request, TechSupportRepository $repository): JsonResponse
     {
         $data = $request->validated();
 
-        $type = TechSupportType::tryFrom($request->get('type'));
-        if (!$type) {
-            return $this->badRequestResponse(__('support.not_such_type'));
-        }
-
         $uid = $this->getUID();
         $dto = (new TechSupportDTO())
-            ->setLocale(App::getLocale())
+            ->setLocale(Locale::from(App::getLocale()))
             ->setComment($request->get('comment'))
             ->setStatus(TechSupportStatus::STATUS_CREATED)
             ->setUID($uid ?: null)
-            ->setType($type)
-            ->setEmail($request->get('email'));
+            ->setType(TechSupportType::from($data['type']))
+            ->setEmail($request->get('email'))
+            ->setFromURL($data['from_url']);
 
         if (!$uid) {
             $user = app(UserRepository::class)->findByEmail($dto->getEmail());
@@ -57,8 +60,8 @@ class AnonymTechSupportController extends BaseController
             foreach ($request->allFiles() as $files) {
                 foreach ($files as $file) {
                     $fileName = sprintf('%s.%s', mb_strtolower(uuid_create()), $file->getClientOriginalExtension());
-                    $path = sprintf('uploads/tech-support/%s/%d/', $data['email'], $entity->id);
-                    $file->move(storage_path($path), $fileName);
+                    $path = sprintf('uploads/%s/%s/%d/', AdminTechSupportController::FOLDER_UPLOADS, $data['email'], $entity->id);
+                    $file->move(public_path($path), $fileName);
                     $fileNames[] = $fileName;
                 }
             }

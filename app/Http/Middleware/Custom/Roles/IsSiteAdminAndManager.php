@@ -22,7 +22,7 @@ class IsSiteAdminAndManager
      */
     public function handle(Request $request, Closure $next)
     {
-        if (RolesEnum::isRoles(RolesEnum::ROLE_SITE_ADMIN, RolesEnum::ROLE_SITE_MANAGER)) {
+        if (RolesEnum::isRoles(RolesEnum::SITE_ADMIN, RolesEnum::SITE_MANAGER)) {
             return $next($request);
         }
 

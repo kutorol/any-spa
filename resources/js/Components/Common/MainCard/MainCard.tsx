@@ -1,41 +1,83 @@
 import { Card, CardContent, CardHeader, Divider, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 // @ts-ignore
-import PropTypes from "prop-types";
-// @ts-ignore
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect } from "react";
 
-// constant
-const headerSX = {
+const commonHeaderSX = {
   "& .MuiCardHeader-action": { mr: 0 }
 };
 
+interface IMainCard {
+  border?: boolean,
+  boxShadow?: boolean,
+  shadow?: string,
+  children?: React.ReactNode,
+  content?: boolean,
+  contentClass?: string,
+  contentSX?: object,
+  headerSX?: object,
+  darkTitle?: boolean,
+  secondary?: React.ReactNode | string | object,
+  sx?: { [key: string]: any },
+  title?: React.ReactNode | string | object
+  // от 0 до 24 (это расплывчатость тени)
+  elevation?: number;
+}
+
 // @ts-ignore
-const MainCard = forwardRef(({ border = true, boxShadow, children, content = true, contentClass = "", contentSX = {}, darkTitle, secondary, shadow, sx = {}, title, ...others }, ref) => {
+const MainCard = forwardRef(({
+                               border = true,
+                               boxShadow,
+                               children,
+                               content = true,
+                               contentClass = "",
+                               contentSX = {},
+                               headerSX = {},
+                               darkTitle,
+                               secondary,
+                               shadow,
+                               sx = {},
+                               title,
+                               elevation,
+                               ...others
+                             }: IMainCard, ref) => {
     const theme = useTheme();
+
+    const titleTSX = title ? (darkTitle ? <Typography variant="h3">{title}</Typography> : title) : null;
+    const cardSx = {
+      border: border ? "1px solid" : "none",
+      borderColor: theme.palette.primary[200] + 25,
+      ":hover": {
+        boxShadow: boxShadow ? shadow || "0 2px 14px 0 rgb(32 40 45 / 8%)" : "inherit"
+      },
+      ...sx
+    };
+
+    const headerSXGenerate = {
+      ...commonHeaderSX,
+      ...headerSX
+    };
 
     return (
       // @ts-ignore
       <Card
         ref={ref}
+        elevation={elevation}
         {...others}
-        sx={{
-          border: border ? "1px solid" : "none",
-          borderColor: theme.palette.primary[ 200 ] + 25,
-          ":hover": {
-            boxShadow: boxShadow ? shadow || "0 2px 14px 0 rgb(32 40 45 / 8%)" : "inherit"
-          },
-          ...sx
-        }}
+        sx={cardSx}
       >
-        {/* card header and action */}
-        {title && <CardHeader sx={headerSX} title={darkTitle ? <Typography variant="h3">{title}</Typography> : title}
-                              action={secondary}/>}
+        {title && (
+          <>
+            <CardHeader
+              sx={headerSXGenerate}
+              title={titleTSX}
+              action={secondary}
+            />
 
-        {/* content & header divider */}
-        {title && <Divider/>}
+            <Divider/>
+          </>
+        )}
 
-        {/* card content */}
         {content && (
           <CardContent sx={contentSX} className={contentClass}>
             {children}
@@ -46,20 +88,5 @@ const MainCard = forwardRef(({ border = true, boxShadow, children, content = tru
     );
   }
 );
-
-MainCard.propTypes = {
-  // @ts-ignore
-  border: PropTypes.bool,
-  boxShadow: PropTypes.bool,
-  children: PropTypes.node,
-  content: PropTypes.bool,
-  contentClass: PropTypes.string,
-  contentSX: PropTypes.object,
-  darkTitle: PropTypes.bool,
-  secondary: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.object]),
-  shadow: PropTypes.string,
-  sx: PropTypes.object,
-  title: PropTypes.oneOfType([PropTypes.node, PropTypes.string, PropTypes.object])
-};
 
 export default MainCard;

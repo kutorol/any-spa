@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Api\User;
 
 use App;
 use App\DTO\User\OAuthRegisterDTO;
+use App\Events\User\UserLoginOrRegister;
+use App\Events\User\UserLogout;
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Middleware\Custom\Verify\VerifyBlockedUser;
 use App\Http\Requests\LoginRequest;
@@ -24,17 +26,25 @@ use Throwable;
 
 class AuthController extends BaseController
 {
-    // POST Регистрация нового пользователя
+    /**
+     * POST Регистрация нового пользователя.
+     * @param RegisterRequest $request
+     * @param PasetoTokenRepository $pasetoRep
+     * @param UserRepository $userRep
+     * @return JsonResponse
+     * @throws Throwable
+     */
     public function register(RegisterRequest $request, PasetoTokenRepository $pasetoRep, UserRepository $userRep): JsonResponse
     {
         $input = $request->validated();
 
+        /** @var array $data */
         $data = DB::transaction(function () use ($pasetoRep, $userRep, $input) {
             $user = $userRep->create($input);
 
             $tokens = $pasetoRep->create($user);
             if (!$tokens) {
-                throw new PasetoException(__('auth.token_not_created'));
+                throw new PasetoException(__('auth.token.not_created'));
             }
 
             return [
@@ -43,12 +53,13 @@ class AuthController extends BaseController
             ];
         });
 
+        App::setLocale($data['user']->locale->value);
+
+        event(new UserLoginOrRegister($data['user'], false));
         event(new Registered($data['user']));
 
-        App::setLocale($data['user']->locale);
-
         return $this->successResponse(
-            __('auth.success_register'),
+            __('auth.register.success'),
             $this->prepareUserResponse($data['user'], $data['tokens'], '/verify-email'),
         );
     }
@@ -63,41 +74,52 @@ class AuthController extends BaseController
         $creds = $request->only(['email', 'password']);
 
         if (!Auth::attempt($creds)) {
-            return $this->forbiddenResponse(__('auth.fail_login'), [
+            return $this->forbiddenResponse(__('auth.login.fail'), [
                 self::ERR_PARAM => [__('auth.failed')],
             ]);
         }
 
         $user = $this->user();
-        App::setLocale($user->locale ?? App::getLocale());
+        App::setLocale($user->locale->value ?? App::getLocale());
 
         $verifyResponse = $this->checkUserOnBlocked($user);
         if ($verifyResponse) {
             return $verifyResponse;
         }
 
+        event(new UserLoginOrRegister($user, true));
+
         return $this->successResponse(
-            __('auth.success_login'),
+            __('auth.login.success'),
             $this->prepareUserResponse($user, $rep->recreateTokenTx($user)),
         );
     }
 
-    // POST Выход из аккаунта
+    /**
+     * POST Выход из аккаунта.
+     * @param PasetoTokenRepository $rep
+     * @return JsonResponse
+     * @throws Throwable
+     */
     public function logout(PasetoTokenRepository $rep): JsonResponse
     {
-        $uid = $this->getUID();
-        if (!$uid) {
+        $user = $this->user();
+        if (!$user) {
             return $this->notFoundResponse(__('user.not_found'));
         }
 
-        $rep->deleteByUID($uid);
+        event(new UserLogout($user));
+        $rep->deleteByUID($user->id);
 
-        return $this->successResponse(__('auth.logout_success'), [
+        return $this->successResponse(__('auth.logout.success'), [
             self::REDIRECT_PARAM => '/',
         ]);
     }
 
-    // POST Повторная отправка письма с подтверждением
+    /**
+     * Повторная отправка письма с подтверждением
+     * @return JsonResponse
+     */
     public function resendEmailVerify(): JsonResponse
     {
         if ($this->user()->hasVerifiedEmail()) {
@@ -109,16 +131,8 @@ class AuthController extends BaseController
         return $this->successResponse(__('auth.email.verify_send_again'));
     }
 
-    // Сюда идет запрос с рефреш токеном, чтобы заменить его и нужно просто вернуть success ответ
-    // Если рефреш не нужен, то тут просто проверка идет на данные по юзеру
-    public function refreshTokenHandle(): JsonResponse
-    {
-        return $this->successResponse('', [
-            self::USER_PARAM => self::getUserData($this->user()),
-        ]);
-    }
-
     /**
+     * Регистрация через OAuth.
      * @throws Throwable
      */
     public function registerOauth(OAuthRegisterDTO $dto): JsonResponse
@@ -127,6 +141,8 @@ class AuthController extends BaseController
         $pasetoRep = app(PasetoTokenRepository::class);
         $oauthRep = app(OAuthRepository::class);
 
+        App::setLocale($dto->getLocale()->value);
+
         $data = DB::transaction(function () use ($pasetoRep, $userRep, $oauthRep, $dto) {
             $user = $userRep->createOAuth($dto);
 
@@ -134,7 +150,7 @@ class AuthController extends BaseController
 
             $tokens = $pasetoRep->create($user);
             if (!$tokens) {
-                throw new PasetoException(__('auth.token_not_created'));
+                throw new PasetoException(__('auth.token.not_created'));
             }
 
             return [
@@ -143,17 +159,17 @@ class AuthController extends BaseController
             ];
         });
 
+        event(new UserLoginOrRegister($data['user'], false));
         event(new Registered($data['user']));
 
-        App::setLocale($dto->getLocale());
-
         return $this->successResponse(
-            __('auth.success_register'),
+            __('auth.register.success'),
             $this->prepareUserResponse($data['user'], $data['tokens'], '/verify-email'),
         );
     }
 
     /**
+     * Вход через OAuth.
      * @throws Throwable
      * @throws PasetoException
      */
@@ -170,10 +186,12 @@ class AuthController extends BaseController
             return $verifyResponse;
         }
 
-        App::setLocale($u->locale);
+        App::setLocale($u->locale->value);
+
+        event(new UserLoginOrRegister($u, true));
 
         return $this->successResponse(
-            __('auth.success_login'),
+            __('auth.login.success'),
             $this->prepareUserResponse($u, app(PasetoTokenRepository::class)->recreateTokenTx($u)),
         );
     }
@@ -196,31 +214,52 @@ class AuthController extends BaseController
         return null;
     }
 
-    private function prepareUserResponse(User $user, array $tokens, string $redirectTo = '/'): array
-    {
-        return [
-            self::TOKEN_CHANGED_PARAM => true,
-            self::REDIRECT_PARAM => $redirectTo,
-            ...$tokens,
-            self::USER_PARAM => self::getUserData($user),
-        ];
-    }
-
+    /**
+     * Возвращает объект юзера для отправки на клиент
+     * @param User $u
+     * @return array
+     * @throws Throwable
+     */
     public static function getUserData(User $u): array
     {
+        $userInfo = $u->userInfo;
+
         return [
             ...$u->splitName,
             'full_name' => $u->name,
             'uid' => $u->id,
             'email' => $u->email,
-            'role' => $u->role,
-            'locale' => $u->locale,
-            'is_am_pm' => $u->is_am_pm,
-            'phone' => $u->phone,
-            'sex' => $u->sex,
-            'avatar' => $u->avatar,
-            'age' => $u->age,
+            'role' => $u->role->value,
+            self::LOCALE_PARAM => $u->locale->value,
+            'is_am_pm' => $userInfo->is_am_pm,
+            'phone' => $userInfo->phone,
+            'sex' => $userInfo->sex->value,
+            'avatar' => $u->userAvatar,
+            'age' => $userInfo->age,
             'verified_email' => $u->hasVerifiedEmail(),
+            'agreement_confirmed_at' => $userInfo->agreement_confirmed_at,
+            'birthday' => $userInfo->birthday?->format('Y-m-d') ?? null,
+            'gmt' => $userInfo->gmt,
+            'city' => $userInfo->city,
+            'ab_tests' => AbTestUserController::getABTests($u),
+        ];
+    }
+
+    /**
+     * @param User $user
+     * @param array $tokens
+     * @param string $redirectTo
+     * @return array
+     * @throws Throwable
+     */
+    private function prepareUserResponse(User $user, array $tokens, string $redirectTo = '/'): array
+    {
+        return [
+            self::LOCALE_PARAM => $user->locale,
+            self::TOKEN_CHANGED_PARAM => true,
+            self::REDIRECT_PARAM => $redirectTo,
+            ...$tokens,
+            self::USER_PARAM => self::getUserData($user),
         ];
     }
 }

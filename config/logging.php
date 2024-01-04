@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Console\Commands\CommandsLogAbstract;
+use App\Models\User\PasetoToken;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
@@ -69,7 +70,7 @@ return [
             'formatter' => JsonFormatter::class,
         ],
 
-        'paseto' => [
+        PasetoToken::LOG_CHANNEL => [
             'driver' => 'single',
             'path' => storage_path('logs/paseto/'.date('Y').'/'.date('m').'/'.date('d').'/paseto.log'),
             'level' => env('LOG_LEVEL', 'debug'),
@@ -145,7 +146,8 @@ return [
         ],
 
         'emergency' => [
-            'path' => storage_path('logs/laravel.log'),
+            'driver' => 'single',
+            'path' => storage_path('logs/emergency_errors.log'),
             'formatter' => JsonFormatter::class,
         ],
     ],

@@ -15,7 +15,7 @@ class VerifyEmailProvider implements InterfaceProvider
         // переопределяем какое письмо будет отправляться для подтверждения email
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
             return (new MailMessage())
-                ->subject(__('auth.email.subject_mail', ['site_name' => config('app.url')]))
+                ->subject(__('auth.email.subject_mail', ['site_name' => getPrettySiteName()]))
                 ->line(__('auth.email.click_btn_to_verify'))
                 ->action(__('auth.email.verify_btn'), $url)
                 ->greeting(__('auth.email.hello'))

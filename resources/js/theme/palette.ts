@@ -21,6 +21,8 @@ export default function themePalette(theme) {
       main: theme.colors?.secondaryMain,
       dark: theme.colors?.secondaryDark,
       200: theme.colors?.secondary200,
+      300: theme.colors?.secondary300,
+      400: theme.colors?.secondary400,
       800: theme.colors?.secondary800
     },
     error: {

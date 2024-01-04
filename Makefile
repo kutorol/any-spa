@@ -1,6 +1,6 @@
-PROJECT_NAME=hard
-TAG=local-hard
-APP_URL=hard.com
+PROJECT_NAME=any-spa
+TAG=local-any-spa
+APP_URL=any-spa.com
 APP_URL_HTTPS:="https://${APP_URL}"
 
 include .env
@@ -19,7 +19,7 @@ init-mac: ssl-cert-macos init
 init: up-all m seed
 
 # Шаг 2. Запуск для локальной разработки. Если запустили init, то уже не надо ничего делать
-up-all: build-app up ps
+up-all: check-folders build-app up ps
 
 up-rebuild: down
 	$(COMPOSE) up -d --build
@@ -87,6 +87,9 @@ prepare:
 larastan:
 	$(COMPOSE) run --rm -u $(CURRENT_UID) --entrypoint bash composer -c "php /var/www/vendor/bin/phpstan analyse --memory-limit 500M"
 
+larastan-clear-cache:
+	$(COMPOSE) run --rm -u $(CURRENT_UID) --entrypoint bash composer -c "php /var/www/vendor/bin/phpstan clear-result-cache"
+
 fix: fix-ide-helper fix-cs
 
 # Делает форматирование кода
@@ -96,6 +99,16 @@ fix-cs:
 # Добавляет/обновляет файл для работы с Laravel в IDE
 fix-ide-helper:
 	$(COMPOSE) run --rm -u $(CURRENT_UID) --entrypoint bash php -c "php artisan ide-helper:generate && php artisan ide-helper:meta && php artisan ide-helper:models -W"
+
+# Запуск крона
+# В сервисе запускать вот так
+# * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+run-cron:
+	$(COMPOSE) run --rm -u $(CURRENT_UID) --entrypoint bash php -c "php artisan schedule:run >> /dev/null 2>&1"
+
+# Локальный запуск крона, чтобы он постоянно был запущен и вызывался каждую минуту
+work-cron:
+	$(COMPOSE) run --rm -u $(CURRENT_UID) --entrypoint bash php -c "php artisan schedule:work"
 
 # Применение миграции
 m:
@@ -134,3 +147,10 @@ ssl-cert-macos:
 
 c-redis:
 	docker exec -it redis-$(PROJECT_NAME) redis-cli
+
+# Проверяет, есть ли важные папки, без которых не запуститься сайт
+check-folders:
+	if [ ! -d "./storage/framework" ]; then mkdir "./storage/framework"; fi
+	if [ ! -d "./storage/framework/cache" ]; then mkdir "./storage/framework/cache"; fi
+	if [ ! -d "./storage/framework/views" ]; then mkdir "./storage/framework/views"; fi
+	if [ ! -d "./storage/framework/sessions" ]; then mkdir "./storage/framework/sessions"; fi

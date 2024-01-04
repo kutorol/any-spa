@@ -1,14 +1,14 @@
 import { Formik } from "formik";
 import { FormikHelpers, FormikValues } from "formik/dist/types";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import EmailInput from "../../../../../Common/Inputs/EmailInput";
 import SubmitBtn from "../../../Common/SubmitBtn";
+import { isDisabledBtn } from "../../../Login/Form/Formik/FormikLogin";
 
 interface FormikPassResetProps {
-  onSubmit: (v: FormikValues, formikHelpers: FormikHelpers<FormikValues>) => void | Promise<any>
-  formFields: object
-  formValidationSchema: object
+  onSubmit: (v: FormikValues, formikHelpers: FormikHelpers<FormikValues>) => void | Promise<any>;
+  formFields: object;
+  formValidationSchema: object;
 }
 
 const FormikPassReset = ({ onSubmit, formFields, formValidationSchema }: FormikPassResetProps) => {
@@ -18,18 +18,17 @@ const FormikPassReset = ({ onSubmit, formFields, formValidationSchema }: FormikP
       validationSchema={formValidationSchema}
       onSubmit={onSubmit}
     >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+      {({ errors, touched, handleBlur, handleChange, handleSubmit, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           <EmailInput
             values={values}
             handleBlur={handleBlur}
             handleChange={handleChange}
-            touched={touched}
             errors={errors}
           />
 
           <SubmitBtn
-            isSubmitting={isSubmitting}
+            disabled={isDisabledBtn(errors, touched)}
             isPasswordReset
           />
         </form>

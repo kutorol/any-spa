@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Auth;
+use RCerljenko\LaravelPaseto\Paseto;
 
 final class CheckTokenType extends CheckAbstract
 {
@@ -20,8 +20,9 @@ final class CheckTokenType extends CheckAbstract
 
     public function init(): void
     {
-        // @phpstan-ignore-next-line
-        $claims = (array)(Auth::getTokenPayload() ?? []);
+        $token = $this->lastCheckData[SetBearerToken::class];
+
+        $claims = (new Paseto)->decodeToken($token)->getClaims();
         $this->tokenType = $claims['type'] ?? '';
     }
 
@@ -32,7 +33,7 @@ final class CheckTokenType extends CheckAbstract
 
     public function errorResponse(): JsonResponse|Redirector|Application|RedirectResponse|Response
     {
-        return IsSiteAdmin::getResponse($this->r, 'auth.failed_check_token_type', BaseController::VALIDATION_CODE);
+        return IsSiteAdmin::getResponse($this->r, 'auth.token.failed_check_type', BaseController::VALIDATION_CODE);
     }
 
     public function getData(): string

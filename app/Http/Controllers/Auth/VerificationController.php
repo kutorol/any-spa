@@ -23,7 +23,7 @@ class VerificationController extends Controller
     // GET показ страницы удачной/неудачной верификацией
     public function verifyNotice(): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
     {
-        return redirect('/');
+        return $this->redirectTo('/');
     }
 
     /**
@@ -45,6 +45,6 @@ class VerificationController extends Controller
             event(new Verified($user));
         }
 
-        return redirect('/login');
+        return $this->redirectTo('/login');
     }
 }

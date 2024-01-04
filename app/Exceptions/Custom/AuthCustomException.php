@@ -26,8 +26,11 @@ class AuthCustomException implements CustomExceptionInterface
         $response['msg'] = __('auth.you_in_forbidden_zone');
         $response['data'] = array_merge($response['data'], [
             // перенаправляем из запрещенной зоны в зону входа
-            BaseController::REDIRECT_PARAM => 'login',
+            BaseController::REDIRECT_PARAM => '/login',
+            BaseController::NEED_REFRESH_TOKEN_PARAM => true,
         ]);
+
+        $response['statusCode'] = $this->getHeaderCode();
 
         // расширяем ошибку
         return FactoryAuthExtendCustomException::extend($response, $this->e);

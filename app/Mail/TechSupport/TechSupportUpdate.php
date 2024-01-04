@@ -36,7 +36,10 @@ class TechSupportUpdate extends Mailable
     {
         return new Envelope(
             from: config('mail.from.address'),
-            subject: __('support.mail.update_mail_subject', ['num' => $this->entity->id, 'site_name' => explode('//', Url::to('/'))[1] ?? Url::to('/')]),
+            subject: __('support.mail.update_mail_subject', [
+                'num' => $this->entity->id,
+                'site_name' => getPrettySiteName(),
+            ]),
         );
     }
 

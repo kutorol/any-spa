@@ -22,4 +22,6 @@ cert.pem
 key.pem
 lang/php_*.json
 /storage
-.idea
+/public/uploads
+/public/sitemap*.xml
+_ide_helper.php

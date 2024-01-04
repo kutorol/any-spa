@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use App\Exceptions\Custom\FactoryCustomException;
+use App\Exceptions\Entity\CustomException;
 use App\Exceptions\Log\FactoryLogException;
 use App\Http\Controllers\Api\BaseController;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,6 +28,7 @@ class Handler extends ExceptionHandler
      */
     protected $levels = [
         PasetoException::class => LogLevel::INFO,
+        QueryException::class => LogLevel::EMERGENCY,
     ];
 
     /**
@@ -67,9 +70,7 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         // Логируем некоторые ошибки не по стандарту
-        $this->reportable(function (PasetoException|RouteNotFoundException $e) {
-            FactoryLogException::log($e);
-
+        $this->reportable(function (PasetoException|RouteNotFoundException|QueryException $e) {
             // не логируем по стандарту flow данные ошибки
             return false;
         });
@@ -94,7 +95,14 @@ class Handler extends ExceptionHandler
             return parent::render($request, $e);
         }
 
-        $response = BaseController::errorResponse(__($e->getMessage()), [], (int)$e->getCode());
+        $needTranslate = !($e instanceof CustomException);
+
+        $response = BaseController::errorResponse(
+            $needTranslate ? __($e->getMessage()) : $e->getMessage(),
+            [],
+            BaseController::INTERNAL_ERROR_CODE,
+            (int)$e->getCode()
+        );
 
         $ex = FactoryCustomException::get($e);
 

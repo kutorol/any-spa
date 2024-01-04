@@ -22,7 +22,7 @@ class ValidationCustomException implements CustomExceptionInterface
     {
         $response['msg'] = __('validation.failed_validation');
         $response['data'][BaseController::ERR_PARAM] = [];
-
+        $response['statusCode'] = $this->getHeaderCode();
         // @phpstan-ignore-next-line
         foreach (($this->e->errors() ?? []) as $errors) {
             foreach ($errors as $error) {

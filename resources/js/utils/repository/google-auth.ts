@@ -1,14 +1,17 @@
 import { get } from "lodash";
+import { hasConfirmCookieLocalStorage } from "../../Components/Common/Utils/Cookie/CookieConfirm";
 import { changeFullScreenLoaderState } from "../../store/reducers/func/common/full-screen-loader";
 import { createErrMgs } from "../../store/reducers/func/snackbar/error-snackbar";
 import store from "../../store/store";
 import r from "../ajax";
-import Locale from "../funcs/locale";
-import { googleAuthInterface, userSocialAuth } from "./interfaces";
+import { ERoles } from "../enums/user";
+import { __ } from "../funcs/locale";
+import { IGoogleAuthInterface } from "../interfaces/google-auth";
+import { IUserSocialAuth } from "../interfaces/user-auth";
 
-class userGoogleRepository implements userSocialAuth {
+class UserGoogleRepository implements IUserSocialAuth {
   // @ts-ignore Получение данных от гугла по юзера
-  public async fetchData(url: string, accessToken: string): googleAuthInterface {
+  public async fetchData(url: string, accessToken: string): IGoogleAuthInterface {
     // получаем инфу о юзере
     return await r.getOutside(url, {
       headers: {
@@ -19,22 +22,23 @@ class userGoogleRepository implements userSocialAuth {
   }
 
   // Запрос на сервер с авторизацией/регистрацией
-  public auth(res: googleAuthInterface, captchaToken: string): Promise<boolean> {
+  public auth(res: IGoogleAuthInterface, captchaToken: string, chosenRole?: ERoles): Promise<boolean> {
     changeFullScreenLoaderState(true);
     return r.post("/api/oauth/google", {
       id: res.id,
-      // @ts-ignore
-      locale: get(res, "locale", store.getState().locale.val),
+      locale: store.getState().userInfo.user.locale,
       avatar: get(res, "picture", null),
       email: get(res, "email", ""),
       name: `${get(res, "family_name", "")} ${get(res, "given_name", "")}`.trim(),
-      "g-recaptcha-token": captchaToken
+      confirmAgreement: hasConfirmCookieLocalStorage() ? 1 : 0,
+      "g-recaptcha-token": captchaToken,
+      role: chosenRole || null
     })
       .catch(e => {
         console.error("System error", e);
-        let errs = Locale.locale.t("Не удалось пройти проверку каптчи от Google. Попробуйте еще раз или обновите страницу");
+        let errs = __("Не удалось пройти проверку каптчи от Google. Попробуйте еще раз или обновите страницу");
         if (e.message || "") {
-          errs = `${Locale.locale.t("Ошибка сайта")}: ${e.toString()}`;
+          errs = `${__("Ошибка сайта")}: ${e.toString()}`;
         }
 
         createErrMgs(errs);
@@ -47,5 +51,5 @@ class userGoogleRepository implements userSocialAuth {
   }
 }
 
-const userAuthGoogle = new userGoogleRepository();
-export default userAuthGoogle;
+const userAuthGoogleRep = new UserGoogleRepository();
+export default userAuthGoogleRep;

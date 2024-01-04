@@ -1,20 +1,21 @@
 import { IconButton } from "@mui/material";
-import { IconSend } from "@tabler/icons-react";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
+import Icon from "../Common/Icon";
 
-interface BtnProps {
+interface IBtnProps {
   onClick: (e) => void;
   icon?: React.ReactNode;
+  ref?: any;
 
-  [ key: string ]: any;
+  [key: string]: any;
 }
 
-const RoundBtn = ({ onClick, icon = <IconSend/>, ...props }: BtnProps) => {
+const RoundBtn = ({ onClick, icon = <Icon tablerIcon="IconSend"/>, anchorRef, ...props }: IBtnProps) => {
   return (
     <IconButton
       color="secondary"
       onClick={onClick}
+      ref={anchorRef}
       {...props}
     >
       {icon}

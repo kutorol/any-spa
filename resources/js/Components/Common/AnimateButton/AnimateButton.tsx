@@ -1,11 +1,28 @@
 import { motion, useCycle } from "framer-motion";
-// @ts-ignore
-import PropTypes from "prop-types";
-// @ts-ignore
-import React, { forwardRef } from "react";
+import * as React from "react";
+import { forwardRef } from "react";
+
+interface IScaleObject {
+  hover: number | string;
+  tap: number | string;
+}
+
+interface IAnimateButton {
+  children: any;
+  type: "slide" | "scale" | "rotate";
+  direction: "up" | "down" | "left" | "right";
+  offset: number;
+  scale: number | IScaleObject;
+}
 
 // @ts-ignore
-const AnimateButton = forwardRef(({ children, type, direction, offset, scale }, ref) => {
+const AnimateButton = forwardRef(({
+                                    children,
+                                    type = "scale",
+                                    direction = "right",
+                                    offset = 10,
+                                    scale = { hover: 1, tap: 0.9 }
+                                  }: IAnimateButton, ref) => {
   let offset1;
   let offset2;
   switch (direction) {
@@ -74,39 +91,19 @@ const AnimateButton = forwardRef(({ children, type, direction, offset, scale }, 
         scale = {
           hover: scale,
           tap: scale
-        };
+        } as IScaleObject;
       }
       return (
         <motion.div
           // @ts-ignore
           ref={ref}
-          whileHover={{ scale: scale?.hover }}
-          whileTap={{ scale: scale?.tap }}
+          whileHover={{ scale: scale.hover }}
+          whileTap={{ scale: scale.tap }}
         >
           {children}
         </motion.div>
       );
   }
 });
-
-AnimateButton.propTypes = {
-  // @ts-ignore
-  children: PropTypes.node,
-  offset: PropTypes.number,
-  type: PropTypes.oneOf(["slide", "scale", "rotate"]),
-  direction: PropTypes.oneOf(["up", "down", "left", "right"]),
-  scale: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
-};
-
-AnimateButton.defaultProps = {
-  // @ts-ignore
-  type: "scale",
-  offset: 10,
-  direction: "right",
-  scale: {
-    hover: 1,
-    tap: 0.9
-  }
-};
 
 export default AnimateButton;

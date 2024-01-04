@@ -7,6 +7,8 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Enums\User\RolesEnum;
 use App\Enums\User\SexEnum;
+use App\Models\User;
+use App\Models\User\UserInfo;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,28 +23,37 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::factory()->create([
-            'name' => 'Admin ad min',
+        /** @var User $u */
+        $u = User::factory()->create([
+            'name' => 'Admin male 1',
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('adminadmin'),
-            'role' => RolesEnum::ROLE_SITE_ADMIN,
+            'role' => RolesEnum::SITE_ADMIN->value,
+        ]);
+
+        UserInfo::create([
+            'user_id' => $u->id,
             'phone' => null,
-            'sex' => SexEnum::MALE,
-            'age' => 18,
+            'sex' => SexEnum::MALE->value,
+            'age' => 25,
             'is_am_pm' => false,
         ]);
 
-        \App\Models\User::factory()->create([
-            'name' => 'User us er',
+        $u = User::factory()->create([
+            'name' => 'User female 2',
             'email' => 'user@user.com',
             'email_verified_at' => now(),
             'password' => Hash::make('useruser'),
-            'role' => RolesEnum::ROLE_USER,
+            'role' => RolesEnum::USER->value,
+        ]);
+
+        UserInfo::create([
+            'user_id' => $u->id,
             'phone' => null,
-            'sex' => SexEnum::MALE,
+            'sex' => SexEnum::FEMALE->value,
             'age' => 18,
-            'is_am_pm' => false,
+            'is_am_pm' => true,
         ]);
     }
 }

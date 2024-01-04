@@ -16,11 +16,13 @@ class DefaultCustomException implements CustomExceptionInterface
 
     public function getExtendedMessage(array $response): array
     {
+        $response['statusCode'] = $this->getHeaderCode();
+
         return $response;
     }
 
     public function getHeaderCode(): int
     {
-        return BaseController::BAD_REQUEST_CODE;
+        return BaseController::INTERNAL_ERROR_CODE;
     }
 }

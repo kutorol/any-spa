@@ -21,7 +21,7 @@ class VerifyBlockedUser
     public function handle(Request $request, Closure $next)
     {
         /** @var User $u */
-        $u = $request->user();
+        $u = User::getCurrentUser();
         $response = self::getResponse($u, $request);
         if ($response) {
             return $response;
@@ -56,11 +56,11 @@ class VerifyBlockedUser
         }
 
         $errors = [
-            sprintf('%s: %s', __('user.blocked_comment_head'), $blockedEntity->comment),
-            sprintf('%s: %s', __('user.blocked_until'), $blockedEntity->blocked_until->diffForHumans()),
+            sprintf('%s: %s', __('user.block.comment_head'), $blockedEntity->comment),
+            sprintf('%s: %s', __('user.block.until'), $blockedEntity->blocked_until->diffForHumans()),
         ];
 
-        return IsSiteAdmin::getResponse($request, 'user.blocked', BaseController::FORBIDDEN_CODE, [
+        return IsSiteAdmin::getResponse($request, 'user.block.title', BaseController::FORBIDDEN_CODE, [
             BaseController::ERR_PARAM => $errors,
         ]);
     }

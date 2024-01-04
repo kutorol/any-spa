@@ -22,6 +22,6 @@ class ForgotPasswordController extends Controller
     // POST
     public function sendResetLinkEmail(): \Illuminate\Foundation\Application|Redirector|Application|RedirectResponse
     {
-        return redirect('/');
+        return $this->redirectTo('/');
     }
 }

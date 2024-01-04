@@ -1,20 +1,18 @@
 import { Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { FormikErrors, FormikTouched, FormikValues } from "formik/dist/types";
+import { FormikErrors, FormikValues } from "formik/dist/types";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import CustomInput from "../../../../Common/Inputs/CustomInput";
 
 interface InputsBlockListProps {
   handleBlur: (e: React.FocusEvent<any>) => void;
   handleChange: (e: React.ChangeEvent<any>) => void;
   values: FormikValues;
-  touched: FormikTouched<FormikValues>;
   errors: FormikErrors<FormikValues>;
 }
 
-const InputsBlockList = ({ values, handleBlur, handleChange, touched, errors }: InputsBlockListProps) => {
+const InputsBlockList = ({ values, handleBlur, handleChange, errors }: InputsBlockListProps) => {
   const { t } = useLaravelReactI18n();
   const blockInputNames = [
     { name: "first_name", title: t("Имя") },
@@ -39,7 +37,6 @@ const InputsBlockList = ({ values, handleBlur, handleChange, touched, errors }: 
         values={values}
         handleBlur={handleBlur}
         handleChange={handleChange}
-        touched={touched}
         errors={errors}
         theme={theme}
       />

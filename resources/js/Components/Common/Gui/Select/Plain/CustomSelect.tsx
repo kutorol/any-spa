@@ -1,14 +1,15 @@
 import { Select } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 interface ICustomSelect {
   variants: { [key in any]: string } | string[];
   label: string;
   labelId: string;
-  onChange: (n: any) => void;
+  onChange: (e: React.ChangeEvent<{ value: unknown }>) => void;
   chosenVariant: any;
+
+  [key: string]: any;
 }
 
 const CustomSelect = ({ variants, label, onChange, labelId, chosenVariant, ...props }: ICustomSelect) => {
@@ -19,13 +20,9 @@ const CustomSelect = ({ variants, label, onChange, labelId, chosenVariant, ...pr
     ));
   } else {
     items = Object.keys(variants).map((k: any, i: number) => (
-      <MenuItem key={i} value={k}>{variants[ k ]}</MenuItem>
+      <MenuItem key={i} value={k}>{variants[k]}</MenuItem>
     ));
   }
-
-  const _onChange = (e: React.ChangeEvent<{ value: unknown }>): void => {
-    onChange(e.target.value);
-  };
 
   return (
     <Select
@@ -33,8 +30,9 @@ const CustomSelect = ({ variants, label, onChange, labelId, chosenVariant, ...pr
       labelId={labelId}
       value={chosenVariant}
       label={label}
-      onChange={_onChange}
+      onChange={onChange}
       variant="outlined"
+      color="secondary"
       {...props}
     >
       {items}

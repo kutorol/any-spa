@@ -1,28 +1,28 @@
-import { Button } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
+import Btn from "../../Btn/Btn";
+import Icon from "../../Common/Icon";
 
 interface IBack {
   backIsDisabled: boolean;
   handleBack: () => void;
 }
 
-const Back = ({ backIsDisabled, handleBack }:IBack) => {
+const Back = ({ backIsDisabled, handleBack }: IBack) => {
   const { t } = useLaravelReactI18n();
 
+  const title = t("Назад");
   if (backIsDisabled) {
     return null;
   }
 
   return (
-    <Button
-      color="inherit"
+    <Btn
+      webTitle={title}
       onClick={handleBack}
       sx={{ mr: 1 }}
-    >
-      {t("Назад")}
-    </Button>
+      startIcon={<Icon tablerIcon="IconChevronLeft"/>}
+    />
   );
 };
 

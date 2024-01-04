@@ -3,8 +3,9 @@ import { toNumber } from "lodash";
 import React, { useEffect, useState } from "react";
 
 interface useSecondsLeftTimerProps {
-  initStorageNameLeftSeconds?:string
+  initStorageNameLeftSeconds?: string;
 }
+
 /**
  * Хук для получения таймера, который отсчитывает сколько секунд осталось
  * @param initStorageNameLeftSeconds - имя локального хранилища, в котором хранится отсчет секунд до 0

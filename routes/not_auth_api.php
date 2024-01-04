@@ -2,17 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\News\NewsController;
 use App\Http\Controllers\Api\OAuth\GoogleOAuthController;
-use App\Http\Controllers\Api\Other\TermOfUsePolicy;
 use App\Http\Controllers\Api\Seo\SeoController;
 use App\Http\Controllers\Api\TechSupport\AnonymTechSupportController;
 use App\Http\Controllers\Api\User\AuthController;
 use App\Http\Controllers\Api\User\ForgotController;
+use App\Http\Controllers\Api\User\InitRequestController;
 use App\Http\Middleware\Custom\Roles\IsGuest;
 use Illuminate\Support\Facades\Route;
-
-// Политика конфиденциальности и использования
-Route::get('/term-of-use-private-policy', [TermOfUsePolicy::class, 'index'])->name('termOfUsePrivatePolicy');
 
 // Группа авторизации через соц. сети
 Route::middleware('throttle:5,1')->prefix('/oauth')->group(function () {
@@ -29,6 +27,11 @@ Route::post('/tech-support', [AnonymTechSupportController::class, 'send'])
 Route::get('/seo-page-info', [SeoController::class, 'pageInfo'])
     ->name('seo.page-info');
 
+// Инициализационный запрос для анонима
+Route::get('/init-request-anonym', [InitRequestController::class, 'initAnonymRequest'])
+    ->name('api.anonym.init_request');
+
+// аноним
 Route::middleware(IsGuest::MIDDLEWARE_NAME)->group(function () {
     Route::middleware('throttle:5,1')->group(function () {
         // Регистрация
@@ -44,4 +47,12 @@ Route::middleware(IsGuest::MIDDLEWARE_NAME)->group(function () {
         // Восстанавливаем пароль по ссылке
         Route::post('/reset/{url_token}', [ForgotController::class, 'reset'])->middleware('throttle:10,1')->name('api.pass_reset');
     });
+});
+
+// Новости
+Route::prefix('/news')->group(function () {
+    // Листинг новостей
+    Route::get('', [NewsController::class, 'index'])->name('api.news');
+    // конкретная новость
+    Route::get('/info/{id}', [NewsController::class, 'info'])->name('api.news.info');
 });

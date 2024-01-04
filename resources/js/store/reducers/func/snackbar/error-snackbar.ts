@@ -2,11 +2,11 @@ import { cloneDeep, toNumber } from "lodash";
 import store from "../../../store";
 import { set } from "../../snackbar/error-snackbar";
 
-export const createErrMgs = (listErrs: string | string[], duration?: number, code: number = 0) => {
+export const createErrMgs = (listErrs: string | string[], duration?: number, code: number | string = 0) => {
   store.dispatch(set(_createErrMgs(listErrs, duration, code)));
 };
 
-const _createErrMgs = (listErrs: string | string[], duration?: number, code: number = 0) => {
+const _createErrMgs = (listErrs: string | string[], duration?: number, code: number | string = 0) => {
   let errs = [];
   if (typeof listErrs === "string") {
     errs.push(listErrs);
@@ -17,7 +17,7 @@ const _createErrMgs = (listErrs: string | string[], duration?: number, code: num
   }
 
   return {
-    code: toNumber(code),
+    code: code,
     errors: errs,
     duration: toNumber(duration)
   };

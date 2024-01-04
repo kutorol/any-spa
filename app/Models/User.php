@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Common\Locale;
+use App\Enums\User\RolesEnum;
+use App\Http\Controllers\Api\BaseController;
+use App\Models\User\ABTestUser;
+use App\Models\User\UserInfo;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Auth\VerifiesEmails;
@@ -18,52 +25,45 @@ use RCerljenko\LaravelPaseto\Traits\HasPaseto;
  * @property int $id
  * @property string $name
  * @property string $email
- * @property string $role
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
+ * @property string|null $avatar
+ * @property Locale $locale
+ * @property RolesEnum $role
+ * @property bool $blocked Юзер был заблокирован
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
- * @property-read int|null $tokens_count
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property array|null $claims Тут храниться payload от токена Paseto
+ * @property UserInfo $userInfo - остальная информация по юзеру
+ * @property-read null|string $userAvatar - ссылка на автара
+ * @property-read null|string $user_avatar - ссылка на автара
  * @property-read array $splitName - тут полное имя раскладывается на составные части от ФИО
- * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @property-read array $split_name - тут полное имя раскладывается на составные части от ФИО
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBlocked($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLocale($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection $clients
- * @property-read int|null $clients_count
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
- * @method static \Illuminate\Database\Query\Builder|User withTrashed()
- * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
- * @property string $phone
- * @property int $age
- * @property string $sex
- * @property-read array $split_name  - тут полное имя раскладывается на составные части от ФИО
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAge($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSex($value)
- * @property string $avatar
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
- * @property bool $is_am_pm Как юзеру выводить часы работы
- * @property array|null $claims Тут храниться payload от токена Paseto
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAmPm($value)
- * @property bool $blocked Юзер был заблокирован
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBlocked($value)
- * @property string $locale
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLocale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, ABTestUser> $abTests
+ * @property-read int|null $ab_tests_count
  * @mixin \Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail
@@ -80,14 +80,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'role',
-        'phone',
-        'age',
-        'sex',
         'avatar',
-        'is_am_pm',
         'email_verified_at',
         'blocked',
-        'locale',
+        BaseController::LOCALE_PARAM,
     ];
 
     /**
@@ -97,7 +93,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $hidden = [
         'password',
-        'email_verified_at',
     ];
 
     /**
@@ -107,9 +102,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'is_am_pm' => 'boolean',
         'blocked' => 'boolean',
-        'locale' => 'string',
+        BaseController::LOCALE_PARAM => Locale::class,
+        'role' => RolesEnum::class,
     ];
 
     /**
@@ -118,18 +113,27 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getSplitNameAttribute(): array
     {
-        $fio = explode(' ', $this->name ?? '');
+        return getSplitName($this->name ?? '');
+    }
 
-        return [
-            'first_name' => $fio[1] ?? '',
-            'last_name' => $fio[0] ?? '',
-            'surname' => $fio[2] ?? '',
-        ];
+    public function getUserAvatarAttribute(): ?string
+    {
+        return getAvatarURL($this->avatar, $this->updated_at);
     }
 
     public static function getCurrentUser(): ?self
     {
         // @phpstan-ignore-next-line
         return \Auth::guard('api')->user() ?? \Auth::user() ?? null;
+    }
+
+    public function userInfo(): HasOne
+    {
+        return $this->hasOne(UserInfo::class, 'user_id', 'id');
+    }
+
+    public function abTests(): HasMany
+    {
+        return $this->hasMany(ABTestUser::class, 'user_id');
     }
 }

@@ -1,28 +1,44 @@
 import { Alert, AlertTitle, Typography } from "@mui/material";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 interface CustomAlertProps {
-  title: string;
-  subtitleElement: React.ReactNode;
+  title: React.ReactNode | string;
+  subtitleElement: React.ReactNode | string;
   icon?: React.ReactNode;
   color?: "success" | "info" | "warning" | "error";
+  titleSx?: object;
+  subTitleSx?: object;
+
+  [k: string]: any;
 }
 
-const CustomAlert = ({ title, subtitleElement, icon, color = "warning" }: CustomAlertProps) => {
+const CustomAlert = ({
+                       title,
+                       titleSx,
+                       subTitleSx,
+                       subtitleElement,
+                       icon,
+                       color = "warning",
+                       ...other
+                     }: CustomAlertProps) => {
   return (
     <Alert
       color={color}
       severity={color}
       variant="filled"
       icon={icon}
+      {...other}
     >
       <AlertTitle>
-        <Typography variant="h5">{title}</Typography>
+        {typeof title === "string" ? (
+          <Typography variant="h5" sx={titleSx}>{title}</Typography>
+        ) : title}
       </AlertTitle>
-      <Typography variant="subtitle2">
-        {subtitleElement}
-      </Typography>
+      {typeof subtitleElement === "string" ? (
+        <Typography variant="subtitle2" sx={subTitleSx}>
+          {subtitleElement}
+        </Typography>
+      ) : subtitleElement}
     </Alert>
   );
 };

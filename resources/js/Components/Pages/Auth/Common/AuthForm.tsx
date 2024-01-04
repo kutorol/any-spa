@@ -1,9 +1,10 @@
 import { FormControlLabel, Grid, Stack, Typography } from "@mui/material";
-import { IconKeyOff } from "@tabler/icons-react";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { Link } from "react-router-dom";
+import { ERoles } from "../../../../utils/enums/user";
+import { getUrl } from "../../../../utils/funcs/url";
+import Icon from "../../../Common/Gui/Common/Icon";
 import GoogleBtnBlock from "../../../Common/Inputs/GoogleBtnBlock";
 import FormInputsLogin from "../Login/Form/FormInputs";
 import FormPasswordReset from "../PasswordReset/Form/FormInputs";
@@ -16,9 +17,16 @@ function AuthForm({ isRegister = false, isPasswordReset = false, isPasswordReset
   const spacing = 2;
   const { t } = useLaravelReactI18n();
 
+  const [chosenRole, setChosenRole] = React.useState<ERoles>(ERoles.USER);
+
   let formInputs = null;
   if (isRegister) {
-    formInputs = <FormInputsRegister/>;
+    formInputs = (
+      <FormInputsRegister
+        chosenRole={chosenRole}
+        setChosenRole={setChosenRole}
+      />
+    );
   } else if (isPasswordReset) {
     formInputs = <FormPasswordReset/>;
   } else if (isPasswordResetConfirm) {
@@ -35,7 +43,10 @@ function AuthForm({ isRegister = false, isPasswordReset = false, isPasswordReset
         justifyContent="center"
         spacing={spacing}
       >
-        <GoogleBtnBlock isRegister={isRegister}/>
+        <GoogleBtnBlock
+          chosenRole={chosenRole}
+          isRegister={isRegister}
+        />
 
         <OrBlock/>
 
@@ -59,7 +70,7 @@ function AuthForm({ isRegister = false, isPasswordReset = false, isPasswordReset
                 color="secondary"
                 sx={{ textDecoration: "none", cursor: "pointer", mt: 1 }}
                 component={Link}
-                to="/password/reset"
+                to={getUrl("/password/reset")}
               >
                 <Stack
                   direction="row"
@@ -67,7 +78,7 @@ function AuthForm({ isRegister = false, isPasswordReset = false, isPasswordReset
                   justifyContent="flex-end"
                   spacing={1}
                 >
-                  <IconKeyOff size="1rem"/> <span>{t("Забыли пароль?")}</span>
+                  <Icon tablerIcon="IconKeyOff" stroke={undefined} size="1rem"/> <span>{t("Забыли пароль?")}</span>
                 </Stack>
               </Typography>
             }

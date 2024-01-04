@@ -16,9 +16,9 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import MainCard from "../../../Common/MainCard/MainCard";
-import { gridSpacing } from "../../../../store/constant";
 
 // ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
+const gridSpacing = 3;
 
 const PopularCard = ({ isLoading }) => {
   const theme = useTheme();
@@ -36,7 +36,7 @@ const PopularCard = ({ isLoading }) => {
   return (
     <>
       {isLoading ? (
-        <SkeletonPopularCard />
+        <SkeletonPopularCard/>
       ) : (
         <MainCard content={false}>
           <CardContent>
@@ -50,7 +50,7 @@ const PopularCard = ({ isLoading }) => {
                     <MoreHorizOutlinedIcon
                       fontSize="small"
                       sx={{
-                        color: theme.palette.primary[200],
+                        color: theme.palette.primary[ 200 ],
                         cursor: 'pointer'
                       }}
                       aria-controls="menu-popular-card"
@@ -81,7 +81,7 @@ const PopularCard = ({ isLoading }) => {
                 </Grid>
               </Grid>
               <Grid item xs={12} sx={{ pt: '16px !important' }}>
-                <BajajAreaChartCard />
+                <BajajAreaChartCard/>
               </Grid>
               <Grid item xs={12}>
                 <Grid container direction="column">
@@ -111,7 +111,7 @@ const PopularCard = ({ isLoading }) => {
                                 ml: 2
                               }}
                             >
-                              <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
+                              <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit"/>
                             </Avatar>
                           </Grid>
                         </Grid>
@@ -124,7 +124,7 @@ const PopularCard = ({ isLoading }) => {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Divider sx={{ my: 1.5 }} />
+                <Divider sx={{ my: 1.5 }}/>
                 <Grid container direction="column">
                   <Grid item>
                     <Grid container alignItems="center" justifyContent="space-between">
@@ -152,7 +152,7 @@ const PopularCard = ({ isLoading }) => {
                                 marginLeft: 1.875
                               }}
                             >
-                              <KeyboardArrowDownOutlinedIcon fontSize="small" color="inherit" />
+                              <KeyboardArrowDownOutlinedIcon fontSize="small" color="inherit"/>
                             </Avatar>
                           </Grid>
                         </Grid>
@@ -165,7 +165,7 @@ const PopularCard = ({ isLoading }) => {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Divider sx={{ my: 1.5 }} />
+                <Divider sx={{ my: 1.5 }}/>
                 <Grid container direction="column">
                   <Grid item>
                     <Grid container alignItems="center" justifyContent="space-between">
@@ -193,7 +193,7 @@ const PopularCard = ({ isLoading }) => {
                                 ml: 2
                               }}
                             >
-                              <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit" />
+                              <KeyboardArrowUpOutlinedIcon fontSize="small" color="inherit"/>
                             </Avatar>
                           </Grid>
                         </Grid>
@@ -206,7 +206,7 @@ const PopularCard = ({ isLoading }) => {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Divider sx={{ my: 1.5 }} />
+                <Divider sx={{ my: 1.5 }}/>
                 <Grid container direction="column">
                   <Grid item>
                     <Grid container alignItems="center" justifyContent="space-between">
@@ -234,7 +234,7 @@ const PopularCard = ({ isLoading }) => {
                                 ml: 2
                               }}
                             >
-                              <KeyboardArrowDownOutlinedIcon fontSize="small" color="inherit" />
+                              <KeyboardArrowDownOutlinedIcon fontSize="small" color="inherit"/>
                             </Avatar>
                           </Grid>
                         </Grid>
@@ -247,7 +247,7 @@ const PopularCard = ({ isLoading }) => {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Divider sx={{ my: 1.5 }} />
+                <Divider sx={{ my: 1.5 }}/>
                 <Grid container direction="column">
                   <Grid item>
                     <Grid container alignItems="center" justifyContent="space-between">
@@ -275,7 +275,7 @@ const PopularCard = ({ isLoading }) => {
                                 ml: 2
                               }}
                             >
-                              <KeyboardArrowDownOutlinedIcon fontSize="small" color="inherit" />
+                              <KeyboardArrowDownOutlinedIcon fontSize="small" color="inherit"/>
                             </Avatar>
                           </Grid>
                         </Grid>
@@ -294,7 +294,7 @@ const PopularCard = ({ isLoading }) => {
           <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
             <Button size="small" disableElevation>
               View All
-              <ChevronRightOutlinedIcon />
+              <ChevronRightOutlinedIcon/>
             </Button>
           </CardActions>
         </MainCard>

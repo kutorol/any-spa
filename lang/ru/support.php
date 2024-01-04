@@ -6,16 +6,25 @@ use App\Enums\TechSupport\TechSupportStatus;
 
 return [
     'send_success' => 'Запрос успешно отправлен',
-    'not_such_type' => 'Такого типа запроса в техническую поддержку не существует',
     'error_create' => 'Не удалось создать запрос в техническую поддержку. Попробуйте еще раз',
-    'not_save_attachment' => 'Отправьте форму с запросом снова, т.к. не удалось сохранить фото',
+    'not_save_attachment' => 'Отправьте форму с запросом снова, так как не удалось сохранить фото',
     'request_create' => 'Запрос успешно создан',
-    'success_changed_status' => 'Статус успешно изменен',
     'not_found' => 'Запись не найдена',
-    'already_has_status' => 'Запись уже находиться в этом статусе',
-    'deleted' => 'Запись удалена',
     'not_delete' => 'Запись не удалена. Попробуйте еще раз',
     'not_change_status' => 'Не удалось изменить статус',
+    'admin' => [
+        'deleted' => 'Запись удалена',
+        'edit' => [
+            'same_status' => 'Запись уже находиться в этом статусе',
+            'success' => 'Статус успешно изменен',
+        ],
+        'delete' => [
+            'success' => 'Вложение удалено',
+            'ok_attach_not_delete' => 'Файлы удалены, но запись в бд не удалена',
+            'not_found_attach' => 'Такого вложения не найдено',
+        ],
+    ],
+
     'status' => [
         TechSupportStatus::STATUS_CREATED->value => 'создан',
         TechSupportStatus::STATUS_IN_PROGRESS->value => 'в работе',

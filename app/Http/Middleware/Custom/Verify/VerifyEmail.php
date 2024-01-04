@@ -17,18 +17,19 @@ class VerifyEmail
         'verification.send',
         'api.checkInitRequest',
         'api.logout',
+        'api.user.changeLocale',
     ];
 
     /**
-     * Мидлварь проверки email, когда юзер дергает api.
+     * Мидлварь проверки подтверждения email, когда юзер дергает api.
      * @throws Exception
      */
     public function handle(Request $request, Closure $next)
     {
         /** @var User|null $user */
-        $user = $request->user();
+        $user = User::getCurrentUser();
         if ($user && !$user->email_verified_at && !$request->routeIs(self::EXCLUDE_ROUTES)) {
-            return IsSiteAdmin::getResponse($request, 'user.no_email_verification', BaseController::FORBIDDEN_CODE, [
+            return IsSiteAdmin::getResponse($request, 'user.email.no_verification', BaseController::FORBIDDEN_CODE, [
                 BaseController::REDIRECT_PARAM => '/verify-email',
             ]);
         }

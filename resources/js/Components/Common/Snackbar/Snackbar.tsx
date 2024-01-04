@@ -1,18 +1,25 @@
 import { Snackbar as MUISnackbar } from "@mui/material";
-// @ts-ignore
-import PropTypes from "prop-types";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { useDispatch } from "react-redux";
 
-export default function Snackbar({ isOpen, autoHideMs, children, onClose }) {
+interface ISnackbar {
+  isOpen: boolean;
+  autoHideMs: number;
+  onClose: () => any;
+  children: any;
+}
+
+export default function Snackbar({
+                                   isOpen = false, autoHideMs = 5000, children, onClose = (): any => {
+  }
+                                 }: ISnackbar) {
   const d = useDispatch();
   const position = {
     vertical: "top",
     horizontal: "right"
   };
 
-  const _onClose = (e, reason) => {
+  const _onClose = (e, reason?: "clickaway" | "timeout" | "escapeKeyDown") => {
     // if (reason === 'clickaway' || reason === 'timeout') {
     //     e.preventDefault()
     //     return;
@@ -33,17 +40,3 @@ export default function Snackbar({ isOpen, autoHideMs, children, onClose }) {
     </MUISnackbar>
   );
 }
-
-Snackbar.propTypes = {
-  isOpen: PropTypes.bool,
-  autoHideMs: PropTypes.number,
-  children: PropTypes.node,
-  onClose: PropTypes.func
-};
-
-Snackbar.defaultProps = {
-  isOpen: false,
-  autoHideMs: 5000,
-  onClose: () => {
-  }
-};

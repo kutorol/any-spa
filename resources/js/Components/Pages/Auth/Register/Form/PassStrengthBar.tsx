@@ -1,6 +1,5 @@
 import { Box, FormControl, Grid, Typography } from "@mui/material";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 const PassStrengthBar = ({ strength, levelStrength }) => {
   const sx = { mb: 2 };

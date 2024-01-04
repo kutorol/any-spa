@@ -1,11 +1,28 @@
 /**
- * Typography used in theme
+ * Настройки темы: типография
  * @param {JsonObject} theme theme customization object
  */
 
-export default function themeTypography(theme) {
+export interface IThemeTypography {
+  heading: string;
+  grey500: string;
+  background: string;
+  textDark: string;
+  darkTextSecondary: string;
+  darkTextPrimary: string;
+  customization: {
+    borderRadius: number;
+    fontFamily: string;
+  };
+
+  [k: string]: any;
+}
+
+export default function themeTypography(theme: IThemeTypography) {
+  const br = `${theme.customization.borderRadius}px`;
+
   return {
-    fontFamily: theme?.customization?.fontFamily,
+    fontFamily: theme.customization.fontFamily,
     h6: {
       fontWeight: 500,
       color: theme.heading,
@@ -59,6 +76,7 @@ export default function themeTypography(theme) {
     body2: {
       letterSpacing: "0em",
       fontWeight: 400,
+      fontSize: "0.95rem",
       lineHeight: "1.5em",
       color: theme.darkTextPrimary
     },
@@ -109,7 +127,7 @@ export default function themeTypography(theme) {
       padding: "20px",
       marginTop: "88px",
       marginRight: "20px",
-      borderRadius: `${theme?.customization?.borderRadius}px`
+      borderRadius: br
     },
     menuCaption: {
       fontSize: "0.875rem",
@@ -127,7 +145,7 @@ export default function themeTypography(theme) {
     },
     commonAvatar: {
       cursor: "pointer",
-      borderRadius: "8px"
+      borderRadius: br
     },
     smallAvatar: {
       width: "22px",
@@ -142,6 +160,10 @@ export default function themeTypography(theme) {
     largeAvatar: {
       width: "44px",
       height: "44px",
+      fontSize: "1.5rem"
+    },
+    fullAvatar: {
+      width: "100%",
       fontSize: "1.5rem"
     }
   };

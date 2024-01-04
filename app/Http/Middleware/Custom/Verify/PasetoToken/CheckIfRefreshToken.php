@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use ParagonIE\Paseto\Exception\PasetoException;
 
 final class CheckIfRefreshToken extends CheckAbstract
 {
@@ -30,6 +31,10 @@ final class CheckIfRefreshToken extends CheckAbstract
         return !($this->infoToken?->isRefreshToken() ?? false);
     }
 
+    /**
+     * @throws \Throwable
+     * @throws PasetoException
+     */
     public function beforeErrorResponse(): self
     {
         // если токен для обновления, то обновим его и отправим обратно результат

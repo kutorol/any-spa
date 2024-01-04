@@ -1,10 +1,13 @@
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import AuthFormWrapper from "../Common/AuthFormWrapper";
 
-const Login = () => {
+interface ILogin {
+  isLanding?: boolean;
+}
+
+const Login = ({ isLanding }: ILogin) => {
   return (
-    <AuthFormWrapper />
+    <AuthFormWrapper isLanding={isLanding}/>
   );
 };
 

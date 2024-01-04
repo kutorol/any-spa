@@ -59,14 +59,14 @@ final class CheckToken extends CheckAbstract
     public function errorResponse(): JsonResponse|Redirector|Application|RedirectResponse|Response
     {
         if (is_null($this->infoToken)) {
-            return IsSiteAdmin::getResponse($this->r, 'auth.token_not_exists', BaseController::NOT_FOUND_CODE, [
-                BaseController::REDIRECT_PARAM => 'login',
+            return IsSiteAdmin::getResponse($this->r, 'auth.token.not_exists', BaseController::NOT_FOUND_CODE, [
+                BaseController::REDIRECT_PARAM => '/login',
             ]);
         }
 
         return IsSiteAdmin::getResponse($this->r, 'auth.This token has expired.', BaseController::FORBIDDEN_CODE, [
             BaseController::NEED_REFRESH_TOKEN_PARAM => true,
-            BaseController::REDIRECT_PARAM => 'login',
+            BaseController::REDIRECT_PARAM => '/login',
         ]);
     }
 }

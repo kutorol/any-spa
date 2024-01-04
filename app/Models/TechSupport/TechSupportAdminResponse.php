@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\TechSupport;
 
+use App\Enums\TechSupport\TechSupportStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $tech_support_id
  * @property int $user_id
  * @property string $comment
+ * @property TechSupportStatus $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TechSupport\TechSupportAttachment> $attachments
@@ -27,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|TechSupportAdminResponse whereTechSupportId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TechSupportAdminResponse whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TechSupportAdminResponse whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TechSupportAdminResponse whereStatus($value)
  * @mixin \Eloquent
  */
 class TechSupportAdminResponse extends Model
@@ -37,6 +40,13 @@ class TechSupportAdminResponse extends Model
         'tech_support_id',
         'user_id',
         'comment',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => TechSupportStatus::class,
+        'user_id' => 'integer',
+        'tech_support_id' => 'integer',
     ];
 
     public function attachments(): HasMany

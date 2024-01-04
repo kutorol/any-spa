@@ -1,13 +1,14 @@
-import dashboard from "./dashboard";
+import { IAllMenuItems } from "../../utils/interfaces/route";
+import { adminContents, adminSide, adminSpecial } from "./admin";
+import anonym from "./item/anonym";
 import logout from "./item/logout";
-import other from "./other";
-import pages from "./pages";
-import utilities from "./utilities";
 
 // Меню слева
-const menuItems = {
-  items: [dashboard, pages, utilities, other],
-  noVerifiedEmail: [logout]
+const menuItems: IAllMenuItems = {
+  items: [],
+  admin: [adminSide, adminContents, adminSpecial],
+  noVerifiedEmail: [logout],
+  anonym: [anonym]
 };
 
 export default menuItems;

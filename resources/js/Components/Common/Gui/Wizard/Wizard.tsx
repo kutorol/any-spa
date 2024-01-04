@@ -1,8 +1,8 @@
 import { Theme } from "@mui/material";
-import { ThemeProvider, useTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { useLaravelReactI18n } from "laravel-react-i18n";
 // @ts-ignore
-import React from "react";
+import React, { useState } from "react";
 import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
 
@@ -18,7 +18,8 @@ interface IWizard {
   finishBtnTitle: string;
   onClose: () => void;
   showButtons?: boolean;
-  theme?: Theme;
+  theme: Theme;
+  isSuccess?: boolean;
 }
 
 const Wizard = ({
@@ -31,15 +32,14 @@ const Wizard = ({
                   getStepTextError,
                   getIsStepOptional,
                   onClose,
+                  theme,
                   isShowCloseBtn = false,
                   showButtons = true,
-                  theme
-}: IWizard) => {
+                  isSuccess = false
+                }: IWizard) => {
   const { t } = useLaravelReactI18n();
-  theme = theme || useTheme();
-
   // @ts-ignore
-  const [skipped, setSkipped] = React.useState(new Set<number>());
+  const [skipped, setSkipped] = useState(new Set<number>());
 
   const getIsStepSkipped = (step: number): boolean => {
     return skipped.has(step);
@@ -75,6 +75,7 @@ const Wizard = ({
         getIsStepOptional={getIsStepOptional}
         getStepTextError={getStepTextError}
         getIsStepSkipped={getIsStepSkipped}
+        isSuccess={isSuccess}
       />
 
       {children()}

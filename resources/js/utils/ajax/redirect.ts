@@ -1,22 +1,26 @@
-import RouterAPI from "../funcs/router-api";
+import { trimEnd } from "lodash";
+import { getUrl, navTo } from "../funcs/url";
 import { RedirectInterface } from "./interfaces";
 
 class __redirect implements RedirectInterface {
   // с каких роутов нужно редиректить юзера на главную, если он авторизирован уже
-  private readonly redirectFromAuthRouteList = ["/login", "/register"];
+  private readonly redirectFromAuthRouteList = [getUrl("/login"), getUrl("/register")];
 
   public redirectTo(to: string = "/") {
-    if (this.currentPath().toLowerCase() === to.toLowerCase()) {
+    const currentPath = trimEnd(this.currentPath().toLowerCase(), "/");
+    to = trimEnd(to.toLowerCase(), "/");
+
+    if (currentPath === to || currentPath === getUrl(to)) {
       return;
     }
 
-    console.info("REDIRECT TO", to, "from", this.currentPath());
+    console.info("REDIRECT FROM", this.currentPath(), "TO", to);
 
-    RouterAPI.navigate(to);
+    navTo(to, true);
   }
 
   public redirectFromAuthRoutes(): void {
-    const redirectTo = "/";
+    const redirectTo = getUrl("/");
     const currentPath = this.currentPath();
 
     if (currentPath !== redirectTo && this.redirectFromAuthRouteList.indexOf(currentPath) !== -1) {
@@ -25,11 +29,15 @@ class __redirect implements RedirectInterface {
   }
 
   public isLogout(): boolean {
-    return this.currentPath() == "/logout";
+    return this.currentPath() == getUrl("/logout");
   }
 
   private currentPath(): string {
-    return window.location.pathname;
+    return trimEnd(window.location.pathname, "/");
+  }
+
+  public toDirectRedirect(to: string): void {
+    window.location.href = to;
   }
 }
 

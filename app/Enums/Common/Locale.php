@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Enums\Common;
 
+use App\Enums\EnumTrait;
+
 enum Locale: string
 {
+    use EnumTrait;
+
     case RU = 'ru';
     case EN = 'en';
-
-    public static function values(): array
-    {
-        return array_map(fn (Locale $status) => $status->value, self::cases());
-    }
 }

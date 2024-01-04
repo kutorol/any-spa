@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use App\Console\Commands\System\GenerateSiteMap;
+use App\Console\Commands\User\ClearPasetoUserToken;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,8 +18,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        // чистим невалидные токены раз в сутки в 00:00 (и запускается только 1 экземпляр одномоментно)
-        $schedule->command('clear__paseto_user_token')->daily()->withoutOverlapping();
+        $daily = [GenerateSiteMap::NAME, ClearPasetoUserToken::NAME];
+        foreach ($daily as $name) {
+            $schedule->command($name)->daily()->withoutOverlapping();
+        }
     }
 
     /**

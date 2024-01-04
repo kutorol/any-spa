@@ -1,104 +1,139 @@
-import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from "@mui/material";
-import { styled, useTheme } from "@mui/material/styles";
-import { IconChevronRight } from "@tabler/icons-react";
-// @ts-ignore
-import React from "react";
+import { AppBar, Box, CssBaseline, Toolbar } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { toNumber } from "lodash";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router";
 import { Outlet } from "react-router-dom";
-import { drawerWidth } from "../../../store/constant";
-import { changeLeftMenu } from "../../../store/reducers/func/menu/left-menu";
+import useMatch from "../../../hooks/useMatch";
+import { NotVerifyEmailURL } from "../../../store/constant";
+import { RootState } from "../../../store/store";
+import { ERoles } from "../../../utils/enums/user";
+import { getUrl, navTo } from "../../../utils/funcs/url";
 import Breadcrumbs from "../../Common/Breadcrumbs/Breadcrumbs";
-import menuItems from "../../Menu/menu-items";
-import Login from "../../Pages/Auth/Login/Login";
+import LoginPopup from "./Anonym/LoginPopup";
+import RegisterPopup from "./Anonym/RegisterPopup";
 import Header from "./Header/Header";
+import Main from "./Sidebar/Components/MainBlock";
 import Sidebar from "./Sidebar/Sidebar";
 
-// @ts-ignore
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(({ theme, open }) => ({
-  // @ts-ignore
-  ...theme.typography.mainContent,
-  borderBottomLeftRadius: 0,
-  borderBottomRightRadius: 0,
-  transition: theme.transitions.create(
-    "margin",
-    open
-      ? {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen
-      }
-      : {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      }
-  ),
-  [ theme.breakpoints.up("md") ]: {
-    marginLeft: open ? 0 : -(drawerWidth - 20),
-    width: `calc(100% - ${drawerWidth}px)`
-  },
-  [ theme.breakpoints.down("md") ]: {
-    marginLeft: "20px",
-    width: `calc(100% - ${drawerWidth}px)`,
-    padding: "16px"
-  },
-  [ theme.breakpoints.down("sm") ]: {
-    marginLeft: "10px",
-    width: `calc(100% - ${drawerWidth}px)`,
-    padding: "16px",
-    marginRight: "10px"
-  }
-}));
+interface IMainLayout {
+  // Это админка загружается?
+  isAdmin?: boolean;
+  // Загружается страница, которая требует авторизации?
+  needAuth?: boolean;
+}
 
-const MainLayout = () => {
+const getLastIsOpenMenu = (matchDownMd: boolean): boolean => {
+  return !matchDownMd && toNumber(localStorage.getItem("is_open_left_menu") || "0") === 1;
+};
+
+const setLastIsOpenMenu = (isOpen: boolean, matchDownMd: boolean): void => {
+  if (matchDownMd) {
+    return;
+  }
+
+  localStorage.setItem("is_open_left_menu", isOpen ? "1" : "0");
+};
+
+
+const MainLayout = ({ isAdmin, needAuth }: IMainLayout) => {
   const theme = useTheme();
-  const matchDownMd = useMediaQuery(theme.breakpoints.down("md"));
-  const { isLogged, leftMenuIsOpen } = useSelector(s => ({
-    // @ts-ignore
+  const loc = useLocation();
+  const { matchDownMd } = useMatch();
+
+  const [leftMenuIsOpen, setLeftMenuIsOpen] = useState<boolean>(getLastIsOpenMenu(matchDownMd));
+  const { isLogged, isAppInit, user } = useSelector((s: RootState) => ({
     isLogged: s.userInfo.isLogged,
-    // @ts-ignore
-    leftMenuIsOpen: s.leftMenu.isOpen
+    isAppInit: s.appInit.init,
+    user: s.userInfo.user
   }));
 
-  const handleLeftDrawerToggle = () => {
-    changeLeftMenu(!leftMenuIsOpen);
+  const handleLeftDrawerToggle = (): void => {
+    setLastIsOpenMenu(!leftMenuIsOpen, matchDownMd);
+    setLeftMenuIsOpen(!leftMenuIsOpen);
   };
 
-  if (!isLogged) {
-    return <Login/>;
+  useEffect(() => {
+    if (isLogged && !user.verified_email) {
+      loc.pathname !== getUrl(NotVerifyEmailURL) && navTo(NotVerifyEmailURL);
+    }
+  }, [isLogged, user.verified_email, loc.pathname]);
+
+  useEffect(() => {
+    // для авторизованного юзера меню открыто
+    // для анонима - свернуто
+    if (isAppInit) {
+      setLeftMenuIsOpen(getLastIsOpenMenu(matchDownMd));
+    }
+  }, [isAppInit, isLogged, matchDownMd]);
+
+  const needRedirectToMainPage = isAppInit && (
+    // @ts-ignore
+    (isAdmin && ![ERoles.SITE_ADMIN, ERoles.SITE_MANAGER].includes(user.role))
+    || (needAuth && !isLogged)
+  );
+
+  useEffect(() => {
+    if (needRedirectToMainPage) {
+      navTo("/");
+    }
+  }, [needRedirectToMainPage]);
+
+  // Сайт еще не загрузился
+  if (!isAppInit || needRedirectToMainPage) {
+    return null;
   }
 
+  // Если email не подтвердили и вошли в аккаунт, то нужен редирект из useEffect
+  if (isLogged && !user.verified_email && loc.pathname !== getUrl(NotVerifyEmailURL)) {
+    return null;
+  }
+
+  const sxBox = { display: "flex" };
+  const sxAppBar = {
+    bgcolor: theme.palette.background.default,
+    transition: leftMenuIsOpen ? theme.transitions.create("width") : "none"
+  };
+
+  // Для авторизованного всегда открыта вначале, а для мобилки - всегда скрыто вначале
+  // Для анонима - всегда скрыто вначале
+  const drawerOpen = matchDownMd ? (isLogged ? !leftMenuIsOpen : leftMenuIsOpen) : leftMenuIsOpen;
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline/>
-      {/* header */}
-      <AppBar
-        enableColorOnDark
-        position="fixed"
-        color="inherit"
-        elevation={0}
-        sx={{
-          bgcolor: theme.palette.background.default,
-          transition: leftMenuIsOpen ? theme.transitions.create("width") : "none"
-        }}
-      >
-        <Toolbar>
-          <Header handleLeftDrawerToggle={handleLeftDrawerToggle}/>
-        </Toolbar>
-      </AppBar>
+    <>
+      <Box sx={sxBox}>
+        <CssBaseline/>
+        <AppBar
+          enableColorOnDark
+          position="fixed"
+          color="inherit"
+          elevation={0}
+          sx={sxAppBar}
+        >
+          <Toolbar>
+            <Header handleLeftDrawerToggle={handleLeftDrawerToggle}/>
+          </Toolbar>
+        </AppBar>
 
-      <Sidebar
-        drawerOpen={!matchDownMd ? leftMenuIsOpen : !leftMenuIsOpen}
-        drawerToggle={handleLeftDrawerToggle}
-      />
+        <Sidebar
+          drawerOpen={drawerOpen}
+          drawerToggle={handleLeftDrawerToggle}
+        />
 
-      {/* @ts-ignore */}
-      <Main theme={theme} open={leftMenuIsOpen}>
         {/* @ts-ignore */}
-        <Breadcrumbs separator={IconChevronRight} menuItems={menuItems} icons title rightAlign/>
-        <Outlet/>
-      </Main>
-      {/*<Customization/>*/}
-    </Box>
+        <Main theme={theme} open={leftMenuIsOpen}>
+          <Breadcrumbs/>
+          <Outlet/>
+        </Main>
+
+        {/*<Customization/>*/}
+      </Box>
+
+      <LoginPopup/>
+      <RegisterPopup/>
+    </>
   );
 };
 

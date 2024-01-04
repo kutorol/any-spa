@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\DTO\User;
 
+use App\Enums\Common\Locale;
 use App\Enums\User\RolesEnum;
+use App\Enums\User\SexEnum;
 use App\Models\User\OAuth;
 
 class OAuthRegisterDTO
@@ -15,9 +17,13 @@ class OAuthRegisterDTO
 
     private string $email = '';
 
-    private string $role = RolesEnum::ROLE_USER;
+    private RolesEnum $role = RolesEnum::USER;
 
-    private string $locale = 'ru';
+    private SexEnum $sex = SexEnum::MALE;
+
+    private Locale $locale = Locale::RU;
+
+    private ?string $rawLocale = null;
 
     private string $id = '';
 
@@ -59,30 +65,54 @@ class OAuthRegisterDTO
         return $this;
     }
 
-    public function getRole(): string
+    public function getSex(): SexEnum
+    {
+        return $this->sex;
+    }
+
+    public function setSex(?string $sex): self
+    {
+        $this->sex = $sex ? RolesEnum::from($sex) : SexEnum::MALE;
+
+        return $this;
+    }
+
+    public function getRole(): RolesEnum
     {
         return $this->role;
     }
 
     public function setRole(?string $role): self
     {
-        if (!RolesEnum::checkRole($role)) {
-            $role = RolesEnum::ROLE_USER;
-        }
-
-        $this->role = $role;
+        $this->role = $role ? RolesEnum::from($role) : RolesEnum::USER;
 
         return $this;
     }
 
-    public function getLocale(): string
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
 
     public function setLocale(?string $locale): self
     {
-        $this->locale = $locale ?? 'ru';
+        $l = Locale::tryFrom($locale ?? Locale::RU->value);
+        if (!$l) {
+            $l = Locale::RU;
+        }
+        $this->locale = $l;
+
+        return $this;
+    }
+
+    public function getRawLocale(): ?string
+    {
+        return $this->rawLocale;
+    }
+
+    public function setRawLocale(?string $locale): self
+    {
+        $this->rawLocale = $locale;
 
         return $this;
     }

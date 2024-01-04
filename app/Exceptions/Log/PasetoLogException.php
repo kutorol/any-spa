@@ -11,7 +11,7 @@ class PasetoLogException extends LogExceptionAbstract
     public function log(): void
     {
         PasetoToken::log()->error(
-            'Ошибка авторизации. Попробуйте еще раз',
+            'ErrorAuthPaseto',
             $this->commonData()
         );
     }

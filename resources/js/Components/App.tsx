@@ -1,26 +1,32 @@
 import { CssBaseline, StyledEngineProvider } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import "../../assets/scss/style.scss";
 import RouteList from "../routes/routes";
-// инициализируем проверку токенов
-import config from "../store/config";
+import { RootState } from "../store/store";
 import themes from "../theme/themes";
-// инициализируем проверку токенов
 import r from "../utils/ajax";
 import InitCommonComponents from "./Common/InitCommonComponents";
 import NavigationScroll from "./Common/NavigationScroll/NavigationScroll";
 
 export default function App() {
-  const themeState = themes(config);
+  const themeState = themes();
   // запрос на проверку токенов и получение юзера
-  r.initApp();
+  useEffect(() => r.initApp(), []);
 
-  // @ts-ignore
-  const isAppInit = useSelector(s => s.appInit.init);
+  const isAppInit: boolean = useSelector((s: RootState) => s.appInit.init);
+
+  useEffect(() => {
+    // Устанавливает переменную, по которой бот Яндекса поймет, что spa загрузилась для SEO
+    // @ts-ignore
+    if (!window.AppIsInit && isAppInit) {
+      // @ts-ignore
+      window.AppIsInit = true;
+    }
+  }, [isAppInit]);
 
   return (
     <BrowserRouter>

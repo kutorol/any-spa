@@ -24,10 +24,10 @@ class IsGuest
      */
     public function handle(Request $request, Closure $next)
     {
-        if (RolesEnum::isRoles(RolesEnum::ROLE_GUEST)) {
+        if (RolesEnum::isRoles(RolesEnum::GUEST)) {
             return $next($request);
         }
 
-        return IsSiteAdmin::getResponse($request, 'general.not_guest');
+        return IsSiteAdmin::getResponse($request, 'auth.not_guest');
     }
 }

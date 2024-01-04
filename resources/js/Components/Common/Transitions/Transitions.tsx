@@ -1,11 +1,24 @@
 import { Box, Collapse, Fade, Grow, Slide, Zoom } from "@mui/material";
-// @ts-ignore
-import PropTypes from "prop-types";
-// @ts-ignore
-import React, { forwardRef } from "react";
+import * as React from "react";
+import { forwardRef } from "react";
+
+interface ITransitions {
+  children: any;
+  position: "top-left" | "top-right" | "top" | "bottom-left" | "bottom-right" | "bottom";
+  type: "grow" | "fade" | "collapse" | "slide" | "zoom";
+  direction: "up" | "down" | "left" | "right";
+
+  [k: string]: any;
+}
 
 // @ts-ignore
-const Transitions = forwardRef(({ children, position, type, direction, ...others }, ref) => {
+const Transitions = forwardRef(({
+                                  children,
+                                  position = "top-left",
+                                  type = "grow",
+                                  direction = "up",
+                                  ...others
+                                }: ITransitions, ref) => {
   let positionSX = {
     transformOrigin: "0 0 0"
   };
@@ -89,20 +102,5 @@ const Transitions = forwardRef(({ children, position, type, direction, ...others
     </Box>
   );
 });
-
-Transitions.propTypes = {
-  // @ts-ignore
-  children: PropTypes.node,
-  type: PropTypes.oneOf(["grow", "fade", "collapse", "slide", "zoom"]),
-  position: PropTypes.oneOf(["top-left", "top-right", "top", "bottom-left", "bottom-right", "bottom"]),
-  direction: PropTypes.oneOf(["up", "down", "left", "right"])
-};
-
-Transitions.defaultProps = {
-  // @ts-ignore
-  type: "grow",
-  position: "top-left",
-  direction: "up"
-};
 
 export default Transitions;

@@ -1,28 +1,30 @@
 import { get } from "lodash";
 // @ts-ignore
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
 import useSecondsLeftTimer from "../../../../hooks/useSecondsLeftTimer";
+import { RootState } from "../../../../store/store";
+import { navTo } from "../../../../utils/funcs/url";
 import userAuth from "../../../../utils/repository/user-auth";
 import VerifyEmail from "./VerifyEmail";
 
 const VerifyEmailWrapper = () => {
-  const navigate = useNavigate();
-  // @ts-ignore
-  const verifiedEmail = useSelector(s => s.userInfo.user.verified_email);
+  const { isLogged, verifiedEmail } = useSelector((s: RootState) => ({
+    isLogged: s.userInfo.isLogged,
+    verifiedEmail: s.userInfo.user.verified_email
+  }));
+
   const { leftSeconds, setLeftSeconds } = useSecondsLeftTimer({
     initStorageNameLeftSeconds: "verify_email_again_action"
   });
 
   useEffect(() => {
-    if (verifiedEmail) {
-      navigate("/");
+    if (!isLogged || (isLogged && verifiedEmail)) {
+      navTo("/");
     }
     return () => {
     };
-  }, [verifiedEmail]);
-
+  }, [isLogged, verifiedEmail]);
 
   const onClickSendEmail = (e): void => {
     e && e.preventDefault();
@@ -33,7 +35,7 @@ const VerifyEmailWrapper = () => {
     userAuth.sendVerifyEmail((res: object) => get(res, "status", false) && setLeftSeconds(60));
   };
 
-  if (verifiedEmail) {
+  if (!isLogged || verifiedEmail) {
     return null;
   }
 

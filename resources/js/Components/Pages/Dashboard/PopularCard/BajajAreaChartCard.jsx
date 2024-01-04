@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 // import { useSelector } from 'react-redux';
-
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Card, Grid, Typography } from '@mui/material';
@@ -8,7 +7,6 @@ import { Card, Grid, Typography } from '@mui/material';
 // third-party
 // import ApexCharts from 'apexcharts';
 // import Chart from 'react-apexcharts';
-
 // project imports
 import chartData from './bajaj-area-chart';
 
@@ -16,13 +14,13 @@ import chartData from './bajaj-area-chart';
 
 const BajajAreaChartCard = () => {
   const theme = useTheme();
-  // const customization = useSelector((state) => state.customization);
+  // const customization = useSelector((state: RootState) => state.customization);
   const customization = {
     navType: null,
   };
   const { navType } = customization;
 
-  const orangeDark = theme.palette.secondary[800];
+  const orangeDark = theme.palette.secondary[ 800 ];
 
   useEffect(() => {
     const newSupportChart = {
@@ -46,14 +44,14 @@ const BajajAreaChartCard = () => {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="h4" sx={{ color: theme.palette.grey[800] }}>
+              <Typography variant="h4" sx={{ color: theme.palette.grey[ 800 ] }}>
                 $1839.00
               </Typography>
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="subtitle2" sx={{ color: theme.palette.grey[800] }}>
+          <Typography variant="subtitle2" sx={{ color: theme.palette.grey[ 800 ] }}>
             10% Profit
           </Typography>
         </Grid>

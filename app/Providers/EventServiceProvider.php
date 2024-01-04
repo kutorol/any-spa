@@ -5,7 +5,15 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Events\TechSupport\TechSupportUpdate;
+use App\Events\User\ChangeEmail;
+use App\Events\User\InitRequestEvent;
+use App\Events\User\UserLoginOrRegister;
+use App\Events\User\UserLogout;
 use App\Listeners\TechSupport\TechSupportUpdateNotification;
+use App\Listeners\User\ChangeEmailNotification;
+use App\Listeners\User\ClearUserCacheAfterRegistration;
+use App\Listeners\User\SetABTestsToUserFromRequest;
+use App\Listeners\User\SetCookieConfirmFromRequest;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
@@ -20,9 +28,21 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        InitRequestEvent::class => [
+            SetCookieConfirmFromRequest::class,
+            SetABTestsToUserFromRequest::class,
+        ],
+        UserLoginOrRegister::class => [
+            SetCookieConfirmFromRequest::class,
+            SetABTestsToUserFromRequest::class,
+        ],
         // Зарегались
         Registered::class => [
+            ClearUserCacheAfterRegistration::class,
             SendEmailVerificationNotification::class,
+        ],
+        UserLogout::class => [
+            SetABTestsToUserFromRequest::class,
         ],
         // Подтвердили email
         Verified::class => [
@@ -32,6 +52,12 @@ class EventServiceProvider extends ServiceProvider
         PasswordReset::class => [
 
         ],
+        // Изменили email
+        ChangeEmail::class => [
+            // нужно выслать подтверждение email
+            ChangeEmailNotification::class,
+        ],
+        // Статус у запроса в тех. поддержку изменился
         TechSupportUpdate::class => [
             TechSupportUpdateNotification::class,
         ],

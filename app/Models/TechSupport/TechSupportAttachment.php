@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\TechSupport;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\TechSupport\TechSupportAttachment.
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $tech_support_id
  * @property string $file_name
+ * @property TechSupport $techSupportEntity
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|TechSupportAttachment newModelQuery()
@@ -32,4 +34,9 @@ class TechSupportAttachment extends Model
         'tech_support_id',
         'file_name',
     ];
+
+    public function techSupportEntity(): HasOne
+    {
+        return $this->hasOne(TechSupport::class, 'id', 'tech_support_id');
+    }
 }

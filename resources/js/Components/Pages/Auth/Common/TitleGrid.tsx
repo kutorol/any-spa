@@ -1,17 +1,16 @@
 import { Grid, Stack, Typography } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { useParams } from "react-router";
 
 const TitleGrid = ({
- xsNum,
- themeColor,
- matchDownSM,
- isRegister = false,
- isPasswordReset = false,
- isPasswordResetConfirm = false
-}) => {
+                     xsNum,
+                     themeColor,
+                     matchDownSM,
+                     isRegister = false,
+                     isPasswordReset = false,
+                     isPasswordResetConfirm = false
+                   }) => {
   const { t } = useLaravelReactI18n();
   const direction = matchDownSM ? "column-reverse" : "row";
   const variant = matchDownSM ? "h3" : "h2";
@@ -62,7 +61,7 @@ const TitleGrid = ({
               gutterBottom
               variant={variant}
             >
-              {titleMap[ action ]}
+              {titleMap[action]}
             </Typography>
 
             <Typography
@@ -70,7 +69,7 @@ const TitleGrid = ({
               fontSize="16px"
               textAlign={textAlign}
             >
-              {subtitleMap[ action ]}
+              {subtitleMap[action]}
             </Typography>
           </Stack>
         </Grid>

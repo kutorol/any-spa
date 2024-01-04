@@ -17,21 +17,24 @@ final class CheckEqBearer extends CheckAbstract
 {
     private ?PasetoToken $infoToken;
 
+    private ?string $token;
+
     public function init(): void
     {
         $this->infoToken = $this->lastCheckData[CheckToken::class] ?? null;
+        $this->token = $this->lastCheckData[SetBearerToken::class] ?? null;
     }
 
     public function check(): bool
     {
-        return $this->r->bearerToken() === ($this->infoToken->token ?? null);
+        return $this->token === ($this->infoToken->token ?? 'no_token_bd');
     }
 
     public function errorResponse(): JsonResponse|Redirector|Application|RedirectResponse|Response
     {
-        return IsSiteAdmin::getResponse($this->r, 'auth.token_invalid', BaseController::FORBIDDEN_CODE, [
+        return IsSiteAdmin::getResponse($this->r, 'auth.token.invalid', BaseController::FORBIDDEN_CODE, [
             BaseController::NEED_REFRESH_TOKEN_PARAM => true,
-            BaseController::REDIRECT_PARAM => 'login',
+            BaseController::REDIRECT_PARAM => '/login',
         ]);
     }
 }

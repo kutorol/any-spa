@@ -1,10 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 // @ts-ignore
 import { cloneDeep, get, toNumber } from "lodash";
-import { Languages, Roles, Sex } from "../../../utils/enums/common/enums";
-import { UserInterface } from "../../../utils/repository/interfaces";
+import { isEnumLocale } from "../../../utils/ajax/chains-http/locale";
+import { ELanguages, ERoles, ESex } from "../../../utils/enums/user";
+import { IUserInterface } from "../../../utils/interfaces/user";
 
-export const defaultUser: UserInterface = {
+let defaultLang = ELanguages.RU;
+// @ts-ignore
+if (isEnumLocale(window.siteLocale || "")) {
+  // @ts-ignore
+  defaultLang = window.siteLocale as ELanguages;
+}
+
+export const defaultUser: IUserInterface = {
   uid: 0,
   verified_email: false,
   full_name: "",
@@ -12,36 +20,34 @@ export const defaultUser: UserInterface = {
   last_name: "",
   surname: "",
   email: "",
-  roleTitle: "",
-  role: Roles.GUEST,
-  locale: Languages.RU,
+  role: ERoles.GUEST,
+  locale: defaultLang,
   is_am_pm: false,
   phone: null,
-  sex: Sex.MALE,
+  sex: ESex.MALE,
   avatar: null,
-  age: 0
+  age: 0,
+  agreement_confirmed_at: null,
+  gmt: 3,
+  city: null
 };
-
 
 export const createUserInfoReducer = () => {
   return createSlice({
     name: "userInfoReducer",
     initialState: {
-      uid: 0,
       isLogged: false,
       user: defaultUser
     },
     reducers: {
       set: (state, action) => {
-        const { user, isLogged, uid } = action.payload;
+        const { user, isLogged } = action.payload;
         state.isLogged = isLogged;
         state.user = user;
-        state.uid = uid;
       },
       clear: (state) => {
         state.user = defaultUser;
         state.isLogged = false;
-        state.uid = 0;
       }
     }
   });

@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models\TechSupport;
 
+use App\Enums\Common\Locale;
+use App\Enums\TechSupport\TechSupportStatus;
+use App\Enums\TechSupport\TechSupportType;
+use App\Http\Controllers\Api\BaseController;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\TechSupport\TechSupport.
@@ -14,10 +19,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property string $email
  * @property int|null $user_id
- * @property string $type
- * @property string $status
+ * @property TechSupportType $type
+ * @property TechSupportStatus $status
  * @property string $comment
- * @property string $locale
+ * @property Locale $locale
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|TechSupport newModelQuery()
@@ -35,6 +40,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $attachments_count
  * @property-read User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|TechSupport whereLocale($value)
+ * @property string|null $from_url
+ * @property string|null $user_agent
+ * @property string|null $ip
+ * @method static \Illuminate\Database\Eloquent\Builder|TechSupport whereFromUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TechSupport whereIp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TechSupport whereUserAgent($value)
  * @mixin \Eloquent
  */
 class TechSupport extends Model
@@ -47,11 +58,36 @@ class TechSupport extends Model
         'type',
         'status',
         'comment',
-        'locale',
+        BaseController::LOCALE_PARAM,
+        'from_url',
+        'user_agent',
+        'ip',
+    ];
+
+    protected $casts = [
+        'type' => TechSupportType::class,
+        BaseController::LOCALE_PARAM => Locale::class,
+        'status' => TechSupportStatus::class,
     ];
 
     public function attachments(): HasMany
     {
         return $this->hasMany(TechSupportAttachment::class);
+    }
+
+    public function comments(): Collection
+    {
+        return $this->hasMany(TechSupportAdminResponse::class)
+            ->join('users', 'tech_support_admin_response.user_id', '=', 'users.id')
+            ->select([
+                'tech_support_admin_response.user_id',
+                'tech_support_admin_response.comment',
+                'tech_support_admin_response.created_at',
+                'tech_support_admin_response.status',
+                'users.avatar',
+                'users.name',
+            ])
+            ->orderBy('tech_support_admin_response.created_at', 'ASC')
+            ->get();
     }
 }

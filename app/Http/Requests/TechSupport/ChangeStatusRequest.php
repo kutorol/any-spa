@@ -6,6 +6,7 @@ namespace App\Http\Requests\TechSupport;
 
 use App\Enums\TechSupport\TechSupportStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ChangeStatusRequest extends FormRequest
 {
@@ -13,8 +14,8 @@ class ChangeStatusRequest extends FormRequest
     {
         return [
             'id' => 'required|integer|min:1',
-            'status' => 'required|string|in:'.implode(',', TechSupportStatus::allValues()),
-            'comment' => 'nullable|string|min:6|max:2500',
+            'status' => ['required', new Enum(TechSupportStatus::class)],
+            'comment' => 'nullable|string|max:2500',
         ];
     }
 }

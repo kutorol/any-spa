@@ -1,13 +1,13 @@
 import { Divider, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { IconLifebuoy } from "@tabler/icons-react";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { Link } from "react-router-dom";
 import useOpen from "../../../../hooks/useOpen";
 import { GoogleRecaptchaV3SiteKey } from "../../../../store/constant";
+import { getUrl } from "../../../../utils/funcs/url";
+import Icon from "../../../Common/Gui/Common/Icon";
 import TechSupport from "../../Special/TechSupport/TechSupport";
 import AuthCardWrapper from "../LayoutTheme/AuthCardWrapper";
 import AuthWrapper1 from "../LayoutTheme/AuthWrapper1";
@@ -19,7 +19,19 @@ import FooterGrid from "./FooterGrid";
 import LogoHeader from "./LogoHeader";
 import TitleGrid from "./TitleGrid";
 
-const AuthFormWrapper = ({ isRegister = false, isPasswordReset = false, isPasswordResetConfirm = false }) => {
+interface IAuthFormWrapper {
+  isLanding?: boolean;
+  isRegister?: boolean;
+  isPasswordReset?: boolean;
+  isPasswordResetConfirm?: boolean;
+}
+
+const AuthFormWrapper = ({
+                           isLanding,
+                           isRegister = false,
+                           isPasswordReset = false,
+                           isPasswordResetConfirm = false
+                         }: IAuthFormWrapper) => {
   const theme = useTheme();
   const { isOpen: isOpenSupport, toggle: toggleOpenSupport } = useOpen();
 
@@ -55,7 +67,8 @@ const AuthFormWrapper = ({ isRegister = false, isPasswordReset = false, isPasswo
       useRecaptchaNet={true}
       // container={{parameters: { theme: 'dark' }}}
     >
-      <AuthWrapper1>
+      {/* @ts-ignore */}
+      <AuthWrapper1 isLanding={isLanding}>
         <Grid
           container
           direction="column"
@@ -116,7 +129,7 @@ const AuthFormWrapper = ({ isRegister = false, isPasswordReset = false, isPasswo
 
               <Typography
                 component={Link}
-                to="/support-tech"
+                to={getUrl("/support-tech")}
                 onClick={onClickSupport}
               >
                 <Stack
@@ -125,7 +138,7 @@ const AuthFormWrapper = ({ isRegister = false, isPasswordReset = false, isPasswo
                   justifyContent="flex-end"
                   spacing={1}
                 >
-                  <IconLifebuoy size="1rem"/> <span>{t("Техническая поддержка")}</span>
+                  <Icon tablerIcon="IconLifebuoy" size="1rem"/> <span>{t("Техническая поддержка")}</span>
                 </Stack>
               </Typography>
             </Stack>

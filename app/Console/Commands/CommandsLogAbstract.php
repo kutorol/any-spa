@@ -23,13 +23,12 @@ abstract class CommandsLogAbstract extends Command
     protected function logMiddleware(Closure $cb)
     {
         $this->log()->info('cron_middleware__start', ['command' => $this->signature]);
-        $startTime = new DateTime('now');
+        $startTime = now();
 
-        /** @var void|bool $res */
         $res = false;
         try {
             $res = $cb();
-            $method = $res ? 'error' : 'info';
+            $method = $res ? 'info' : 'error';
         } catch (Throwable $e) {
             $this->log()->error('cron_middleware__middle_error', [
                 'msg' => $e->getMessage(),
@@ -37,7 +36,7 @@ abstract class CommandsLogAbstract extends Command
             ]);
             $method = 'error';
         } finally {
-            $endTime = new DateTime('now');
+            $endTime = now();
         }
 
         $interval = $startTime->diff($endTime);
@@ -51,12 +50,16 @@ abstract class CommandsLogAbstract extends Command
         } elseif ($interval->s > 0) {
             $format = $interval->format('%Ss, %fms');
         } else {
-            $format = $interval->format('%fms');
+            $ms = (int)floor($interval->f / 1000);
+            $micr = $interval->f - $ms;
+            $micr = $micr > 0 ? $micr : 0;
+            $format = "{$micr} microseconds ({$ms}ms)";
         }
 
         $this->log()->{$method}(
             'cron_middleware__end',
             [
+                'status' => $res,
                 'command' => $this->signature,
                 'executed_time' => $format,
                 'total_ms' => $this->timeDiffMs($startTime, $endTime),

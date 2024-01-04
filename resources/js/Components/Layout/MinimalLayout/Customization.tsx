@@ -13,24 +13,19 @@ import {
   Typography
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-// @ts-ignore
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { gridSpacing } from "../../../store/constant";
-import AnimateButton from "../../Common/AnimateButton/AnimateButton";
 import SubCard from "./SubCard";
 
-// concat 'px'
-function valueText(value) {
+const valueText = (value: number, index: number): string => {
   return `${value}px`;
-}
-
-// ==============================|| LIVE CUSTOMIZATION ||============================== //
+};
 
 const Customization = () => {
   const theme = useTheme();
   // const dispatch = useDispatch();
-  // const customization = useSelector((state) => state.customization);
+  // const customization = useSelector((state: RootState) => state.customization);
 
   // drawer on/off
   const [open, setOpen] = useState(false);
@@ -69,12 +64,9 @@ const Customization = () => {
             zIndex: theme.zIndex.speedDial
           }}
         >
-          {/*@ts-ignore*/}
-          <AnimateButton type="rotate">
-            <IconButton color="inherit" size="large" disableRipple>
-              <SettingsIcon/>
-            </IconButton>
-          </AnimateButton>
+          <IconButton color="inherit" size="large" disableRipple>
+            <SettingsIcon/>
+          </IconButton>
         </Fab>
       </Tooltip>
 
@@ -89,13 +81,11 @@ const Customization = () => {
         }}
       >
         <PerfectScrollbar component="div">
-          <Grid container spacing={gridSpacing} sx={{ p: 3 }}>
+          <Grid container spacing={3} sx={{ p: 3 }}>
             <Grid item xs={12}>
-              {/*@ts-ignore font family */}
               <SubCard title="Font Family">
                 <FormControl>
                   <RadioGroup
-                    aria-label="font-family"
                     value={fontFamily}
                     onChange={(e) => setFontFamily(e.target.value)}
                     name="row-radio-buttons-group"
@@ -106,7 +96,7 @@ const Customization = () => {
                       label="Roboto"
                       sx={{
                         "& .MuiSvgIcon-root": { fontSize: 28 },
-                        "& .MuiFormControlLabel-label": { color: theme.palette.grey[ 900 ] }
+                        "& .MuiFormControlLabel-label": { color: theme.palette.grey[900] }
                       }}
                     />
                     <FormControlLabel
@@ -115,7 +105,7 @@ const Customization = () => {
                       label="Poppins"
                       sx={{
                         "& .MuiSvgIcon-root": { fontSize: 28 },
-                        "& .MuiFormControlLabel-label": { color: theme.palette.grey[ 900 ] }
+                        "& .MuiFormControlLabel-label": { color: theme.palette.grey[900] }
                       }}
                     />
                     <FormControlLabel
@@ -124,7 +114,7 @@ const Customization = () => {
                       label="Inter"
                       sx={{
                         "& .MuiSvgIcon-root": { fontSize: 28 },
-                        "& .MuiFormControlLabel-label": { color: theme.palette.grey[ 900 ] }
+                        "& .MuiFormControlLabel-label": { color: theme.palette.grey[900] }
                       }}
                     />
                   </RadioGroup>
@@ -147,7 +137,6 @@ const Customization = () => {
                       onChange={handleBorderRadius}
                       getAriaValueText={valueText}
                       valueLabelDisplay="on"
-                      aria-labelledby="discrete-slider-small-steps"
                       marks
                       step={2}
                       min={4}

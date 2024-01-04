@@ -13,9 +13,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('blocked_user_info', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned()->unique();
+            $table->unsignedInteger('user_id')->unique();
             $table->text('comment')->comment('По какой причине был заблокирован юзер');
-            $table->timestampTz('blocked_until')->default(\DB::raw("NOW() + INTERVAL '1' DAY"));
+            $table->timestampTz('blocked_until')->default(DB::raw("NOW() + INTERVAL '1' DAY"));
             $table->timestampsTz();
 
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();

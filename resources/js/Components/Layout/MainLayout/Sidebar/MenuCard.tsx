@@ -1,4 +1,3 @@
-// assets
 import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import {
   Avatar,
@@ -13,22 +12,17 @@ import {
   ListItemText,
   Typography
 } from "@mui/material";
-
-// material-ui
 import { styled, useTheme } from "@mui/material/styles";
-// @ts-ignore
-import PropTypes from "prop-types";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 // styles
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
   borderRadius: 30,
-  [ `&.${linearProgressClasses.colorPrimary}` ]: {
+  [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor: "#fff"
   },
-  [ `& .${linearProgressClasses.bar}` ]: {
+  [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
     backgroundColor: theme.palette.primary.main
   }
@@ -44,16 +38,20 @@ const CardStyle = styled(Card)(({ theme }) => ({
     position: "absolute",
     width: "157px",
     height: "157px",
-    background: theme.palette.primary[ 200 ],
+    background: theme.palette.primary[200],
     borderRadius: "50%",
     top: "-105px",
     right: "-96px"
   }
 }));
 
-// ==============================|| PROGRESS BAR WITH LABEL ||============================== //
+interface ILinearProgressWithLabel {
+  value: number;
 
-function LinearProgressWithLabel({ value, ...others }) {
+  [k: string]: any;
+}
+
+function LinearProgressWithLabel({ value, ...others }: ILinearProgressWithLabel) {
   const theme = useTheme();
 
   return (
@@ -61,7 +59,7 @@ function LinearProgressWithLabel({ value, ...others }) {
       <Grid item>
         <Grid container justifyContent="space-between">
           <Grid item>
-            <Typography variant="h6" sx={{ color: theme.palette.primary[ 800 ] }}>
+            <Typography variant="h6" sx={{ color: theme.palette.primary[800] }}>
               Progress
             </Typography>
           </Grid>
@@ -76,12 +74,6 @@ function LinearProgressWithLabel({ value, ...others }) {
     </Grid>
   );
 }
-
-LinearProgressWithLabel.propTypes = {
-  value: PropTypes.number
-};
-
-// ==============================|| SIDEBAR MENU Card ||============================== //
 
 const MenuCard = () => {
   const theme = useTheme();
@@ -112,7 +104,7 @@ const MenuCard = () => {
             <ListItemText
               sx={{ mt: 0 }}
               primary={
-                <Typography variant="subtitle1" sx={{ color: theme.palette.primary[ 800 ] }}>
+                <Typography variant="subtitle1" sx={{ color: theme.palette.primary[800] }}>
                   Get Extra Space
                 </Typography>
               }

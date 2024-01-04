@@ -57,11 +57,12 @@ class GoogleOAuthController extends BaseController implements OAuthInterface
     {
         $dto = (new OAuthRegisterDTO())
             ->setEmail($data['email'])
-            ->setRole($data['role'] ?? null)
-            ->setLocale($data['locale'] ?? null)
+            ->setRawLocale($data[self::LOCALE_PARAM] ?? null)
+            ->setLocale($data[self::LOCALE_PARAM] ?? null)
             ->setId($data['id'])
             ->setImg($data['avatar'] ?? null)
             ->setName($data['name'])
+            ->setRole($data['role'] ?? null)
             ->setTitle(OAuth::OAUTH_TITLE_GOOGLE);
 
         return app(AuthController::class)->registerOauth($dto);

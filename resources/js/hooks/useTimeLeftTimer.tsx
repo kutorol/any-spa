@@ -1,9 +1,9 @@
 // @ts-ignore
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 interface useTimeLeftTimerProps {
-  initFutureDate?: Date
-  initStorageNameFutureDate?: string
+  initFutureDate?: Date;
+  initStorageNameFutureDate?: string;
 }
 
 /**
@@ -32,9 +32,9 @@ const useTimeLeftTimer = ({ initFutureDate = null, initStorageNameFutureDate = n
 
   useEffect(() => {
     if (leftSeconds <= 0 && (timer || futureDate)) {
-      initStorageNameFutureDate && localStorage.removeItem(initStorageNameFutureDate)
+      initStorageNameFutureDate && localStorage.removeItem(initStorageNameFutureDate);
       timer && clearInterval(timer);
-      setTimer(null)
+      setTimer(null);
     }
 
     return () => {
@@ -44,8 +44,8 @@ const useTimeLeftTimer = ({ initFutureDate = null, initStorageNameFutureDate = n
   useEffect(() => {
     if (!timer && futureDate) {
       setTimer(setInterval(() => {
-        setNowTime(new Date())
-      }, 1000))
+        setNowTime(new Date());
+      }, 1000));
     }
 
     return () => {
@@ -53,13 +53,13 @@ const useTimeLeftTimer = ({ initFutureDate = null, initStorageNameFutureDate = n
   }, [futureDate]);
 
   const onSetFutureDate = (futureDate: Date): void => {
-    initStorageNameFutureDate && localStorage.setItem(initStorageNameFutureDate, String(futureDate))
-    setFutureDate(futureDate)
+    initStorageNameFutureDate && localStorage.setItem(initStorageNameFutureDate, String(futureDate));
+    setFutureDate(futureDate);
   };
 
   return {
     leftSeconds,
-    setFutureDate: onSetFutureDate,
+    setFutureDate: onSetFutureDate
   };
 };
 

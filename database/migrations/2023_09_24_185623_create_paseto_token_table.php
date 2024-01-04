@@ -14,7 +14,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('paseto_user_token', function (Blueprint $table) {
-            $table->integer('user_id');
+            $table->unsignedInteger('user_id');
             $table->text('token')->index();
             $table->boolean('active')->default(true);
 

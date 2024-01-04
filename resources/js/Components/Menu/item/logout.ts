@@ -1,17 +1,14 @@
-import { IconLogout } from "@tabler/icons-react";
+import { EMenuType } from "../../../utils/enums/menu";
+import { IMenuItem } from "../../../utils/interfaces/route";
 
-const logout = {
-  id: "logout-title-left-menu",
+const logout: IMenuItem = {
   title: "Меню",
-  type: "group",
-  children: [
+  children: <IMenuItem[]>[
     {
-      id: "logout-item-left-menu",
       title: "Выйти",
-      type: "item",
+      type: EMenuType.ITEM,
       url: "/logout",
-      icon: IconLogout,
-      breadcrumbs: false
+      icon: "IconLogout"
     }
   ]
 };

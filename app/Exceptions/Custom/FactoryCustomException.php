@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Exceptions\Custom;
 
+use App\Exceptions\Entity\CustomException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 use ParagonIE\Paseto\Exception\PasetoException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -22,6 +24,10 @@ class FactoryCustomException
             return new ValidationCustomException($e);
         } elseif ($e instanceof RouteNotFoundException || $e instanceof MethodNotAllowedHttpException) {
             return new RouteCustomException($e);
+        } elseif ($e instanceof QueryException) {
+            return new DatabaseCustomException($e);
+        } elseif ($e instanceof CustomException) {
+            return new DefaultCustomErrorsException($e);
         }
 
         return new DefaultCustomException($e);

@@ -1,10 +1,11 @@
+import { trimStart } from "lodash";
 // @ts-ignore
 import React, { lazy } from "react";
-
 import Loadable from "../../Components/Common/Utils/Loadable";
 import MainLayout from "../../Components/Layout/MainLayout/MainLayout";
 import MinimalLayout from "../../Components/Layout/MinimalLayout/MinimalLayout";
-import NotFoundPage from "../../Components/Pages/NotFound/NotFoundPage";
+import { NotVerifyEmailURL } from "../../store/constant";
+import { IRoute } from "../../utils/interfaces/route";
 
 // @ts-ignore
 const LoginPage = Loadable(lazy(() => import("../../Components/Pages/Auth/Login/Login")));
@@ -18,29 +19,30 @@ const LogoutPage = Loadable(lazy(() => import("../../Components/Pages/Auth/Logou
 const PasswordResetPage = Loadable(lazy(() => import("../../Components/Pages/Auth/PasswordReset/PasswordReset")));
 // @ts-ignore
 const PasswordResetConfirmPage = Loadable(lazy(() => import("../../Components/Pages/Auth/PasswordReset/PasswordResetConfirm")));
+// @ts-ignore
+const LandingPage = Loadable(lazy(() => import("../../Components/Pages/Landing/LandingPage")));
 
-// ==============================|| Маршруты авторизации ||============================== //
-
-const AuthenticationRoutes = {
-  path: "/",
+const AuthenticationRoutes: IRoute = {
+  path: ":lang",
   element: <MinimalLayout/>,
   children: [
-    { path: "/", element: <LoginPage/> },
-    { path: "/login", element: <LoginPage/> },
-    { path: "/register", element: <RegisterPage/> },
-    { path: "/password/reset", element: <PasswordResetPage/> },
-    { path: "/pass/forgot/:email/:token", element: <PasswordResetConfirmPage/> },
-    // todo заменить компонент роута
-    { path: "/term-of-use-private-policy", element: <NotFoundPage/> },
-    { path: "/logout", element: <LogoutPage/> }
+    { path: "", element: <LandingPage/> },
+    { path: "login", element: <LoginPage/> },
+    { path: "register", element: <RegisterPage/> },
+    { path: "password/reset", element: <PasswordResetPage/> },
+    { path: "pass/forgot/:email/:token", element: <PasswordResetConfirmPage/> },
+    { path: "logout", element: <LogoutPage/> }
   ]
 };
 
-export const AuthLoggedRoutes = {
-  path: "/",
-  element: <MainLayout/>,
+export const AuthLoggedRoutes: IRoute = {
+  path: ":lang",
+  element: <MainLayout needAuth/>,
   children: [
-    { path: "/verify-email", element: <VerifyEmailPage/> }
+    {
+      path: trimStart(NotVerifyEmailURL, "/"),
+      element: <VerifyEmailPage/>
+    }
   ]
 };
 

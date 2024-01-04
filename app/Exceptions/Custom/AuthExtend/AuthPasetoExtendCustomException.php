@@ -11,10 +11,9 @@ class AuthPasetoExtendCustomException implements AuthExtendExceptionInterface
 {
     public function getExtendedMessage(array $response, Throwable $e): array
     {
-        $prefix = 'auth.';
         $response['data'] = array_merge($response['data'], [
             'paseto' => [
-                'msg' => str_replace($prefix, '', __($prefix.$e->getMessage())),
+                'msg' => __($e->getMessage()),
             ],
         ]);
 

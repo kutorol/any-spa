@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exceptions\Log;
 
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Exceptions\PostTooLargeException;
 use ParagonIE\Paseto\Exception\PasetoException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -19,6 +21,8 @@ class FactoryLogException
             $log = new PasetoLogException($e);
         } elseif ($e instanceof RouteNotFoundException || $e instanceof MethodNotAllowedHttpException) {
             $log = new RouteLogException($e);
+        } elseif ($e instanceof PostTooLargeException || $e instanceof QueryException) {
+            $log = new SystemLogException($e);
         }
 
         if (!$log) {

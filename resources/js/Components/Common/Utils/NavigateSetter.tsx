@@ -1,11 +1,12 @@
-// @ts-ignore
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import * as React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import RouterAPI from "../../../utils/funcs/router-api";
 
 const NavigateSetter = () => {
   // устанавливаем хук, чтобы можно было использовать навигацию не только в компонентах
-  RouterAPI.navigate = useNavigate();
+  RouterAPI.nav = useNavigate();
+  // @ts-ignore
+  RouterAPI.params = useParams();
 
   return null;
 };

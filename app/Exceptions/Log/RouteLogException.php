@@ -8,8 +8,8 @@ class RouteLogException extends LogExceptionAbstract
 {
     public function log(): void
     {
-        \Log::channel('routes')->error(
-            'Запрашивают несуществующий адрес',
+        \Log::channel('routes')->info(
+            'RouteNotFound',
             $this->commonData(),
         );
     }

@@ -10,13 +10,14 @@ import TotalOrderLineChartCard from './TotalOrderLineChartCard/TotalOrderLineCha
 import TotalIncomeDarkCard from './TotalIncomeDarkCard';
 import TotalIncomeLightCard from './TotalIncomeLightCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart/TotalGrowthBarChart';
-import { gridSpacing } from "../../../store/constant";
 
+
+const gridSpacing = 3;
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const DashboardPage = () => {
-  const [ isLoading, setLoading ] = useState(true);
+  const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(false);
   }, []);

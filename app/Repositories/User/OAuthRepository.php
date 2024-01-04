@@ -29,7 +29,7 @@ class OAuthRepository
             'oauth_id' => $dto->getId(),
             'oauth_email' => $dto->getEmail(),
             'oauth_title' => $dto->getTitle(),
-            'oauth_locale' => $dto->getLocale(),
+            'oauth_locale' => $dto->getRawLocale(),
         ]);
     }
 }

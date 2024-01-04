@@ -3,16 +3,22 @@ import { toNumber } from "lodash";
 
 export const defaultDurationMS = 5000;
 
+interface IInitialState {
+  code: number | string;
+  errors: null | any[];
+  duration: number;
+}
+
 export const errSnackbar = createSlice({
   name: "errSnackbar",
   initialState: {
     code: 0,
     errors: null,
     duration: defaultDurationMS
-  },
+  } as IInitialState,
   reducers: {
     set: (state, action) => {
-      const { errors, duration, code } = action.payload;
+      const { errors, duration, code }: IInitialState = action.payload;
 
       state.errors = errors;
       const dur = toNumber(duration);

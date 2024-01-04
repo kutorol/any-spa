@@ -1,14 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface IAppInit {
+  init: boolean;
+  // если true - делается запрос за seo данными
+  gettingSEO: boolean;
+}
+
 export const createAppInitReducerReducer = () => {
   return createSlice({
     name: "appInitReducer",
     initialState: {
-      init: false
-    },
+      // приложение еще не инициализировано
+      init: false,
+      // true - приложение получает в текущий момент seo данные
+      gettingSEO: false
+    } as IAppInit,
     reducers: {
       set: (state, action) => {
         state.init = action.payload.init;
+        state.gettingSEO = action.payload.gettingSEO;
       }
     }
   });

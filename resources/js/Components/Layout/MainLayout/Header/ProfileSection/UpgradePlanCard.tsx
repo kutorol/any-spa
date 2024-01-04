@@ -1,9 +1,7 @@
 import { Button, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 // material-ui
 import { styled } from "@mui/material/styles";
-// @ts-ignore
-import React from "react";
-import AnimateButton from "../../../../Common/AnimateButton/AnimateButton";
+import * as React from "react";
 
 // project imports
 
@@ -56,11 +54,9 @@ const UpgradePlanCard = () => (
         <Grid item>
           <Stack direction="row">
             {/* @ts-ignore */}
-            <AnimateButton>
-              <Button variant="contained" color="warning" sx={{ boxShadow: "none" }}>
-                Go Premium
-              </Button>
-            </AnimateButton>
+            <Button variant="contained" color="warning" sx={{ boxShadow: "none" }}>
+              Go Premium
+            </Button>
           </Stack>
         </Grid>
       </Grid>

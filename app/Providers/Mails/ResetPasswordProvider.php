@@ -16,7 +16,7 @@ class ResetPasswordProvider implements InterfaceProvider
         // переопределяем какое письмо будет отправляться для подтверждения email
         ResetPassword::toMailUsing(function (User $user, string $token) {
             return (new MailMessage())
-                ->subject(__('auth.pass.subject_mail', ['site_name' => config('app.url')]))
+                ->subject(__('auth.pass.subject_mail', ['site_name' => getPrettySiteName()]))
                 ->line(__('auth.pass.click_btn_to_change_pass'))
                 ->action(__('auth.pass.action_btn'), route('pass.forgot_show_form_with_pass', [
                     'token' => $token,

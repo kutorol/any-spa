@@ -10,6 +10,7 @@ use App\Http\Middleware\Custom\Verify\PasetoToken\CheckIfRefreshToken;
 use App\Http\Middleware\Custom\Verify\PasetoToken\CheckToken;
 use App\Http\Middleware\Custom\Verify\PasetoToken\CheckTokenType;
 use App\Http\Middleware\Custom\Verify\PasetoToken\CheckUser;
+use App\Http\Middleware\Custom\Verify\PasetoToken\SetBearerToken;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -28,11 +29,13 @@ class VerifyPasetoToken
     public function handle(Request $request, Closure $next): Response|JsonResponse|RedirectResponse
     {
         $checks = [
-            // Проверяет и возвращает юзера
+            // Проверяет и возвращает юзера (если юзера нет, то проверка идет дальше)
             CheckUser::class,
+            // Проверяет, что существует и устанавливает Bearer токен
+            SetBearerToken::class,
             // Проверяет и возвращает тип токена
             CheckTokenType::class,
-            // Проверяет и возвращает сам токен
+            // Проверяет и возвращает сам токен из бд
             CheckToken::class,
             // Проверяет, что токен такой же, как и передали его в браузере
             // ничего не возвращает

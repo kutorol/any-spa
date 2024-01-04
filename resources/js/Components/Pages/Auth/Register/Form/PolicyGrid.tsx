@@ -1,8 +1,9 @@
 import { Grid, Typography } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { Link } from "react-router-dom";
+import { termOfUseURL } from "../../../../../routes/Components/SpecialRoutes";
+import { getUrl } from "../../../../../utils/funcs/url";
 
 const PolicyGrid = () => {
   const { t } = useLaravelReactI18n();
@@ -18,7 +19,8 @@ const PolicyGrid = () => {
           <Typography
             variant="subtitle2"
             component={Link}
-            to="/term-of-use-private-policy"
+            target="_blank"
+            to={getUrl(termOfUseURL)}
           >
             {t("данные условия.")}
           </Typography>

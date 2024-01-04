@@ -1,7 +1,6 @@
 import { Typography } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 const Optional = () => {
   const { t } = useLaravelReactI18n();

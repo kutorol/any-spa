@@ -2,7 +2,8 @@ import { TokenResponse } from "@react-oauth/google";
 // @ts-ignore
 import { get } from "lodash";
 import { createErrMgs } from "../../../store/reducers/func/snackbar/error-snackbar";
-import Locale from "../../funcs/locale";
+import { ERoles } from "../../enums/user";
+import { __ } from "../../funcs/locale";
 import userAuth from "../../repository/user-auth";
 
 // Класс получения инфы юзера от гугла и авторизации на сайте
@@ -16,7 +17,9 @@ export class GoogleOAuth {
     // Токены от google auth
     private readonly tokens: Omit<TokenResponse, "error" | "error_description" | "error_uri">,
     // promise с получением токена recaptcha v3
-    private readonly handleReCaptchaVerify: any
+    private readonly handleReCaptchaVerify: any,
+    // выбранная роль при регистрации
+    private readonly chosenRole?: ERoles
   ) {
     if (GoogleOAuth.process) {
       createErrMgs("Процесс авторизации через Google уже запущен");
@@ -33,12 +36,12 @@ export class GoogleOAuth {
     // получаем инфу о юзере
     const res = await userAuth.fetchData(this.googleUrl + this.tokens.access_token, this.tokens.access_token);
     if (!res.id) {
-      createErrMgs(Locale.locale.t("Не удалось получить ответ от сервера Google для авторизации на сайте"));
+      createErrMgs(__("Не удалось получить ответ от сервера Google для авторизации на сайте"));
       return;
     }
 
     await this.handleReCaptchaVerify().then(captchaToken => {
-      return userAuth.googleAuth(res, captchaToken);
+      return userAuth.googleAuth(res, captchaToken, this.chosenRole);
     });
   }
 }

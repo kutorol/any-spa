@@ -21,6 +21,6 @@ class RegisterController extends Controller
     // POST
     public function register(): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
     {
-        return redirect('register');
+        return $this->redirectTo('/register');
     }
 }

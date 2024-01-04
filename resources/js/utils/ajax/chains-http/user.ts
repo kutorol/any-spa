@@ -1,6 +1,8 @@
 import { get } from "lodash";
+import { NotVerifyEmailURL, redirectParam, userDataParam } from "../../../store/constant";
 import { changeUserInfo } from "../../../store/reducers/func/common/user";
-import { UserInterface } from "../../repository/interfaces";
+import { getUrl } from "../../funcs/url";
+import { IUserInterface } from "../../interfaces/user";
 import { ChainCheckHTTPResponse, RedirectInterface } from "../interfaces";
 
 // Проверка на приход данных по юзеру
@@ -11,13 +13,13 @@ export class ChainCheckUserDataHTTP implements ChainCheckHTTPResponse {
   }
 
   public check(res: any): any {
-    const user = <UserInterface>get(res, "data.user_data", null);
+    const user = <IUserInterface>get(res, `data.${userDataParam}`, null);
     if (!user) {
       return res;
     }
 
     if (!user.verified_email && !this.redirect.isLogout()) {
-      res.data.redirect = "/verify-email";
+      res.data[redirectParam] = getUrl(NotVerifyEmailURL);
     }
 
     changeUserInfo(user);

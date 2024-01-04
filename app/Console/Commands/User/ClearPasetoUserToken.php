@@ -9,13 +9,15 @@ use App\Repositories\User\PasetoTokenRepository;
 
 class ClearPasetoUserToken extends CommandsLogAbstract
 {
-    protected $signature = 'clear__paseto_user_token';
+    public const NAME = 'clear__paseto_user_token';
 
-    protected $description = 'Очищает все невалидные токены авторизации у юзеров';
+    protected $signature = self::NAME;
+
+    protected $description = 'Чистим невалидные токены авторизации у юзеров раз в сутки в 00:00';
 
     public function handle()
     {
-        return $this->logMiddleware(function () {
+        return $this->logMiddleware(function (): bool {
             app(PasetoTokenRepository::class)->clearInvalidTokens();
 
             return true;

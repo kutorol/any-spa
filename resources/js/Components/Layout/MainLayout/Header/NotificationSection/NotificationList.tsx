@@ -15,11 +15,10 @@ import {
   Typography
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
-import { IconBrandTelegram, IconBuildingStore, IconMailbox, IconPhoto } from "@tabler/icons-react";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 // @ts-ignore
 import User1 from "../../../../../../assets/images/svg/users/user-round.svg";
+import Icon from "../../../../Common/Gui/Common/Icon";
 
 // styles
 const ListItemWrapper = styled("div")(({ theme }) => ({
@@ -69,7 +68,7 @@ const NotificationList = () => {
         maxWidth: 330,
         py: 0,
         borderRadius: "10px",
-        [ theme.breakpoints.down("md") ]: {
+        [theme.breakpoints.down("md")]: {
           maxWidth: 300
         },
         "& .MuiListItemSecondaryAction-root": {
@@ -127,7 +126,7 @@ const NotificationList = () => {
                 borderColor: theme.palette.success.main
               }}
             >
-              <IconBuildingStore stroke={1.5} size="1.3rem"/>
+              <Icon tablerIcon="IconBuildingStore"/>
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={<Typography variant="subtitle1">Store Verification Done</Typography>}/>
@@ -166,7 +165,7 @@ const NotificationList = () => {
                 borderColor: theme.palette.primary.main
               }}
             >
-              <IconMailbox stroke={1.5} size="1.3rem"/>
+              <Icon tablerIcon="IconMailbox"/>
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={<Typography variant="subtitle1">Check Your Mail.</Typography>}/>
@@ -188,7 +187,7 @@ const NotificationList = () => {
           <Grid item xs={12}>
             <Grid container>
               <Grid item>
-                <Button variant="contained" disableElevation endIcon={<IconBrandTelegram stroke={1.5} size="1.3rem"/>}>
+                <Button variant="contained" disableElevation endIcon={<Icon tablerIcon="IconBrandTelegram"/>}>
                   Mail
                 </Button>
               </Grid>
@@ -234,7 +233,7 @@ const NotificationList = () => {
                     <Grid container direction="column">
                       <Grid item xs={12}>
                         <Stack direction="row" spacing={2}>
-                          <IconPhoto stroke={1.5} size="1.3rem"/>
+                          <Icon tablerIcon="IconPhoto"/>
                           <Typography variant="subtitle1">demo.jpg</Typography>
                         </Stack>
                       </Grid>

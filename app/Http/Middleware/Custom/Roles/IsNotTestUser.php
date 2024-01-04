@@ -24,7 +24,7 @@ class IsNotTestUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!RolesEnum::isRoles(RolesEnum::ROLE_TEST_USER)) {
+        if (!RolesEnum::isRoles(RolesEnum::TEST_USER)) {
             return $next($request);
         }
 

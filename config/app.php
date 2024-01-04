@@ -17,6 +17,7 @@ return [
     |
     */
 
+    'version' => env('VITE_SITE_VERSION', null),
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
@@ -198,7 +199,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-
+        Jaybizzle\LaravelCrawlerDetect\LaravelCrawlerDetectServiceProvider::class,
     ],
 
     /*
@@ -214,6 +215,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Crawler'   => Jaybizzle\LaravelCrawlerDetect\Facades\LaravelCrawlerDetect::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

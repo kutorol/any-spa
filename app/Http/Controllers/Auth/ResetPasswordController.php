@@ -22,6 +22,6 @@ class ResetPasswordController extends Controller
     // POST
     public function reset(): \Illuminate\Foundation\Application|Redirector|Application|RedirectResponse
     {
-        return redirect('/');
+        return $this->redirectTo('/');
     }
 }

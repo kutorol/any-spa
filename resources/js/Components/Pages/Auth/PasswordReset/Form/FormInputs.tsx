@@ -1,5 +1,4 @@
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import useGoogleRecaptcha from "../../../../../hooks/useGoogleRecaptcha";
 import { inputRules } from "../../../../../utils/funcs/form-rule/default-rule";
 import userAuth from "../../../../../utils/repository/user-auth";

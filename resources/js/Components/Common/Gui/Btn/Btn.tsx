@@ -1,36 +1,69 @@
 import { Button } from "@mui/material";
-import { IconSend } from "@tabler/icons-react";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { BrowserView, MobileView } from "react-device-detect";
+import useMatch from "../../../../hooks/useMatch";
 
 interface BtnProps {
-  webTitle: string;
+  webTitle?: string;
   mobTitle?: string;
-  onClick: (e) => void;
+  onClick?: (e) => void;
   icon?: React.ReactNode;
 
-  [ key: string ]: any;
+  color?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
+  variant?: "contained" | "outlined" | "text";
+  size?: "small" | "medium" | "large";
+  disabled?: boolean;
+
+  [key: string]: any;
 }
 
-const Btn = ({ webTitle, mobTitle = "", onClick, icon = <IconSend/>, ...props }: BtnProps) => {
-  let mobContent = mobTitle;
-  if (!mobTitle.trim() && icon) {
-    mobContent = icon;
-    icon = undefined;
+const Btn = ({
+               webTitle = "",
+               mobTitle,
+               onClick,
+               size,
+               variant = "text",
+               color = "secondary",
+               icon,
+               ...props
+             }: BtnProps) => {
+
+  const { matchDownMd } = useMatch();
+  if (!size) {
+    size = matchDownMd ? "small" : "medium";
   }
 
-  return (
+  const webTitleExists = webTitle.trim() !== "";
+  const webBtn = (
     <Button
-      variant="contained"
-      color="secondary"
+      variant={variant}
+      size={size}
+      color={color}
       onClick={onClick}
-      startIcon={icon}
+      startIcon={webTitleExists ? icon : undefined}
       {...props}
     >
-      <BrowserView>{webTitle}</BrowserView>
-      <MobileView>{mobContent}</MobileView>
+      {webTitleExists ? webTitle : icon}
     </Button>
+  );
+
+  const isOnlyIcon = !(mobTitle || "").trim() && icon;
+
+  const mobileBtn = React.cloneElement(webBtn, {
+    ...(isOnlyIcon ? {
+      startIcon: undefined,
+      children: React.cloneElement(icon)
+    } : {
+      startIcon: icon ? icon : undefined,
+      children: mobTitle
+    })
+  });
+
+  return (
+    <>
+      <BrowserView>{webBtn}</BrowserView>
+      <MobileView>{mobileBtn}</MobileView>
+    </>
   );
 };
 

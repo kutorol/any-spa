@@ -1,12 +1,12 @@
 import { Grid, Tooltip } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../../../../assets/images/svg/Components/Logo";
+import { getUrl } from "../../../../utils/funcs/url";
 
 interface ILogoHeader {
-  withLink: boolean;
+  withLink?: boolean;
 }
 
 const LogoHeader = ({ withLink = true }: ILogoHeader) => {
@@ -17,7 +17,7 @@ const LogoHeader = ({ withLink = true }: ILogoHeader) => {
     <Grid item sx={sx}>
       {withLink ? (
         <Tooltip title={t("На главную страницу")}>
-          <Link to="/">
+          <Link to={getUrl("/")}>
             <Logo/>
           </Link>
         </Tooltip>

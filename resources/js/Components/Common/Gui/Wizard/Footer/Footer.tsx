@@ -1,8 +1,8 @@
-import CloseIcon from "@mui/icons-material/Close";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
+import Btn from "../../Btn/Btn";
+import Icon from "../../Common/Icon";
 import Back from "./Back";
 import Optional from "./Optional";
 
@@ -28,20 +28,22 @@ const Footer = ({
                   handleSkip,
                   handleNext,
                   nextBtnTitle
-}: IFooter) => {
+                }: IFooter) => {
   const { t } = useLaravelReactI18n();
 
   if (isShowCloseBtn) {
+    const closeTitle = t("Закрыть");
+
     return (
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
         <Box sx={{ flex: "1 1 auto" }}/>
 
-        <Button
+        <Btn
           onClick={onClose}
-          startIcon={<CloseIcon/>}
-        >
-          {t("Закрыть")}
-        </Button>
+          icon={<Icon tablerIcon="IconX"/>}
+          webTitle={closeTitle}
+          mobTitle={closeTitle}
+        />
       </Box>
     );
   }
@@ -60,12 +62,12 @@ const Footer = ({
         handleSkip={handleSkip}
       />
 
-      <Button
+      <Btn
+        webTitle={nextBtnTitle}
         disabled={nextIsDisabled}
         onClick={handleNext}
-      >
-        {nextBtnTitle}
-      </Button>
+        endIcon={<Icon tablerIcon="IconChevronRight"/>}
+      />
     </Box>
   );
 };

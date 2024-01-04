@@ -2,7 +2,9 @@ import React from 'react'
 // material-ui
 import { Card, CardContent, Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
-import { gridSpacing } from "../../../../store/constant";
+
+
+const gridSpacing = 3;
 
 
 // ==============================|| SKELETON TOTAL GROWTH BAR CHART ||============================== //
@@ -16,20 +18,20 @@ const TotalGrowthBarChart = () => (
             <Grid item xs zeroMinWidth>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
-                  <Skeleton variant="text" />
+                  <Skeleton variant="text"/>
                 </Grid>
                 <Grid item xs={12}>
-                  <Skeleton variant="rectangular" height={20} />
+                  <Skeleton variant="rectangular" height={20}/>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item>
-              <Skeleton variant="rectangular" height={50} width={80} />
+              <Skeleton variant="rectangular" height={50} width={80}/>
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Skeleton variant="rectangular" height={530} />
+          <Skeleton variant="rectangular" height={530}/>
         </Grid>
       </Grid>
     </CardContent>

@@ -28,6 +28,6 @@ class ConfirmPasswordController extends Controller
     // POST
     public function confirm(): \Illuminate\Foundation\Application|Redirector|Application|RedirectResponse
     {
-        return redirect('/');
+        return $this->redirectTo('/');
     }
 }

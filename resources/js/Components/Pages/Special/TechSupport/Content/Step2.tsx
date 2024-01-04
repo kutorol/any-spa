@@ -1,7 +1,6 @@
 import { Toolbar } from "@mui/material";
 import { Formik } from "formik";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { inputRules } from "../../../../../utils/funcs/form-rule/default-rule";
 import EmailInput from "../../../../Common/Inputs/EmailInput";
 
@@ -38,14 +37,13 @@ const Step2 = ({ email, onChangeEmail, onSubmit }: IStep2) => {
       validationSchema={formValidationSchema}
       onSubmit={_onSubmit}
     >
-      {({ errors, handleChange, handleSubmit, touched, values }) => (
+      {({ errors, handleChange, handleSubmit, values }) => (
         <form noValidate onSubmit={_onSubmit}>
           <Toolbar/>
           <EmailInput
             values={values}
             handleBlur={handleSubmit}
             handleChange={onChange(handleChange)}
-            touched={touched}
             errors={errors}
           />
         </form>

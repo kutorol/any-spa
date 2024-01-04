@@ -6,6 +6,7 @@ namespace App\Http\Middleware\Custom\Roles;
 
 use App\Enums\User\RolesEnum;
 use App\Http\Controllers\Api\BaseController;
+use App\Http\Controllers\Controller;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
@@ -25,7 +26,7 @@ class IsSiteAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (RolesEnum::isRoles(RolesEnum::ROLE_SITE_ADMIN)) {
+        if (RolesEnum::isRoles(RolesEnum::SITE_ADMIN)) {
             return $next($request);
         }
 
@@ -39,14 +40,14 @@ class IsSiteAdmin
      * @param array $data
      * @return Application|JsonResponse|RedirectResponse|Redirector
      */
-    public static function getResponse(Request $request, string $msg = 'general.bad_role', int $code = BaseController::FORBIDDEN_CODE, array $data = []): JsonResponse|Redirector|Application|RedirectResponse
+    public static function getResponse(Request $request, string $msg = 'user.bad_role', int $code = BaseController::FORBIDDEN_CODE, array $data = []): JsonResponse|Redirector|Application|RedirectResponse
     {
         if (BaseController::isWeb($request)) {
-            return redirect('/');
+            return Controller::redirect('/');
         }
 
         return response()->json(
-            BaseController::errorResponse(__($msg), $data, $code),
+            BaseController::errorResponse(__($msg), $data, $code, $code),
             $code
         );
     }

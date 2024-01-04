@@ -1,7 +1,6 @@
 import { FormHelperText } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 
 interface ILeftSymbols {
   value?: string;

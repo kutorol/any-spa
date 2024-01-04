@@ -1,8 +1,7 @@
 import { Toolbar } from "@mui/material";
 import { Formik } from "formik";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { inputRules } from "../../../../../utils/funcs/form-rule/default-rule";
 import CustomTextarea from "../../../../Common/Inputs/CustomTextarea";
 
@@ -43,7 +42,7 @@ const Step4 = ({ comment, onChangeComment }: IStep4) => {
       validationSchema={formValidationSchema}
       onSubmit={onSubmit}
     >
-      {({ errors, handleChange, handleSubmit, touched, values }) => (
+      {({ errors, handleChange, handleSubmit, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           <Toolbar/>
           <CustomTextarea
@@ -54,7 +53,6 @@ const Step4 = ({ comment, onChangeComment }: IStep4) => {
             values={values}
             handleBlur={handleSubmit}
             handleChange={onChange(handleChange)}
-            touched={touched}
             errors={errors}
           />
         </form>

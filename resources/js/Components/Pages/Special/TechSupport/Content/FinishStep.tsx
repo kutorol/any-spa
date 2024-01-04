@@ -43,9 +43,7 @@ const FinishStep = ({ isSuccess }: IFinishStep) => {
     <>
       <Toolbar/>
       <Box sx={{ width: "100%" }}>
-        <LinearProgress
-          color="primary"
-        />
+        <LinearProgress color="secondary"/>
       </Box>
       <Toolbar/>
     </>

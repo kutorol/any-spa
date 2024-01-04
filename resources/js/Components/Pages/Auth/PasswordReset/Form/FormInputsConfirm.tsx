@@ -1,6 +1,5 @@
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React from "react";
+import * as React from "react";
 import { useParams } from "react-router";
 import useGoogleRecaptcha from "../../../../../hooks/useGoogleRecaptcha";
 import { inputRules } from "../../../../../utils/funcs/form-rule/default-rule";

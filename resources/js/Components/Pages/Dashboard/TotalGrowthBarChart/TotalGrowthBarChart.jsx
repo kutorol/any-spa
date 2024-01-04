@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { useSelector } from 'react-redux';
-
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Grid, MenuItem, TextField, Typography } from '@mui/material';
@@ -9,14 +8,12 @@ import { Grid, MenuItem, TextField, Typography } from '@mui/material';
 // third-party
 // import ApexCharts from 'apexcharts';
 // import Chart from 'react-apexcharts';
-
 // project imports
 import SkeletonTotalGrowthBarChart from '../Skeleton/SkeletonTotalGrowthBarChart';
 
 // chart data
 import chartData from './total-growth-bar-chart';
 import MainCard from "../../../Common/MainCard/MainCard";
-import { gridSpacing } from "../../../../store/constant";
 
 const status = [
   {
@@ -38,7 +35,7 @@ const status = [
 const TotalGrowthBarChart = ({ isLoading }) => {
   const [value, setValue] = useState('today');
   const theme = useTheme();
-  // const customization = useSelector((state) => state.customization);
+  // const customization = useSelector((state: RootState) => state.customization);
   const customization = {
     navType: null,
   };
@@ -46,10 +43,10 @@ const TotalGrowthBarChart = ({ isLoading }) => {
   const { navType } = customization;
   const { primary } = theme.palette.text;
   const darkLight = theme.palette.dark.light;
-  const grey200 = theme.palette.grey[200];
-  const grey500 = theme.palette.grey[500];
+  const grey200 = theme.palette.grey[ 200 ];
+  const grey500 = theme.palette.grey[ 500 ];
 
-  const primary200 = theme.palette.primary[200];
+  const primary200 = theme.palette.primary[ 200 ];
   const primaryDark = theme.palette.primary.dark;
   const secondaryMain = theme.palette.secondary.main;
   const secondaryLight = theme.palette.secondary.light;
@@ -94,10 +91,10 @@ const TotalGrowthBarChart = ({ isLoading }) => {
   return (
     <>
       {isLoading ? (
-        <SkeletonTotalGrowthBarChart />
+        <SkeletonTotalGrowthBarChart/>
       ) : (
         <MainCard>
-          <Grid container spacing={gridSpacing}>
+          <Grid container spacing={3}>
             <Grid item xs={12}>
               <Grid container alignItems="center" justifyContent="space-between">
                 <Grid item>
@@ -111,7 +108,8 @@ const TotalGrowthBarChart = ({ isLoading }) => {
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <TextField id="standard-select-currency" select value={value} onChange={(e) => setValue(e.target.value)}>
+                  <TextField id="standard-select-currency" select value={value}
+                             onChange={(e) => setValue(e.target.value)}>
                     {status.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}

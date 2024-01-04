@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 
 // material-ui
-import { useTheme, styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 
 // project imports
@@ -46,7 +46,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
   return (
     <>
       {isLoading ? (
-        <SkeletonTotalIncomeCard />
+        <SkeletonTotalIncomeCard/>
       ) : (
         <CardWrapper border={false} content={false}>
           <Box sx={{ p: 2 }}>
@@ -62,7 +62,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                       color: theme.palette.warning.dark
                     }}
                   >
-                    <StorefrontTwoToneIcon fontSize="inherit" />
+                    <StorefrontTwoToneIcon fontSize="inherit"/>
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
@@ -76,7 +76,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                     <Typography
                       variant="subtitle2"
                       sx={{
-                        color: theme.palette.grey[500],
+                        color: theme.palette.grey[ 500 ],
                         mt: 0.5
                       }}
                     >

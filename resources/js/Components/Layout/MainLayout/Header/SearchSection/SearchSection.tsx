@@ -1,13 +1,14 @@
 import { Avatar, Box, ButtonBase, Card, Grid, InputAdornment, OutlinedInput, Popper } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { shouldForwardProp } from "@mui/system";
-import { IconAdjustmentsHorizontal, IconSearch, IconX } from "@tabler/icons-react";
 import PopupState, { bindPopper, bindToggle } from "material-ui-popup-state";
-// @ts-ignore
-import PropTypes from "prop-types";
-// @ts-ignore
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import useMatch from "../../../../../hooks/useMatch";
+import { RootState } from "../../../../../store/store";
+import { IUserInterface } from "../../../../../utils/interfaces/user";
+import Icon from "../../../../Common/Gui/Common/Icon";
 import Transitions from "../../../../Common/Transitions/Transitions";
 
 // styles
@@ -16,7 +17,7 @@ const PopperStyle = styled(Popper, { shouldForwardProp })(({ theme }) => ({
   width: "99%",
   top: "-55px !important",
   padding: "0 12px",
-  [ theme.breakpoints.down("sm") ]: {
+  [theme.breakpoints.down("sm")]: {
     padding: "0 10px"
   }
 }));
@@ -30,10 +31,10 @@ const OutlineInputStyle = styled(OutlinedInput, { shouldForwardProp })(({ theme 
     background: "transparent !important",
     paddingLeft: "4px !important"
   },
-  [ theme.breakpoints.down("lg") ]: {
+  [theme.breakpoints.down("lg")]: {
     width: 250
   },
-  [ theme.breakpoints.down("md") ]: {
+  [theme.breakpoints.down("md")]: {
     width: "100%",
     marginLeft: 4,
     background: "#fff"
@@ -53,31 +54,37 @@ const HeaderAvatarStyle = styled(Avatar, { shouldForwardProp })(({ theme }) => (
   }
 }));
 
-// ==============================|| SEARCH INPUT - MOBILE||============================== //
+interface IMobileSearch {
+  value: string;
+  setValue: (v: string) => void;
+  popupState: any;
+}
 
-const MobileSearch = ({ value, setValue, popupState }) => {
+const MobileSearch = ({ value, setValue, popupState }: IMobileSearch) => {
   const theme = useTheme();
 
   return (
     <OutlineInputStyle
-      id="input-search-header"
+      autoFocus
+      id="input-mobile-search-header"
+      color="secondary"
       value={value}
       onChange={(e) => setValue(e.target.value)}
       placeholder="Search"
       startAdornment={
         <InputAdornment position="start">
-          <IconSearch stroke={1.5} size="1rem" color={theme.palette.grey[ 500 ]}/>
+          <Icon tablerIcon="IconSearch" customColor={theme.palette.grey[500]}/>
         </InputAdornment>
       }
       endAdornment={
         <InputAdornment position="end">
-          <ButtonBase sx={{ borderRadius: "12px" }}>
+          <ButtonBase>
             <HeaderAvatarStyle variant="rounded">
-              <IconAdjustmentsHorizontal stroke={1.5} size="1.3rem"/>
+              <Icon tablerIcon="IconAdjustmentsHorizontal"/>
             </HeaderAvatarStyle>
           </ButtonBase>
           <Box sx={{ ml: 2 }}>
-            <ButtonBase sx={{ borderRadius: "12px" }}>
+            <ButtonBase>
               <Avatar
                 variant="rounded"
                 sx={{
@@ -98,46 +105,43 @@ const MobileSearch = ({ value, setValue, popupState }) => {
                 }}
                 {...bindToggle(popupState)}
               >
-                <IconX stroke={1.5} size="1.3rem"/>
+                <Icon tablerIcon="IconX"/>
               </Avatar>
             </ButtonBase>
           </Box>
         </InputAdornment>
       }
-      aria-describedby="search-helper-text"
-      inputProps={{ "aria-label": "weight" }}
     />
   );
 };
 
-MobileSearch.propTypes = {
-  value: PropTypes.string,
-  setValue: PropTypes.func,
-  popupState: PopupState
-};
-
-// ==============================|| SEARCH INPUT ||============================== //
-
 const SearchSection = () => {
   const theme = useTheme();
   const [value, setValue] = useState("");
-  // @ts-ignore
-  const user = useSelector(s => s.userInfo.user);
 
-  if (!user.verified_email) {
+  const user: IUserInterface = useSelector((s: RootState) => s.userInfo.user);
+
+  const { bDownSM } = useMatch().breakpoints;
+  if (user.uid === 0 || !user.verified_email) {
     return null;
   }
 
   return (
     <>
       <Box sx={{ display: { xs: "block", md: "none" } }}>
-        <PopupState variant="popper" popupId="demo-popup-popper">
+        <PopupState
+          variant="popper"
+          popupId="search-popup-popper"
+        >
           {(popupState) => (
             <>
               <Box sx={{ ml: 2 }}>
-                <ButtonBase sx={{ borderRadius: "12px" }}>
-                  <HeaderAvatarStyle variant="rounded" {...bindToggle(popupState)}>
-                    <IconSearch stroke={1.5} size="1.2rem"/>
+                <ButtonBase>
+                  <HeaderAvatarStyle
+                    variant="rounded"
+                    {...bindToggle(popupState)}
+                  >
+                    <Icon tablerIcon="IconSearch"/>
                   </HeaderAvatarStyle>
                 </ButtonBase>
               </Box>
@@ -148,7 +152,7 @@ const SearchSection = () => {
                       <Card
                         sx={{
                           background: "#fff",
-                          [ theme.breakpoints.down("sm") ]: {
+                          [bDownSM]: {
                             border: 0,
                             boxShadow: "none"
                           }
@@ -157,7 +161,11 @@ const SearchSection = () => {
                         <Box sx={{ p: 2 }}>
                           <Grid container alignItems="center" justifyContent="space-between">
                             <Grid item xs>
-                              <MobileSearch value={value} setValue={setValue} popupState={popupState}/>
+                              <MobileSearch
+                                value={value}
+                                setValue={setValue}
+                                popupState={popupState}
+                              />
                             </Grid>
                           </Grid>
                         </Box>
@@ -173,25 +181,24 @@ const SearchSection = () => {
       <Box sx={{ display: { xs: "none", md: "block" } }}>
         <OutlineInputStyle
           id="input-search-header"
+          color="secondary"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search"
           startAdornment={
             <InputAdornment position="start">
-              <IconSearch stroke={1.5} size="1rem" color={theme.palette.grey[ 500 ]}/>
+              <Icon tablerIcon="IconSearch" customColor={theme.palette.grey[500]}/>
             </InputAdornment>
           }
           endAdornment={
             <InputAdornment position="end">
-              <ButtonBase sx={{ borderRadius: "12px" }}>
+              <ButtonBase>
                 <HeaderAvatarStyle variant="rounded">
-                  <IconAdjustmentsHorizontal stroke={1.5} size="1.3rem"/>
+                  <Icon tablerIcon="IconAdjustmentsHorizontal"/>
                 </HeaderAvatarStyle>
               </ButtonBase>
             </InputAdornment>
           }
-          aria-describedby="search-helper-text"
-          inputProps={{ "aria-label": "weight" }}
         />
       </Box>
     </>

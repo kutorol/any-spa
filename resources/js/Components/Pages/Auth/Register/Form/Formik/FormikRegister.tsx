@@ -1,25 +1,43 @@
-import { Grid, useMediaQuery } from "@mui/material";
+import { ButtonGroup, Grid, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Formik } from "formik";
 import { FormikHelpers, FormikValues } from "formik/dist/types";
-// @ts-ignore
-import React from 'react'
+import { useLaravelReactI18n } from "laravel-react-i18n";
+import * as React from "react";
+import { ERoles } from "../../../../../../utils/enums/user";
+import Btn from "../../../../../Common/Gui/Btn/Btn";
+import Icon from "../../../../../Common/Gui/Common/Icon";
 import EmailInput from "../../../../../Common/Inputs/EmailInput";
-import PasswordsList from "../../../../../Common/Inputs/PasswordsList";
+import PasswordsList, { isPassEqual } from "../../../../../Common/Inputs/PasswordsList";
 import SubmitBtn from "../../../Common/SubmitBtn";
+import { isDisabledBtn } from "../../../Login/Form/Formik/FormikLogin";
 import InputsBlockList from "../InputsBlockList";
 import PolicyGrid from "../PolicyGrid";
 
 interface FormikRegisterProps {
-  onSubmit: (v: FormikValues, formikHelpers: FormikHelpers<FormikValues>) => void | Promise<any>
-  formFields: object
-  formValidationSchema: object
+  chosenRole: ERoles;
+  setChosenRole: (r: ERoles) => void;
+  onSubmit: (v: FormikValues, formikHelpers: FormikHelpers<FormikValues>) => void | Promise<any>;
+  formFields: object;
+  formValidationSchema: object;
 }
 
-const FormikRegister = ({ onSubmit, formFields, formValidationSchema }: FormikRegisterProps) => {
+const FormikRegister = ({
+                          chosenRole,
+                          setChosenRole,
+                          onSubmit,
+                          formFields,
+                          formValidationSchema
+                        }: FormikRegisterProps) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
   const spacing = matchDownSM ? 0 : 2;
+  const { t } = useLaravelReactI18n();
+
+  const isAdminRole = chosenRole === ERoles.ADMIN;
+
+  const titleBtnUser = t("Пользователь");
+  const titleBtnAdmin = t("Администратор");
 
   return (
     <Formik
@@ -27,7 +45,7 @@ const FormikRegister = ({ onSubmit, formFields, formValidationSchema }: FormikRe
       validationSchema={formValidationSchema}
       onSubmit={onSubmit}
     >
-      {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+      {({ errors, setFieldValue, touched, handleBlur, handleChange, handleSubmit, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           <Grid container spacing={spacing}>
             {/*@ts-ignore*/}
@@ -35,7 +53,6 @@ const FormikRegister = ({ onSubmit, formFields, formValidationSchema }: FormikRe
               values={values}
               handleBlur={handleBlur}
               handleChange={handleChange}
-              touched={touched}
               errors={errors}
             />
           </Grid>
@@ -44,7 +61,6 @@ const FormikRegister = ({ onSubmit, formFields, formValidationSchema }: FormikRe
             values={values}
             handleBlur={handleBlur}
             handleChange={handleChange}
-            touched={touched}
             errors={errors}
           />
 
@@ -52,14 +68,53 @@ const FormikRegister = ({ onSubmit, formFields, formValidationSchema }: FormikRe
             values={values}
             handleBlur={handleBlur}
             handleChange={handleChange}
-            touched={touched}
             errors={errors}
           />
+
+          <Grid item xs={12} sx={{ my: 1 }}>
+            <Typography variant="caption">
+              {t("Ваша роль")}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sx={{ mb: 4 }}>
+            <Grid container justifyContent="center" alignItems="center">
+              <ButtonGroup
+                variant="contained"
+                color="secondary"
+                sx={{ boxShadow: "none" }}
+              >
+                <Btn
+                  onClick={e => {
+                    setChosenRole(ERoles.USER);
+                    setFieldValue("role", ERoles.USER);
+                  }}
+                  variant={isAdminRole ? "outlined" : "contained"}
+                  webTitle={titleBtnUser}
+                  mobTitle={titleBtnUser}
+                  icon={<Icon tablerIcon="IconUser"/>}
+                  sx={isAdminRole ? { color: "secondary.200" } : {}}
+                />
+
+                <Btn
+                  sx={isAdminRole ? {} : { color: "secondary.200" }}
+                  onClick={e => {
+                    setChosenRole(ERoles.ADMIN);
+                    setFieldValue("role", ERoles.ADMIN);
+                  }}
+                  variant={isAdminRole ? "contained" : "outlined"}
+                  webTitle={titleBtnAdmin}
+                  mobTitle={titleBtnAdmin}
+                  endIcon={<Icon tablerIcon="IconUsersGroup"/>}
+                />
+              </ButtonGroup>
+            </Grid>
+          </Grid>
 
           <PolicyGrid/>
 
           <SubmitBtn
-            isSubmitting={isSubmitting}
+            disabled={isDisabledBtn(errors, touched) || !isPassEqual(values)}
             isRegister
           />
         </form>
