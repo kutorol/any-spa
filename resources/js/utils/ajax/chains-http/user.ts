@@ -20,6 +20,7 @@ export class ChainCheckUserDataHTTP implements ChainCheckHTTPResponse {
 
     if (!user.verified_email && !this.redirect.isLogout()) {
       res.data[redirectParam] = getUrl(NotVerifyEmailURL);
+      res.data.redirect_change_with_locale = true;
     }
 
     changeUserInfo(user);

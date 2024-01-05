@@ -49,7 +49,10 @@ class ManageUserController extends BaseController
                 'userID' => $user->id,
             ]);
         } catch (\Throwable $e) {
-            \Log::error('Error manual register', array_merge(['error' => $e->getMessage(), 'code' => $e->getCode()], $data));
+            \Log::error(
+                'Error manual register',
+                array_merge(['error' => $e->getMessage(), 'code' => $e->getCode()], $data)
+            );
 
             return $this->internalResponse($e->getMessage());
         }
@@ -124,8 +127,11 @@ class ManageUserController extends BaseController
      * @return JsonResponse
      * @throws \Throwable
      */
-    public function updateCurrentUser(UpdateCurrentUserRequest $request, PasetoTokenRepository $rep, UserRepository $userRep): JsonResponse
-    {
+    public function updateCurrentUser(
+        UpdateCurrentUserRequest $request,
+        PasetoTokenRepository $rep,
+        UserRepository $userRep
+    ): JsonResponse {
         $oldConfirmedEmailRep = app(OldConfirmedEmailsRepository::class);
         $user = $this->user();
 
@@ -160,31 +166,33 @@ class ManageUserController extends BaseController
         $userInfo->city = mb_ucfirst($data['city']);
         $user->updated_at = now();
 
-        $tokens = DB::transaction(function () use ($user, $userInfo, $oldEmail, $isChangeEmail, $wasConfirmed, $rep, $oldConfirmedEmailRep) {
-            if (!$user->save()) {
-                throw new PasetoException(failMsg());
+        $tokens = DB::transaction(
+            function () use ($user, $userInfo, $oldEmail, $isChangeEmail, $wasConfirmed, $rep, $oldConfirmedEmailRep) {
+                if (!$user->save()) {
+                    throw new PasetoException(failMsg());
+                }
+
+                if (!$userInfo->save()) {
+                    throw new PasetoException(failMsg());
+                }
+
+                if (!$isChangeEmail) {
+                    return null;
+                }
+
+                $rep->deleteByUID($user->id);
+
+                $tokens = $rep->create($user);
+                if (!$tokens) {
+                    throw new PasetoException(failMsg());
+                }
+
+                // сохраняем email, если он был уже подтвержден
+                $wasConfirmed && $oldConfirmedEmailRep->create($user->id, $oldEmail);
+
+                return $tokens;
             }
-
-            if (!$userInfo->save()) {
-                throw new PasetoException(failMsg());
-            }
-
-            if (!$isChangeEmail) {
-                return null;
-            }
-
-            $rep->deleteByUID($user->id);
-
-            $tokens = $rep->create($user);
-            if (!$tokens) {
-                throw new PasetoException(failMsg());
-            }
-
-            // сохраняем email, если он был уже подтвержден
-            $wasConfirmed && $oldConfirmedEmailRep->create($user->id, $oldEmail);
-
-            return $tokens;
-        });
+        );
 
         if ($isChangeEmail && !$tokens) {
             return $this->badRequestResponse(failMsg());
@@ -218,8 +226,10 @@ class ManageUserController extends BaseController
      * @return JsonResponse
      * @throws \Throwable
      */
-    public function updateCurrentPassword(UpdateCurrentPasswordRequest $request, PasetoTokenRepository $rep): JsonResponse
-    {
+    public function updateCurrentPassword(
+        UpdateCurrentPasswordRequest $request,
+        PasetoTokenRepository $rep
+    ): JsonResponse {
         $user = $this->user();
         $user->password = bcrypt($request->get('password'));
 

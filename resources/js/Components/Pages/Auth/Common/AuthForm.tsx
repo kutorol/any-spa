@@ -50,7 +50,8 @@ function AuthForm({ isRegister = false, isPasswordReset = false, isPasswordReset
 
         <OrBlock/>
 
-        {(!isPasswordReset) && (<AuthEmailTitle isRegister={isRegister}/>)}
+        {(!isPasswordReset) && (
+          <AuthEmailTitle isPasswordResetConfirm={isPasswordResetConfirm} isRegister={isRegister}/>)}
       </Grid>
 
       {formInputs}

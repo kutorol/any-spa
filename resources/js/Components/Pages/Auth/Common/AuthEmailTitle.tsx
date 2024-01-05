@@ -2,12 +2,21 @@ import { Box, Grid, Typography } from "@mui/material";
 import { useLaravelReactI18n } from "laravel-react-i18n";
 import * as React from "react";
 
-const AuthEmailTitle = ({ isRegister = false }) => {
+interface IAuthEmailTitle {
+  isPasswordResetConfirm?: boolean;
+  isRegister: boolean;
+}
+
+const AuthEmailTitle = ({ isPasswordResetConfirm, isRegister = false }: IAuthEmailTitle) => {
   const xs = 12;
   const sx = { mb: 2 };
   const { t } = useLaravelReactI18n();
 
-  const title = isRegister ? t("Регистрация через E-mail") : t("Авторизация через E-mail");
+  const title = isRegister
+    ? t("Регистрация через E-mail")
+    : (isPasswordResetConfirm
+      ? t("Введите новый пароль")
+      : t("Авторизация через E-mail"));
 
   return (
     <Grid item xs={xs} container alignItems="center" justifyContent="center">

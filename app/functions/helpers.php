@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\URL;
 
 /**
  * @param string $key
@@ -199,7 +200,6 @@ function failMsg(): string
 
 function getPrettySiteName(): string
 {
-    // @phpstan-ignore-next-line
     return explode('//', Url::to('/'))[1] ?? Url::to('/');
 }
 

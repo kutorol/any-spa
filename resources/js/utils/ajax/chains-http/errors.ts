@@ -11,13 +11,13 @@ export class ChainCheckErrorsHTTP implements ChainCheckHTTPResponse {
     }
 
     const errs = get(res, `data.${errParam}`, []);
-    if (!errs.length && get(res, "msg", "").trim() !== "") {
-      errs.push(res.msg.trim());
+    if (errs.length > 0 && get(res, "msg", "").trim() !== "") {
+      errs.unshift(res.msg.trim());
     }
 
     // отдельные логи авторизации
     const pasetoMsg = get(res, "data.paseto.msg", null);
-    pasetoMsg && errs.push(pasetoMsg.trim());
+    pasetoMsg && errs.unshift(pasetoMsg.trim());
 
     // @ts-ignore
     createErrMgs(errs, errs.length > 0 ? 5000 : 1000, get(res, "code", 0));

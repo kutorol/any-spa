@@ -32,7 +32,12 @@ class VerificationController extends Controller
      */
     public function verify(VerifyEmailRequest $request, UserRepository $userRep): \Illuminate\Foundation\Application|Redirector|RedirectResponse|Application
     {
-        $user = $userRep->findByID((int)$request->route('id'));
+        $userID = (int)$request->route('id');
+        if (!$userID) {
+            throw new AuthorizationException;
+        }
+
+        $user = $userRep->findByID($userID);
         if (!hash_equals((string) $request->route('id'), (string) $user->getKey())) {
             throw new AuthorizationException;
         }

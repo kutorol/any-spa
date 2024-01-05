@@ -18,6 +18,9 @@ class VerifyEmail
         'api.checkInitRequest',
         'api.logout',
         'api.user.changeLocale',
+        'seo.page-info',
+        'googleOAuth',
+        'support.send',
     ];
 
     /**
