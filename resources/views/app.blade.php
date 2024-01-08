@@ -57,7 +57,11 @@
         rel="stylesheet"
     />
     <script>
-        window.siteLocale = `{{app()->getLocale()}}`;
+        try {
+            window.siteLocale = `{{app()->getLocale()}}`;
+        } catch (e) {
+            console.error("initial data is wrong", e);
+        }
     </script>
 
     <!-- Styles -->
