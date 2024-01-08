@@ -1,7 +1,7 @@
-import { Grid, useMediaQuery } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import { Grid } from "@mui/material";
 import { FormikErrors, FormikValues } from "formik/dist/types";
 import * as React from "react";
+import useMatch from "../../../hooks/useMatch";
 import PassInput from "./PassInput";
 
 interface IPasswordsList {
@@ -16,13 +16,12 @@ export const isPassEqual = (values: FormikValues): boolean => {
 };
 
 const PasswordsList = ({ values, handleBlur, handleChange, errors }: IPasswordsList) => {
-  const theme = useTheme();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
+  const { matchDownMd } = useMatch();
 
   const withCheckingConfirmation = values.password.length > 0 && values.password_confirmation.length > 0;
 
   return (
-    <Grid container spacing={matchDownSM ? 0 : 2}>
+    <Grid container spacing={matchDownMd ? 0 : 2}>
       <Grid item xs={12} sm={6}>
         <PassInput
           withStrength

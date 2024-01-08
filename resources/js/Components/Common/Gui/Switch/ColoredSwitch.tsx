@@ -1,34 +1,41 @@
-import { Grid, Switch } from "@mui/material";
-// @ts-ignore
-import React, { useState } from "react";
+import { Switch } from "@mui/material";
+import * as React from "react";
+import { EColor } from "../../../../utils/enums/common";
 
 interface IColoredSwitch {
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  color?: "default" | EColor;
 
+  [k: string]: any;
 }
 
-const ColoredSwitch = ({}: IColoredSwitch) => {
-  const [checked, setChecked] = useState<boolean>(false);
+const ColoredSwitch = ({ color = EColor.SECONDARY, checked, onChange, ...other }: IColoredSwitch) => {
+
+  const _onChange = e => onChange(!checked);
+
+  let v = "200";
+  // @ts-ignore
+  if (![EColor.SECONDARY, EColor.PRIMARY].includes(color)) {
+    v = "light";
+  }
 
   return (
-    <Grid container alignItems="center">
-      <Grid item xs={4}>Слева</Grid>
-      <Grid item xs={4}>
-        <Switch
-          sx={{
-            "& .MuiButtonBase-root:not(.Mui-checked ), & .MuiButtonBase-root:not(.Mui-checked) + .MuiSwitch-track": {
-              color: "secondary.200"
-            },
-            "& .MuiButtonBase-root:not(.Mui-checked) + .MuiSwitch-track": {
-              backgroundColor: "secondary.200"
-            }
-          }}
-          checked={checked}
-          onChange={e => setChecked(!checked)}
-          color="secondary"
-        />
-      </Grid>
-      <Grid item xs={4}>Справа</Grid>
-    </Grid>
+    <Switch
+      edge="start"
+      sx={{
+        "& .MuiButtonBase-root:not(.Mui-checked ), & .MuiButtonBase-root:not(.Mui-checked) + .MuiSwitch-track": {
+          color: `${color}.${v}`
+        },
+        "& .MuiButtonBase-root:not(.Mui-checked) + .MuiSwitch-track": {
+          backgroundColor: `${color}.${v}`
+        }
+      }}
+      checked={checked}
+      onChange={_onChange}
+      color={color}
+      {...other}
+    />
   );
 };
 

@@ -6,8 +6,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useTheme } from "@mui/material/styles";
 import { useLaravelReactI18n } from "laravel-react-i18n";
-// @ts-ignore
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import Btn from "../../Components/Common/Gui/Btn/Btn";
 import Icon from "../../Components/Common/Gui/Common/Icon";
 import { changeFullScreenLoaderState } from "../../store/reducers/func/common/full-screen-loader";

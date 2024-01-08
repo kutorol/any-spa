@@ -1,29 +1,30 @@
 import { Languages, Roles, Sex } from "../enums/common/enums";
 
 export interface registerFormValuesInterface {
-  first_name: string
-  last_name: string
-  sur_name: string
-  email: string
-  password: string
-  password_confirmation: string
+  first_name: string;
+  last_name: string;
+  sur_name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
 }
 
 export interface resetPassForgotParamsInterface {
-  token: string
-  email: string
-  password: string
-  password_confirmation: string
+  token: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
 }
 
 export interface loginPropsInterface {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface userSocialAuth {
-  auth(re: object, captchaToken: string): Promise<boolean>
-  fetchData(url: string, accessToken: string): any
+  auth(re: object, captchaToken: string): Promise<boolean>;
+
+  fetchData(url: string, accessToken: string): any;
 }
 
 export interface googleAuthInterface {

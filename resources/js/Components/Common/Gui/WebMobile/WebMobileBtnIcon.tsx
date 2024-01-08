@@ -8,7 +8,7 @@ interface IWebMobileBtnIcon {
   onClick: (e: any) => void;
   icon?: React.ReactNode;
 
-  [ key: string ]: any;
+  [key: string]: any;
 }
 
 const WebMobileBtnIcon = ({ title, onClick, icon, ...props }: IWebMobileBtnIcon) => {

@@ -9,6 +9,7 @@ interface CustomInputProps {
   type?: "text" | "email" | "password" | string;
   name: string;
   title: string;
+  helpText?: string | React.ReactNode;
   theme?: any;
   endAdornment?: React.ReactNode;
   handleBlur?: (e: React.FocusEvent<any>) => void;
@@ -37,6 +38,7 @@ const CustomInput = ({
                        showLeftChars,
                        maxLength,
                        noSubmit = false,
+                       helpText,
                        ...otherInputProps
                      }: CustomInputProps) => {
   const inputID = `${name}-${type}-custom-input`;
@@ -83,6 +85,12 @@ const CustomInput = ({
       {hasErr && (
         <FormHelperText error>
           {errors[name]}
+        </FormHelperText>
+      )}
+
+      {helpText && (
+        <FormHelperText disabled component="div">
+          {helpText}
         </FormHelperText>
       )}
     </FormControl>

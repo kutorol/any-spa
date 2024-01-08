@@ -11,7 +11,7 @@ export class ChainCheckErrorsHTTP implements ChainCheckHTTPResponse {
     }
 
     const errs = get(res, `data.${errParam}`, []);
-    if (errs.length > 0 && get(res, "msg", "").trim() !== "") {
+    if (get(res, "msg", "").trim() !== "") {
       errs.unshift(res.msg.trim());
     }
 
