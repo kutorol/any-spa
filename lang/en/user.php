@@ -13,6 +13,7 @@ return [
     'not_updated' => 'Failed to update user',
     'updated_with_email' => 'User updated. Confirmation email has been sent',
     'updated' => 'User updated',
+    'invalid_signature' => 'The token from the URL is incorrect or the token has expired',
 
     'block' => [
         'comment_head' => 'Administrator comment',

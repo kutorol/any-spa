@@ -13,9 +13,11 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use ParagonIE\Paseto\Exception\PasetoException;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 
@@ -90,8 +92,13 @@ class Handler extends ExceptionHandler
     {
         FactoryLogException::log($e);
 
+        $isWeb = BaseController::isWeb($request);
+        if ($isWeb && $e instanceof InvalidSignatureException) {
+            throw new HttpException(BaseController::FORBIDDEN_CODE, __('user.invalid_signature'));
+        }
+
         // на web оставляем стандартное поведение
-        if (BaseController::isWeb($request)) {
+        if ($isWeb) {
             return parent::render($request, $e);
         }
 
